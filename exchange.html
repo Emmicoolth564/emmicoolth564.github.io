@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CryptoJet Exchange</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(180deg,#020617,#020617,#020617,#000);
+  color:white;
+  padding-bottom:90px;
+}
+
+/* LOGO */
+.logo{
+  text-align:center;
+  font-size:28px;
+  font-weight:700;
+  margin-top:20px;
+  background:linear-gradient(90deg,#00ffcc,#22c55e,#0ea5e9);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:glowText 3s infinite linear;
+}
+
+@keyframes glowText{
+  0%{filter:drop-shadow(0 0 5px #00ffcc);}
+  50%{filter:drop-shadow(0 0 20px #22c55e);}
+  100%{filter:drop-shadow(0 0 5px #0ea5e9);}
+}
+
+/* HEADER */
+.header{
+  text-align:center;
+  font-size:18px;
+  color:#94a3b8;
+  margin-bottom:10px;
+}
+
+/* CARD */
+.card{
+  margin:15px;
+  padding:20px;
+  border-radius:20px;
+  background:#0f172a;
+  box-shadow:0 0 60px rgba(0,255,204,0.08);
+  animation:fade .6s ease;
+}
+
+/* VALUES */
+.label{
+  font-size:13px;
+  color:#94a3b8;
+}
+
+.value{
+  font-size:30px;
+  font-weight:700;
+  margin:8px 0 15px;
+}
+
+/* RATE */
+.rate{
+  text-align:center;
+  margin:20px 0;
+  font-size:14px;
+  color:#22c55e;
+}
+
+/* BUTTON */
+.btn{
+  margin-top:20px;
+  padding:16px;
+  border-radius:16px;
+  text-align:center;
+  font-weight:700;
+  background:linear-gradient(90deg,#00ffcc,#22c55e);
+  color:black;
+  transition:.2s;
+  box-shadow:0 0 25px rgba(0,255,204,0.4);
+}
+
+.btn:active{
+  transform:scale(.95);
+}
+
+/* INFO BLOCK */
+.info{
+  margin-top:20px;
+  font-size:13px;
+  color:#94a3b8;
+  line-height:1.7;
+}
+
+/* STEPS */
+.steps{
+  margin-top:15px;
+}
+
+.step{
+  margin-bottom:10px;
+}
+
+/* SUCCESS GLOW */
+.success{
+  animation:glow 1s ease;
+}
+
+@keyframes glow{
+  0%{box-shadow:0 0 0 rgba(0,255,204,0);}
+  50%{box-shadow:0 0 50px rgba(0,255,204,0.9);}
+  100%{box-shadow:0 0 0 rgba(0,255,204,0);}
+}
+
+/* FLOAT */
+.float{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:30px;
+  color:#00ffcc;
+  opacity:0;
+  animation:pop 1.3s ease;
+}
+
+@keyframes pop{
+  0%{opacity:0; transform:translate(-50%,-30%) scale(.5);}
+  50%{opacity:1; transform:translate(-50%,-50%) scale(1.3);}
+  100%{opacity:0; transform:translate(-50%,-80%) scale(1);}
+}
+
+/* NAV */
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  height:65px;
+  background:#020617;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
+.nav-item{
+  text-align:center;
+  font-size:11px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="logo">CryptoJet</div>
+<div class="header">Points Exchange System</div>
+
+<div class="card" id="card">
+
+  <div class="label">Available Points</div>
+  <div class="value" id="points">0</div>
+
+  <div class="label">Current Balance</div>
+  <div class="value" id="balance">0</div>
+
+  <div class="rate">Conversion Rate: 100 Points = 1 Balance</div>
+
+  <div class="btn" onclick="exchange()">Exchange All Points</div>
+
+  <div class="info">
+    <b>How Exchange Works</b><br><br>
+
+    CryptoJet rewards you with points from signups and referrals.  
+    These points are not directly withdrawable until converted.<br><br>
+
+    <div class="steps">
+      <div class="step">• Earn points from referrals and signup bonuses</div>
+      <div class="step">• Points accumulate in your account</div>
+      <div class="step">• Use the exchange button to convert them</div>
+      <div class="step">• Converted balance can be withdrawn or used</div>
+    </div>
+
+    <br>
+    Exchange is instant and secure.
+  </div>
+
+</div>
+
+<div id="float" class="float"></div>
+
+<!-- NAV -->
+<div class="bottom-nav">
+  <div class="nav-item" onclick="nav('dashboard.html')">Home</div>
+  <div class="nav-item" onclick="nav('miner.html')">Miner</div>
+  <div class="nav-item" onclick="nav('me.html')">Me</div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
+  authDomain: "cj-miner.firebaseapp.com",
+  databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cj-miner"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+let uid = localStorage.getItem("uid");
+
+if(!uid){
+  window.location.href = "signin.html";
+}
+
+/* LOAD */
+function load(){
+  db.ref("users/" + uid).once("value").then(snap=>{
+    const d = snap.val() || {};
+    document.getElementById("points").innerText = d.points || 0;
+    document.getElementById("balance").innerText = d.balance || 0;
+  });
+}
+
+/* EXCHANGE */
+function exchange(){
+  const userRef = db.ref("users/" + uid);
+
+  userRef.once("value").then(snap=>{
+    const d = snap.val() || {};
+    let pts = d.points || 0;
+
+    if(pts <= 0){
+      showFloat("No points");
+      return;
+    }
+
+    let converted = Math.floor(pts / 100);
+
+    if(converted <= 0){
+      showFloat("Min 100 pts");
+      return;
+    }
+
+    let remaining = pts % 100;
+
+    userRef.update({
+      balance:(d.balance||0) + converted,
+      points:remaining
+    });
+
+    animate(converted);
+    load();
+  });
+}
+
+/* ANIMATE */
+function animate(amount){
+  let card = document.getElementById("card");
+  card.classList.add("success");
+
+  setTimeout(()=>card.classList.remove("success"),1000);
+
+  showFloat("+"+amount);
+}
+
+/* FLOAT */
+function showFloat(text){
+  const el = document.getElementById("float");
+  el.innerText = text;
+  el.style.animation="none";
+  void el.offsetWidth;
+  el.style.animation="pop 1.3s ease";
+}
+
+/* INIT */
+load();
+
+function nav(p){ window.location.href=p; }
+</script>
+
+</body>
+</html>

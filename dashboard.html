@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background: radial-gradient(circle at top,#020617,#000814);
+    color:white;
+    overflow-y: auto;   /* ✅ allow vertical scroll */
+}
+
+/* WRAPPER */
+.wrapper{
+    max-width:420px;
+    margin:auto;
+    padding:25px 15px 120px; /* increase this */
+}
+/* TITLE */
+.title{
+    text-align:center;
+    font-size:30px;
+    font-weight:900;
+    color:#00ffcc;
+    animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+    from{ text-shadow:0 0 5px #00ffcc;}
+    to{ text-shadow:0 0 30px #00ffcc;}
+}
+
+/* MINER CARD */
+.miner-card{
+    margin-top:20px;
+    padding:20px;
+    border-radius:18px;
+    background:linear-gradient(145deg,#020617,#0f172a);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 0 25px rgba(0,255,204,0.08);
+}
+
+/* LEFT INFO */
+.miner-info{ flex:1; }
+
+.miner-title{
+    font-size:16px;
+    font-weight:700;
+    color:#e5e7eb; /* soft white */
+    letter-spacing:0.5px;
+}
+
+.miner-id{
+    color:#22c55e; /* deeper green */
+    font-size:15px;
+    font-weight:700;
+}
+
+.miner-level{
+    margin-top:8px;
+    color:#38bdf8; /* clean blue */
+    font-weight:600;
+    font-size:14px;
+}
+
+/* BADGE */
+.badge{
+    margin-top:10px;
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:20px;
+    background:#022c22;
+    color:#00ff9d;
+    font-size:12px;
+    position:relative;
+    overflow:hidden;
+}
+.badge::after{
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    left:-100%;
+    top:0;
+    background:linear-gradient(120deg,transparent,rgba(0,255,200,0.5),transparent);
+    animation:shine 2s infinite;
+}
+.miner-status{
+    margin-top:6px;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:3px 8px;
+    border-radius:12px;
+    background:rgba(255,0,0,0.1);
+    color:#ff4d4d;
+    font-size:10px;
+    font-weight:600;
+    animation: blink 1s infinite;
+}
+
+.miner-status .dot{
+    width:5px;
+    height:5px;
+    background:#ff0000;
+    border-radius:50%;
+    box-shadow:0 0 6px #ff0000;
+}
+
+@keyframes blink{
+    0%{opacity:1;}
+    50%{opacity:0.4;}
+    100%{opacity:1;}
+}
+
+@keyframes shine{
+    100%{left:100%;}
+}
+
+/* VISUAL */
+.visual{
+    width:100px;
+    height:100px;
+    position:relative;
+}
+
+/* ✅ FIXED: REAL IMAGES */
+.coin{
+    width:45px;
+    height:45px;
+    position:absolute;
+    top:0;
+    left:30px;
+    background:url("./coin.png") no-repeat center/contain;
+    animation:float 3s infinite ease-in-out;
+    filter:drop-shadow(0 0 10px #00ffcc);
+}
+
+.bot{
+    width:55px;
+    height:55px;
+    position:absolute;
+    bottom:0;
+    left:25px;
+    background:url("./bot.png") no-repeat center/contain;
+    animation:pulse 2s infinite;
+    filter:drop-shadow(0 0 10px #00ffcc);
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-12px);}
+}
+
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.08);}
+    100%{transform:scale(1);}
+}
+
+.balance-card{
+    margin-top:15px;
+    padding:15px;
+    border-radius:15px;
+    background:#0f172a;
+    display:flex;
+    justify-content:space-between;
+    box-shadow:0 0 20px rgba(0,255,204,0.05);
+}
+
+.balance-item{
+    text-align:center;
+    flex:1;
+}
+
+.label{
+    font-size:12px;
+    color:#aaa;
+}
+
+.value{
+    margin-top:5px;
+    font-size:16px;
+    color:#00ffcc;
+    font-weight:bold;
+}
+/* MARKET */
+.market{ margin-top:25px; }
+.coin-card{
+    background:#0b1220;
+    padding:14px;
+    border-radius:14px;
+    margin-bottom:10px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    box-shadow:0 0 15px rgba(0,255,204,0.05);
+}
+
+.coin-left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.coin-icon{
+    width:28px;
+    height:28px;
+}
+
+.coin-name{
+    font-weight:700;
+    font-size:14px;
+}
+
+.coin-pair{
+    font-size:11px;
+    color:#888;
+}
+
+.coin-right{
+    text-align:right;
+}
+
+.coin-price{
+    font-size:15px;
+    font-weight:700;
+}
+
+.coin-change{
+    font-size:12px;
+    font-weight:600;
+}
+
+/* EXTRA */
+.grid{
+    margin-top:20px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.box{
+    background:#0f172a;
+    padding:18px;
+    border-radius:14px;
+    text-align:center;
+}
+
+/* NAV */
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    width:100%;
+    height:65px;
+    background:#020617;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+}
+
+/* ✅ ICON NAV */
+.nav-item{
+    text-align:center;
+    color:#aaa;
+    font-size:11px;
+}
+
+.nav-item img{
+    width:22px;
+    height:22px;
+    display:block;
+    margin:auto;
+    margin-bottom:4px;
+    filter:brightness(0.6);
+}
+
+.nav-item.active img{
+    filter:brightness(1.5) drop-shadow(0 0 8px #00ffcc);
+    transform:translateY(-2px);
+}
+
+.nav-item.active{
+    color:#00ffcc;
+}
+
+.logo-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.logo-svg {
+  width: 260px;
+}
+
+.logo-text {
+  font-size: 55px;
+  font-weight: 900;
+  fill: none;
+  stroke: #00ffcc;
+  stroke-width: 2;
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: write 3s ease forwards;
+}
+
+@keyframes write {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.logo-wrap{
+  position:relative;
+  display:inline-block;
+}
+
+/* ✈️ NEW DRAWN PLANE */
+.plane-line{
+  fill:none;
+  stroke:#00ffcc;
+  stroke-width:2.5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+
+  stroke-dasharray:800;
+  stroke-dashoffset:800;
+
+  animation: planeLoop 9s ease-in-out infinite;
+} /* 👈 ADD THIS LINE */
+
+@keyframes planeLoop{
+
+  0%{
+    stroke-dashoffset:800;
+    opacity:0;
+  }
+
+  20%{
+    stroke-dashoffset:0;
+    opacity:1;
+  }
+
+  20%, 70%{
+    stroke-dashoffset:0;
+    opacity:1;
+  }
+
+  85%{
+    stroke-dashoffset:800;
+    opacity:0;
+  }
+
+  100%{
+    stroke-dashoffset:800;
+    opacity:0;
+  }
+}
+
+.slider{
+  margin-top:15px;
+  overflow:hidden;
+  border-radius:15px;
+  touch-action: pan-y;
+}
+.slides {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border-radius: 15px;
+}
+
+</style>
+</head>
+
+<body>
+<div class="wrapper">
+<div class="logo-container">
+  <div class="logo-wrap">
+
+    <svg viewBox="0 0 800 120" class="logo-svg">
+
+      <!-- TEXT -->
+      <text x="10" y="80" class="logo-text">CryptoJet</text>
+
+      <!-- ✈️ PLANE PATH (connected to end of text) -->
+      <path 
+        d="M350 75 
+           C480 60, 520 50, 560 60
+           L620 45 
+           L600 65 
+           L620 85 
+           L560 70 
+           C520 80, 480 85, 430 75"
+        class="plane-line"
+      />
+
+    </svg>
+
+  </div>
+</div>
+
+<div class="miner-card">
+
+<div class="miner-info">
+    <div class="miner-title">YOUR MINER CARD</div>
+
+    <div>ID:</div>
+    <div id="userId" class="miner-id">Loading...</div>
+
+    <div class="miner-level">
+        Miner Level: <span id="minerLevel">Loading...</span>
+    </div>
+
+    <div class="badge">Active User</div>
+
+<div class="miner-status" id="minerStatus">
+    <span class="dot"></span>
+    Mining Active
+</div>
+</div>
+
+<div class="visual">
+    <div class="coin"></div>
+    <div class="bot"></div>
+</div>
+
+</div>
+
+<div class="balance-card">
+    <div class="balance-item">
+        <div class="label">Balance</div>
+        <div class="value" id="balance">Loading...</div>
+    </div>
+
+    <div class="balance-item">
+        <div class="label">Team Income</div>
+        <div class="value" id="teamIncome">0</div>
+    </div>
+
+    <div class="balance-item">
+        <div class="label">UI Points</div>
+        <div class="value" id="uiPoints">0</div>
+    </div>
+</div>
+<div class="slider">
+  <div class="slides">
+  <img src="logo.jpg" class="slide">
+<img src="mining1.jpg" class="slide">
+<img src="mining2.jpg" class="slide">
+<img src="mining3.jpg" class="slide">
+</div>
+</div>
+<div class="market" id="market"></div>
+
+<div class="grid">
+    <div class="box" onclick="nav('miner.html')">Mining Power</div>
+
+    <div class="box" onclick="nav('reward.html')">Rewards</div>
+
+    <div class="box">Tasks</div>
+
+    <div class="box">Wallet</div>
+</div>
+<!-- ✅ NAV WITH ICONS -->
+<div class="bottom-nav">
+    <div class="nav-item active" onclick="nav('dashboard.html')">
+        <img src="./home.png">Home
+    </div>
+
+    <div class="nav-item" onclick="nav('miner.html')">
+        <img src="./miner.png">Miner
+    </div>
+
+    <div class="nav-item" onclick="nav('me.html')">
+        <img src="./user.png">Me
+    </div>
+</div>
+
+<script>
+function nav(page){
+    window.location.href=page;
+}
+
+/* MARKET */
+const coins = [
+  {
+    id: "bitcoin",
+    symbol: "btc",
+    img: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png"
+  },
+  {
+    id: "ethereum",
+    symbol: "eth",
+    img: "https://assets.coingecko.com/coins/images/279/large/ethereum.png"
+  },
+  {
+    id: "solana",
+    symbol: "sol",
+    img: "https://assets.coingecko.com/coins/images/4128/large/solana.png"
+  }
+];
+let last={};
+
+async function loadMarket(){
+  try{
+    const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coins.map(c => c.id).join(",")}&vs_currencies=usd`);
+    
+    const data = await res.json();
+
+    let html = "";
+
+    for (let coin of coins){
+      let price = data[coin.id]?.usd || 0;
+      let old = last[coin.id] || price;
+
+      let up = price >= old;
+      let color = up ? "#00ffcc" : "#ff4d4d";
+
+      html += `
+      <div class="coin-card">
+        <div class="coin-left">
+          <img src="${coin.img}" class="coin-icon">
+          <div>
+            <div>${coin.id.toUpperCase()}</div>
+            <small>${coin.id}/USD</small>
+          </div>
+        </div>
+        <div style="color:${color}">
+          $${price}
+        </div>
+      </div>
+      `;
+
+      last[coin.id] = price;
+    }
+
+    document.getElementById("market").innerHTML = html;
+
+  }catch(e){
+    console.log("Market error:", e);
+  }
+}
+ 
+loadMarket();
+setInterval(loadMarket,10000);
+</script>
+
+<!-- ✅ FIXED FIREBASE (REAL USER DATA) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
+  authDomain: "cj-miner.firebaseapp.com",
+  databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cj-miner"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+let uid = localStorage.getItem("uid");
+
+if(!uid){
+    window.location.href = "signin.html";
+}
+
+/* 🔥 FIREBASE BALANCE LISTENER */
+db.ref("users/" + uid).on("value", snapshot => {
+  const data = snapshot.val();
+
+  if (data) {
+    document.getElementById("balance").innerText = Math.floor(data.balance || 0);
+    document.getElementById("uiPoints").innerText = data.points || 0;
+    document.getElementById("teamIncome").innerText = data.team || 0;
+  } else {
+    document.getElementById("balance").innerText = 0;
+    document.getElementById("uiPoints").innerText = 0;
+    document.getElementById("teamIncome").innerText = 0;
+  }
+});
+/* LOAD USER */
+async function loadUser(){
+    const snapshot = await db.ref("users/" + uid).once("value");
+
+    if(snapshot.exists()){
+        const data = snapshot.val();
+
+        document.getElementById("userId").innerText = data.minerId || uid;
+        document.getElementById("minerLevel").innerText =
+            data.level || "Novice Miner";
+
+    } else {
+        /* CREATE NEW USER */
+        document.getElementById("userId").innerText = uid;
+        document.getElementById("minerLevel").innerText = "Novice Miner";
+
+        await db.ref("users/" + uid).set({
+            balance: 0,
+            level: "Novice Miner",
+            mining: false,
+            lastClaim: Date.now()
+        });
+    }
+}
+loadUser();
+</script>
+<script>
+let index = 0;
+
+window.onload = () => {
+  const slides = document.querySelector('.slides');
+  const totalSlides = document.querySelectorAll('.slide').length;
+
+  function showSlide() {
+    index++;
+    if (index >= totalSlides) {
+      index = 0;
+    }
+    slides.style.transform = `translateX(-${index * 100}%)`;
+  }
+
+  setInterval(showSlide, 2000);
+
+  let startX = 0;
+
+  slides.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+  });
+
+  slides.addEventListener('touchend', e => {
+    let endX = e.changedTouches[0].clientX;
+
+    if (startX - endX > 50) {
+      showSlide();
+    }
+
+    if (endX - startX > 50) {
+      index--;
+      if (index < 0) index = totalSlides - 1;
+      slides.style.transform = `translateX(-${index * 100}%)`;
+    }
+  });
+};
+</script>
+</body>
+</html>

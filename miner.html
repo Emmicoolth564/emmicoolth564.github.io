@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crypto Jet - Miner</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background: radial-gradient(circle,#020617,#000814);
+  color:white;
+  padding-bottom:100px;
+  overflow-x:hidden;
+}
+
+/* HEADER */
+.header{
+  text-align:center;
+  font-size:26px;
+  font-weight:900;
+  color:#00ffcc;
+  margin-top:20px;
+  animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+  from{ text-shadow:0 0 5px #00ffcc;}
+  to{ text-shadow:0 0 25px #00ffcc;}
+}
+
+/* BALANCE */
+.balance-box{
+  margin:15px;
+  padding:15px;
+  border-radius:15px;
+  background:#0f172a;
+  text-align:center;
+  box-shadow:0 0 20px #00ffcc22;
+  animation:fadeUp .6s ease;
+}
+
+/* TABS */
+.tabs{
+  display:flex;
+  margin:15px;
+  border-radius:12px;
+  overflow:hidden;
+  background:#0f172a;
+}
+
+.tab{
+  flex:1;
+  padding:12px;
+  text-align:center;
+  color:#aaa;
+  transition:.3s;
+}
+
+.tab.active{
+  color:#00ffcc;
+  box-shadow:0 0 15px #00ffcc;
+}
+
+/* CONTENT */
+.tab-content{
+  display:none;
+  animation:fadeUp .5s ease;
+}
+.tab-content.active{ display:block; }
+
+/* CARD */
+.card{
+  margin:15px;
+  padding:15px;
+  border-radius:15px;
+  background:linear-gradient(145deg,#020617,#0f172a);
+  box-shadow:0 0 15px #00ffcc22;
+  position:relative;
+  overflow:hidden;
+  transform:translateY(20px);
+  opacity:0;
+  animation:fadeUp .6s ease forwards;
+}
+
+/* IMAGE */
+.card img{
+  width:100%;
+  height:160px;
+  object-fit:cover;
+  border-radius:10px;
+}
+
+/* GLOW LINE */
+.card::after{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:2px;
+  background:#00ffcc;
+  bottom:0;
+  left:-100%;
+  animation:scan 3s infinite;
+}
+
+@keyframes scan{
+  100%{left:100%;}
+}
+
+/* BUTTONS */
+button{
+  padding:10px;
+  border:none;
+  border-radius:20px;
+  color:white;
+  cursor:pointer;
+  transition:.3s;
+}
+
+button:hover{
+  transform:scale(1.05);
+}
+
+.rent{ background:#00ffcc; color:#000; }
+.start{ background:#3b82f6; }
+
+/* RUNNING TEXT */
+.running{
+  color:#00ff9d;
+}
+
+.dots span{
+  animation:blink 1.5s infinite;
+}
+.dots span:nth-child(2){animation-delay:.3s;}
+.dots span:nth-child(3){animation-delay:.6s;}
+
+@keyframes blink{
+  0%,100%{opacity:0.2;}
+  50%{opacity:1;}
+}
+
+/* ANIMATION */
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* NAV */
+.nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  height:65px;
+  background:#020617;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
+
+.nav-item{
+  text-align:center;
+  font-size:11px;
+  color:#aaa;
+}
+
+.nav-item img{
+  width:22px;
+  display:block;
+  margin:auto;
+  margin-bottom:4px;
+  filter:brightness(.6);
+}
+
+.nav-item.active img{
+  filter:brightness(1.5) drop-shadow(0 0 8px #00ffcc);
+}
+
+.nav-item.active{ color:#00ffcc; }
+
+.logo-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.logo-svg {
+  width: 260px;
+}
+
+.logo-text {
+  font-size: 55px;
+  font-weight: 900;
+  fill: none;
+  stroke: #00ffcc;
+  stroke-width: 2;
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: write 3s ease forwards;
+}
+
+@keyframes write {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="logo-container">
+  <svg viewBox="0 0 600 120" class="logo-svg">
+    <text x="10" y="80" class="logo-text">CryptoJet</text>
+  </svg>
+</div>
+
+<div class="balance-box">
+Balance: $<span id="balance">0.0000</span>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('run')">Running</div>
+  <div class="tab" onclick="switchTab('buy')">Purchase</div>
+</div>
+
+<div id="run" class="tab-content active"></div>
+<div id="buy" class="tab-content"></div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-item" onclick="nav('dashboard.html')">
+    <img src="./home.png">Home
+  </div>
+  <div class="nav-item active">
+    <img src="./miner.png">Miner
+  </div>
+  <div class="nav-item" onclick="nav('me.html')">
+    <img src="./user.png">Me
+  </div>
+</div>
+
+<script>
+function nav(p){ window.location.href=p; }
+
+function switchTab(tab){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(c=>c.classList.remove("active"));
+
+  if(tab==="run"){
+    document.querySelectorAll(".tab")[0].classList.add("active");
+    document.getElementById("run").classList.add("active");
+  }else{
+    document.querySelectorAll(".tab")[1].classList.add("active");
+    document.getElementById("buy").classList.add("active");
+  }
+}
+</script>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
+  authDomain: "cj-miner.firebaseapp.com",
+  databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cj-miner"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+/* =========================
+   UID + PREVIEW MODE
+========================= */
+let uid = localStorage.getItem("uid");
+
+/* FORCE PREVIEW IF YOU WANT */
+let preview = !uid;
+
+/* OPTIONAL: force preview manually */
+if(location.search.includes("preview")){
+  preview = true;
+}
+
+if(preview){
+  uid = "preview_user";
+}
+
+/* =========================
+   DATA
+========================= */
+let data = {
+  balance:0,
+  miners:{}
+};
+
+const userRef = db.ref("users/" + uid);
+
+/* =========================
+   PLANS
+========================= */
+let minersData = {};
+
+async function loadMiners(){
+  let snap = await db.ref("miners").once("value");
+  minersData = snap.val() || {};
+}
+/* =========================
+   LOAD
+========================= */
+if(!preview){
+  userRef.on("value", snap=>{
+    if(snap.exists()){
+      data = snap.val();
+      if(!data.miners) data.miners = {};
+      loadMiners().then(() => {
+  render();
+});
+    }else{
+      userRef.set(data);
+    }
+  });
+}else{
+  /* PREVIEW DATA */
+  data = {
+    balance:150,
+    miners:{
+      "Nano Miner":{running:true,last:Date.now(),daily:0.5}
+    }
+  };
+  render();
+}
+
+/* =========================
+   RENDER
+========================= */
+function render(){
+  let runHTML="";
+  let buyHTML="";
+
+  for(let n in minersData){
+  let p = minersData[n];
+
+    if(!data.miners[n]){
+      buyHTML+=`
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475">
+
+<h3>${n.replace(" Engine","")}</h3>
+
+<p>⚡ Duration: ${p.duration} days</p>
+<p>💰 Earn: $${p.daily}/day</p>
+<p>💵 Price: $${p.price}</p>
+
+<button class="rent" onclick="rent('${n}')">
+  Buy - $${p.price}
+</button>
+      </div>`;
+    }
+  }
+
+  for(let n in data.miners){
+    let m=data.miners[n];
+
+    runHTML+=`
+    <div class="card">
+      <h3>${n.replace(" Engine","")}</h3>
+      <p>Earned: $<span id="e_${n}">0.0000</span></p>
+      ${
+        !m.running
+        ? `<button class="start" onclick="start('${n}')">Start Mining</button>`
+        : `<div class="running">Mining <span class="dots"><span>.</span><span>.</span><span>.</span></span></div>`
+      }
+    </div>`;
+  }
+
+  document.getElementById("run").innerHTML=runHTML;
+  document.getElementById("buy").innerHTML=buyHTML;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+window.rent=function(name){
+  let p = minersData[name];
+
+let balance = Number(data.balance);
+let price = Number(p.price);
+
+if(balance < price){
+  return alert("Insufficient balance ❌");
+}
+
+  data.balance-=p.price;
+  data.miners[name]={running:false,last:Date.now(),daily:p.daily};
+
+// 🔥 reward referrer
+db.ref("users/" + uid).once("value").then(snap=>{
+  let d = snap.val();
+  let ref = d.referredBy;
+
+  if(ref){
+    let reward = 0;
+
+    if(name.includes("S-244")) reward = 100;
+    if(name.includes("S-500")) reward = 200;
+    if(name.includes("S-900")) reward = 350;
+
+    if(reward > 0){
+      db.ref("users/" + ref + "/pendingRewards/" + name)
+        .transaction(val => (val || 0) + reward);
+    }
+  }
+});  
+save();
+}
+
+window.start=function(name){
+  data.miners[name].running=true;
+  data.miners[name].last=Date.now();
+  save();
+}
+
+/* =========================
+   SAVE
+========================= */
+function save(){
+  if(!preview){
+    userRef.set(data);
+  }
+}
+
+/* =========================
+   ENGINE
+========================= */
+setInterval(()=>{
+  let now=Date.now();
+  let changed=false;
+
+  for(let n in data.miners){
+    let m=data.miners[n];
+    if(m.running){
+      let sec = (now - m.last) / 1000;
+let earn = sec * (m.daily / 86400);
+
+// store hidden earnings
+m.temp = (m.temp || 0) + earn;
+
+// only convert to real balance when >= 1
+if(m.temp >= 1){
+  let whole = Math.floor(m.temp);
+  data.balance += whole;
+  m.temp -= whole;
+}
+
+// update last time
+m.last = now;
+
+// track total earned
+m.total = (m.total || 0) + earn;
+
+// display total earned
+let el = document.getElementById("e_" + n);
+if(el){
+  el.innerText = Math.floor(m.total);
+}
+
+changed = true;
+    }
+  }
+
+  if(changed) save();
+
+document.getElementById("balance").innerText = data.balance.toFixed(2);
+}, 1000);
+</script>
+</script>
+
+</body>
+</html>

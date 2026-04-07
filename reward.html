@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Rewards</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:#020617;
+  color:white;
+  padding-bottom:90px;
+}
+
+/* HEADER */
+.header{
+  text-align:center;
+  font-size:26px;
+  margin:20px 0;
+  color:#00ffcc;
+}
+
+/* TABS */
+.tabs{
+  display:flex;
+  margin:15px;
+  background:#0f172a;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.tab{
+  flex:1;
+  text-align:center;
+  padding:12px;
+}
+
+.tab.active{
+  background:#00ffcc;
+  color:black;
+}
+
+/* CARD */
+.card{
+  margin:15px;
+  padding:20px;
+  border-radius:15px;
+  background:#0f172a;
+  animation:fade .5s;
+}
+
+/* BUTTON */
+.btn{
+  margin-top:15px;
+  padding:12px;
+  border-radius:10px;
+  background:linear-gradient(90deg,#00ffcc,#22c55e);
+  text-align:center;
+  color:black;
+  font-weight:700;
+}
+
+/* FLOAT REWARD */
+.reward-float{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:28px;
+  color:#00ffcc;
+  opacity:0;
+  pointer-events:none;
+  animation:pop 1.2s ease;
+}
+
+@keyframes pop{
+  0%{opacity:0; transform:translate(-50%,-30%) scale(.5);}
+  50%{opacity:1; transform:translate(-50%,-50%) scale(1.2);}
+  100%{opacity:0; transform:translate(-50%,-70%) scale(1);}
+}
+
+/* NAV */
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  height:65px;
+  background:#020617;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
+
+.nav-item{
+  text-align:center;
+  font-size:11px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">Rewards</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('miner')">Miner</div>
+  <div class="tab" onclick="switchTab('signup')">Signup</div>
+</div>
+
+<div id="content"></div>
+
+<div id="float" class="reward-float"></div>
+
+<!-- NAV -->
+<div class="bottom-nav">
+  <div class="nav-item" onclick="nav('dashboard.html')">Home</div>
+  <div class="nav-item" onclick="nav('miner.html')">Miner</div>
+  <div class="nav-item" onclick="nav('me.html')">Me</div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+  const firebaseConfig = {
+  apiKey: "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
+  authDomain: "cj-miner.firebaseapp.com",
+  databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cj-miner"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+let uid = localStorage.getItem("uid");
+
+let currentTab = "miner";
+
+/* SWITCH TAB */
+function switchTab(tab){
+  currentTab = tab;
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  event.target.classList.add("active");
+  render();
+}
+
+/* RENDER */
+function render(){
+  db.ref("users/" + uid).once("value").then(snap=>{
+    const d = snap.val() || {};
+
+    if(currentTab === "miner"){
+      renderMiner(d);
+    }else{
+      renderSignup(d);
+    }
+  });
+}
+
+/* MINER SYSTEM */
+function renderMiner(d){
+  const miners = [
+    {name:"S-244", ref:1, pts:100},
+    {name:"S-500", ref:2, pts:200},
+    {name:"S-900", ref:3, pts:350}
+  ];
+
+  let html = `
+  <div class="card">
+    Invite users who purchase miners. Each miner unlocks points.
+  </div>
+  `;
+
+  miners.forEach(m=>{
+    let rewards = d.pendingRewards || {};
+let amount = rewards[m.name] || 0;
+
+let unlocked = amount > 0;
+    let claimed = !amount;
+
+    html += `
+    <div class="card">
+      <div>${m.name}</div>
+      <div>${m.pts} Points</div>
+
+      <div class="btn" onclick="claimMiner(${m.ref},${m.pts})">
+      ${
+        claimed ? "Claimed" :
+        unlocked ? "Claim" : "Locked"
+      }
+      </div>
+    </div>
+    `;
+  });
+
+  document.getElementById("content").innerHTML = html;
+}
+
+/* SIGNUP SYSTEM */
+function renderSignup(d){
+let available = (d.referrals || 0) - (d.signupClaimed || 0);
+
+  let html = `
+  <div class="card">
+    Each signup gives you 1 point.
+  </div>
+
+  <div class="card">
+    Available: ${available} Points
+    <div class="btn" onclick="claimSignup(${available})">Claim</div>
+  </div>
+  `;
+
+  document.getElementById("content").innerHTML = html;
+}
+
+/* CLAIM MINER */
+function claimMiner(ref, pts){
+  const userRef = db.ref("users/" + uid);
+
+  userRef.once("value").then(snap=>{
+    const d = snap.val();
+
+    if(d.minerRewardsClaimed?.[ref]) return;
+
+    userRef.update({
+      points:(d.points||0)+pts,
+      ["minerRewardsClaimed/"+ref]:true
+    });
+
+    showFloat("+"+pts+" pts");
+    render();
+  });
+}
+
+/* CLAIM SIGNUP */
+function claimSignup(pts){
+  if(pts <= 0) return;
+
+  const userRef = db.ref("users/" + uid);
+
+  userRef.once("value").then(snap=>{
+    const d = snap.val();
+
+    userRef.update({
+      points:(d.points||0)+pts,
+      signupClaimed:(d.signupClaimed||0)+pts
+    });
+
+    showFloat("+"+pts+" pts");
+   render();
+  });
+}
+
+/* FLOAT EFFECT */
+function showFloat(text){
+  const el = document.getElementById("float");
+  el.innerText = text;
+  el.style.animation="none";
+  void el.offsetWidth;
+  el.style.animation="pop 1.2s ease";
+}
+
+/* INIT */
+render();
+
+function nav(p){ window.location.href=p; }
+</script>
+
+</body>
+</html>

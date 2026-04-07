@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CryptoJet - Invite</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background: radial-gradient(circle at top,#020617,#000814);
+  color:white;
+  padding-bottom:90px;
+}
+
+/* HEADER */
+.header{
+  text-align:center;
+  font-size:26px;
+  font-weight:900;
+  margin-top:20px;
+  color:#00ffcc;
+  animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+  from{ text-shadow:0 0 5px #00ffcc;}
+  to{ text-shadow:0 0 25px #00ffcc;}
+}
+
+/* CARD */
+.card{
+  margin:15px;
+  padding:20px;
+  border-radius:18px;
+  background:#0f172a;
+  box-shadow:0 0 25px rgba(0,255,204,0.08);
+  animation:fadeUp .6s ease;
+}
+
+/* LINK */
+.link{
+  background:#020617;
+  padding:15px;
+  border-radius:12px;
+  font-size:12px;
+  word-break:break-all;
+  margin-top:10px;
+}
+
+/* BUTTON */
+.btn{
+  margin-top:15px;
+  padding:15px;
+  border-radius:12px;
+  text-align:center;
+  font-weight:700;
+  background:linear-gradient(90deg,#00ffcc,#22c55e);
+  color:black;
+  transition:.3s;
+}
+
+.btn:active{
+  transform:scale(.95);
+}
+
+/* STATS */
+.stats{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
+}
+
+.stat{
+  flex:1;
+  text-align:center;
+  padding:15px;
+  background:#020617;
+  border-radius:12px;
+}
+
+/* BONUS CARD */
+.bonus{
+  margin:15px;
+  padding:20px;
+  border-radius:18px;
+  background:linear-gradient(145deg,#022c22,#064e3b);
+  animation:fadeUp .8s ease;
+}
+
+/* INFO SECTION */
+.info{
+  margin:15px;
+  padding:20px;
+  border-radius:18px;
+  background:#0f172a;
+  line-height:1.6;
+  color:#cbd5f5;
+  animation:fadeUp 1s ease;
+}
+
+/* ANIMATION */
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* NAV */
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  height:65px;
+  background:#020617;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
+
+.nav-item{
+  text-align:center;
+  font-size:11px;
+  color:#aaa;
+}
+
+.nav-item img{
+  width:22px;
+  display:block;
+  margin:auto;
+  margin-bottom:4px;
+  filter:brightness(.6);
+}
+
+.nav-item.active img{
+  filter:brightness(1.5) drop-shadow(0 0 8px #00ffcc);
+}
+
+.nav-item.active{
+  color:#00ffcc;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">Invite & Earn</div>
+
+<div class="card">
+  <div style="font-weight:700;">Your Referral Link</div>
+
+  <div id="refLink" class="link">Loading...</div>
+
+  <div class="btn" onclick="copyLink()">Copy Link</div>
+
+  <div class="stats">
+    <div class="stat">
+      <div id="refCount">0</div>
+      <small>Referrals</small>
+    </div>
+
+    <div class="stat">
+      <div>$<span id="refEarn">0</span></div>
+      <small>Total Earned</small>
+    </div>
+  </div>
+</div>
+
+<!-- BONUS -->
+<div class="bonus">
+  <div style="font-size:18px;font-weight:700;">🔥 Earn More</div>
+  <div style="font-size:13px;margin-top:5px;">
+    Invite friends and earn passive income every time they mine.
+  </div>
+</div>
+
+<!-- INFO -->
+<div class="info">
+  <div style="font-weight:700;margin-bottom:10px;">Why Invite?</div>
+
+  Earn extra income by inviting others to CryptoJet.
+
+  Every user you invite becomes part of your mining network.
+  As they mine and grow, you earn rewards automatically.
+
+  The more active your team is, the more you earn — even while you sleep.
+
+  Build your network, increase your mining power, and maximize your profits over time.
+</div>
+
+<!-- NAV -->
+<div class="bottom-nav">
+  <div class="nav-item" onclick="nav('dashboard.html')">
+    <img src="./home.png">Home
+  </div>
+
+  <div class="nav-item" onclick="nav('miner.html')">
+    <img src="./miner.png">Miner
+  </div>
+
+  <div class="nav-item active">
+    <img src="./user.png">Me
+  </div>
+</div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
+  authDomain: "cj-miner.firebaseapp.com",
+  databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cj-miner"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+let uid = localStorage.getItem("uid");
+
+if(!uid){
+  window.location.href="signin.html";
+}
+
+/* ✅ REF LINK FIXED */
+const refLink = window.location.origin + "/index.html?ref=" + uid;
+document.getElementById("refLink").innerText = refLink;
+
+/* COPY */
+function copyLink(){
+  navigator.clipboard.writeText(refLink);
+  alert("Copied!");
+}
+
+/* 🔥 LIVE DATA */
+db.ref("users/" + uid).on("value", snap=>{
+  const d = snap.val() || {};
+
+  document.getElementById("refCount").innerText = d.referrals || 0;
+  document.getElementById("refEarn").innerText = Math.floor(d.balance || 0);
+});
+
+/* NAV */
+function nav(p){ window.location.href=p; }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CryptoJet - Me</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background: radial-gradient(circle at top,#020617,#000814);
+  color:white;
+  padding-bottom:90px;
+}
+
+/* HEADER */
+.header{
+  text-align:center;
+  font-size:28px;
+  font-weight:900;
+  color:#00ffcc;
+  margin-top:20px;
+  animation:glow 2s infinite alternate;
+}
+@keyframes glow{
+  from{ text-shadow:0 0 5px #00ffcc;}
+  to{ text-shadow:0 0 25px #00ffcc;}
+}
+
+/* PROFILE CARD */
+.profile{
+  margin:15px;
+  padding:20px;
+  border-radius:18px;
+  background:linear-gradient(145deg,#020617,#0f172a);
+  display:flex;
+  align-items:center;
+  gap:15px;
+  box-shadow:0 0 20px rgba(0,255,204,0.1);
+  animation:fadeUp .6s ease;
+}
+
+.avatar{
+  width:65px;
+  height:65px;
+  border-radius:50%;
+  background:#00ffcc22;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  font-size:24px;
+}
+
+.uid{ color:#22c55e; font-weight:700; }
+.level{ color:#38bdf8; font-size:13px; }
+
+/* BALANCE */
+.balance{
+  margin:15px;
+  display:flex;
+  gap:10px;
+}
+
+.balance-box{
+  flex:1;
+  padding:15px;
+  border-radius:14px;
+  background:#0f172a;
+  text-align:center;
+  box-shadow:0 0 15px rgba(0,255,204,0.05);
+  animation:fadeUp .6s ease;
+}
+
+.value{
+  margin-top:5px;
+  color:#00ffcc;
+  font-weight:700;
+}
+
+/* ACTION BUTTONS */
+.actions{
+  display:flex;
+  gap:10px;
+  margin:15px;
+}
+
+.btn{
+  flex:1;
+  padding:14px;
+  border-radius:12px;
+  background:#0f172a;
+  text-align:center;
+  font-weight:600;
+  transition:.3s;
+}
+
+.btn:active{ transform:scale(.95); }
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:15px;
+}
+
+.box{
+  padding:18px;
+  border-radius:14px;
+  background:#0f172a;
+  text-align:center;
+  transition:.3s;
+}
+
+.box:hover{ background:#1e293b; }
+.box:active{ transform:scale(.95); }
+
+/* LIST */
+.list{
+  margin:15px;
+}
+
+.item{
+  padding:18px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.item:active{
+  background:#0f172a;
+}
+
+/* ANIMATION */
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* NAV */
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  height:65px;
+  background:#020617;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
+
+.nav-item{
+  text-align:center;
+  font-size:11px;
+  color:#aaa;
+}
+
+.nav-item img{
+  width:22px;
+  display:block;
+  margin:auto;
+  margin-bottom:4px;
+  filter:brightness(.6);
+}
+
+.nav-item.active img{
+  filter:brightness(1.5) drop-shadow(0 0 8px #00ffcc);
+}
+
+.nav-item.active{
+  color:#00ffcc;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">My Account</div>
+
+<div class="profile">
+  <div class="avatar">CJ</div>
+  <div>
+    <div id="userId" class="uid">Loading...</div>
+    <div id="minerLevel" class="level">Loading...</div>
+  </div>
+</div>
+
+<div class="balance">
+  <div class="balance-box">
+    Balance
+    <div id="balance" class="value">0</div>
+  </div>
+
+  <div class="balance-box">
+    Team
+    <div id="team" class="value">0</div>
+  </div>
+
+  <div class="balance-box">
+    Points
+    <div id="points" class="value">0</div>
+  </div>
+</div>
+
+<div class="actions">
+  <div class="btn" onclick="goRecharge()">Recharge</div>
+  <div class="btn" onclick="goWithdraw()">Withdraw</div>
+  <div class="btn" onclick="logout()">Logout</div>
+</div>
+
+<div class="grid">
+  <div class="box" onclick="nav('invite.html')">Invite</div>
+  <div class="box" onclick="nav('miner.html')">Miner</div>
+  <div class="box" onclick="nav('team.html')">Team</div>
+  <div class="box" onclick="nav('exchange.html')">Exchange</div>
+  <div class="box" onclick="nav('support.html')">Support</div>
+  <div class="box" onclick="nav('about.html')">About</div>
+</div>
+
+<div class="list">
+  <div class="item">Manage Bank Account</div>
+  <div class="item">Team Income Record</div>
+  <div class="item">Miner Income Record</div>
+</div>
+
+<!-- NAV -->
+<div class="bottom-nav">
+  <div class="nav-item" onclick="nav('dashboard.html')">
+    <img src="./home.png">Home
+  </div>
+
+  <div class="nav-item" onclick="nav('miner.html')">
+    <img src="./miner.png">Miner
+  </div>
+
+  <div class="nav-item active">
+    <img src="./user.png">Me
+  </div>
+</div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
+  authDomain: "cj-miner.firebaseapp.com",
+  databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cj-miner"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+let uid = localStorage.getItem("uid");
+
+if(!uid){
+  window.location.href = "signin.html";
+}
+
+/* 🔥 LIVE DATA SYNC */
+db.ref("users/" + uid).on("value", snap=>{
+  const d = snap.val() || {};
+
+  document.getElementById("balance").innerText = Math.floor(d.balance || 0);
+  document.getElementById("team").innerText = d.team || 0;
+  document.getElementById("points").innerText = d.points || 0;
+  document.getElementById("minerLevel").innerText = d.level || "Novice Miner";
+  document.getElementById("userId").innerText = d.minerId || uid;
+});
+
+/* NAV */
+function nav(p){ window.location.href=p; }
+function goRecharge(){ window.location.href="recharge.html"; }
+function goWithdraw(){ window.location.href="withdraw.html"; }
+
+function logout(){
+  localStorage.removeItem("uid");
+  window.location.href="signin.html";
+}
+</script>
+
+</body>
+</html>
