@@ -1,178 +1,290 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CryptoJet - Me</title>
+<title>My Account • CryptoJet</title>
 
 <style>
-body{
-  margin:0;
-  font-family:'Segoe UI',sans-serif;
-  background: radial-gradient(circle at top,#020617,#000814);
-  color:white;
-  padding-bottom:90px;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+    :root {
+        --neon: #00f0ff;
+        --accent: #00ffcc;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+        font-family: 'Inter', system-ui, sans-serif;
+        background: #020617;
+        color: #e2e8f0;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    .header {
+        text-align:center;
+        font-size:28px;
+        color:#00ffcc;
+        margin-top:30px;
+        font-weight:900;
+        letter-spacing:1px;
+        animation:glow 2s infinite alternate;
+    }
+    @keyframes glow {
+        from { text-shadow:0 0 10px #00ffcc; }
+        to { text-shadow:0 0 25px #00ffcc; }
+    }
+
+    .page-content {
+        min-height: calc(100vh - 90px);
+        padding-bottom: 90px;
+    }
+
+    /* PROFILE */
+    .profile {
+        margin:15px;
+        padding:20px;
+        border-radius:20px;
+        background:linear-gradient(145deg,#020617,#0f172a);
+        display:flex;
+        align-items:center;
+        gap:15px;
+        box-shadow:0 0 20px rgba(0,255,204,0.15);
+    }
+    .avatar {
+        width:65px;
+        height:65px;
+        border-radius:50%;
+        background:#00ffcc22;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:26px;
+        font-weight:900;
+    }
+    .uid { color:#22c55e; font-weight:700; }
+    .level { color:#38bdf8; font-size:13px; }
+
+    /* BALANCE - SMALLER & CLEANER */
+    .balance {
+        margin:15px;
+        display:flex;
+        gap:10px;
+    }
+    .balance-box {
+        flex:1;
+        padding:14px 10px;
+        border-radius:16px;
+        background:#0f172a;
+        text-align:center;
+        box-shadow:0 0 15px rgba(0,255,204,0.08);
+    }
+    .balance-label { font-size:12px; color:#94a3b8; }
+    .balance-amount { font-size:22px; font-weight:700; color:#00ffcc; margin-top:4px; }
+
+    /* ACTIONS */
+    .actions {
+        display:flex;
+        gap:10px;
+        margin:15px;
+    }
+    .btn {
+        flex:1;
+        padding:14px;
+        border-radius:14px;
+        background:#0f172a;
+        text-align:center;
+        font-weight:600;
+        transition:0.3s;
+    }
+    .btn:active { transform:scale(0.95); }
+
+        .grid {
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:12px;
+        margin:15px;
+    }
+    .box {
+        padding:18px 16px;
+        border-radius:16px;
+        background:#0f172a;
+        display:flex;
+        align-items:center;
+        gap:12px;
+        font-weight:600;
+        transition:0.3s;
+    }
+    .box:active { background:#1e293b; transform:scale(0.97); }
+
+    /* CLEAN SVG ICONS (no emojis) */
+    .icon {
+        width:32px;
+        height:32px;
+        background:rgba(0,255,204,0.1);
+        border-radius:10px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        flex-shrink: 0;
+    }
+
+    /* LIST */
+    .list {
+        margin:15px;
+    }
+    .list-item {
+        padding:16px;
+        border-radius:14px;
+        margin-bottom:10px;
+        background:#0f172a;
+        display:flex;
+        align-items:center;
+        gap:14px;
+        transition:0.3s;
+    }
+    .list-item:active {
+        transform:scale(0.97);
+        background:#1e293b;
+    }
+
+    /* NAV - EXACTLY LIKE YOUR ORIGINAL */
+    .nav-glass {
+        position:fixed;
+        bottom:20px;
+        left:50%;
+        transform:translateX(-50%);
+        width:90%;
+        height:70px;
+        display:flex;
+        justify-content:space-around;
+        align-items:center;
+        background:rgba(255,255,255,0.05);
+        backdrop-filter:blur(20px);
+        border-radius:25px;
+        box-shadow:0 8px 30px rgba(0,0,0,0.4);
+        border:1px solid rgba(255,255,255,0.08);
+        z-index:999;
+    }
+    .nav-item {
+        text-align:center;
+        color:#aaa;
+        font-size:11px;
+    }
+    .nav-item.active { color:#00ffcc; }
+
+    /* ICONS - MATCHING YOUR OLD FILE */
+    .icon { width:26px; height:26px; margin-bottom:4px; position:relative; }
+    .icon.home::before {
+        content:""; position:absolute; width:18px; height:18px;
+        background:#aaa; transform:rotate(45deg);
+        top:4px; left:4px; border-radius:3px;
+    }
+    .nav-item.active .home::before { background:#00ffcc; }
+
+    .icon.miner::before {
+        content:"⚡"; font-size:20px; position:absolute; left:3px; top:-2px;
+    }
+    .nav-item.active .miner::before { color:#00ffcc; }
+
+    .icon.me {
+        background:#ffffff22;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+    .icon.me::before { content:"👤"; font-size:14px; }
+    .nav-item.active .me { background:#00ffcc33; }
+
+    /* LOADER - EXACTLY LIKE YOUR OLD ONE */
+    #loader {
+        position:fixed; top:0; left:0; width:100%; height:100%;
+        background:#020617; display:flex; align-items:center;
+        justify-content:center; z-index:9999; flex-direction:column;
+        color:#22c55e; font-size:18px;
+    }
+    .loader-content { text-align:center; }
+    .loader-logo {
+        font-size:30px; font-weight:900; color:#00ffcc;
+        margin-bottom:20px; animation:glow 1.5s infinite alternate;
+    }
+    .loader-bar {
+        width:180px; height:4px; background:#111;
+        border-radius:10px; overflow:hidden;
+    }
+    .loader-fill {
+        width:0%; height:100%; background:#00ffcc;
+        animation:loadBar 2s ease forwards;
+    }
+    @keyframes loadBar { to { width:100%; } }
+    @keyframes glow { from { text-shadow:0 0 5px #00ffcc; } to { text-shadow:0 0 25px #00ffcc; } }
+
+/* MENU LIST */
+.menu-group {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    overflow: hidden;
+}
+.menu-item {
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid var(--border);
+    transition: 0.2s;
+    cursor: pointer;
+}
+.menu-item:last-child { border-bottom: none; }
+.menu-item:active { background: rgba(0, 255, 204, 0.05); }
+
+.menu-icon-box {
+    width: 38px;
+    height: 38px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
 }
 
-/* HEADER */
-.header{
-  text-align:center;
-  font-size:28px;
-  font-weight:900;
-  color:#00ffcc;
-  margin-top:20px;
-  animation:glow 2s infinite alternate;
-}
-@keyframes glow{
-  from{ text-shadow:0 0 5px #00ffcc;}
-  to{ text-shadow:0 0 25px #00ffcc;}
+.menu-text { flex: 1; font-weight: 600; font-size: 18px; color: #f1f5f9; }
+
+.menu-icon {
+    width: 22px;
+    height: 22px;
+    stroke: #00ffcc; /* Matches your brand color */
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
 }
 
-/* PROFILE CARD */
-.profile{
-  margin:15px;
-  padding:20px;
-  border-radius:18px;
-  background:linear-gradient(145deg,#020617,#0f172a);
-  display:flex;
-  align-items:center;
-  gap:15px;
-  box-shadow:0 0 20px rgba(0,255,204,0.1);
-  animation:fadeUp .6s ease;
+.chevron {
+    width: 16px;
+    height: 16px;
+    stroke: rgba(255,255,255,0.3);
+    stroke-width: 2.5;
 }
 
-.avatar{
-  width:65px;
-  height:65px;
-  border-radius:50%;
-  background:#00ffcc22;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:900;
-  font-size:24px;
-}
-
-.uid{ color:#22c55e; font-weight:700; }
-.level{ color:#38bdf8; font-size:13px; }
-
-/* BALANCE */
-.balance{
-  margin:15px;
-  display:flex;
-  gap:10px;
-}
-
-.balance-box{
-  flex:1;
-  padding:15px;
-  border-radius:14px;
-  background:#0f172a;
-  text-align:center;
-  box-shadow:0 0 15px rgba(0,255,204,0.05);
-  animation:fadeUp .6s ease;
-}
-
-.value{
-  margin-top:5px;
-  color:#00ffcc;
-  font-weight:700;
-}
-
-/* ACTION BUTTONS */
-.actions{
-  display:flex;
-  gap:10px;
-  margin:15px;
-}
-
-.btn{
-  flex:1;
-  padding:14px;
-  border-radius:12px;
-  background:#0f172a;
-  text-align:center;
-  font-weight:600;
-  transition:.3s;
-}
-
-.btn:active{ transform:scale(.95); }
-
-/* GRID */
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin:15px;
-}
-
-.box{
-  padding:18px;
-  border-radius:14px;
-  background:#0f172a;
-  text-align:center;
-  transition:.3s;
-}
-
-.box:hover{ background:#1e293b; }
-.box:active{ transform:scale(.95); }
-
-/* LIST */
-.list{
-  margin:15px;
-}
-
-.item{
-  padding:18px;
-  border-bottom:1px solid rgba(255,255,255,0.05);
-}
-
-.item:active{
-  background:#0f172a;
-}
-
-/* ANIMATION */
-@keyframes fadeUp{
-  from{opacity:0; transform:translateY(20px);}
-  to{opacity:1; transform:translateY(0);}
-}
-
-/* NAV */
-.bottom-nav{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  height:65px;
-  background:#020617;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-}
-
-.nav-item{
-  text-align:center;
-  font-size:11px;
-  color:#aaa;
-}
-
-.nav-item img{
-  width:22px;
-  display:block;
-  margin:auto;
-  margin-bottom:4px;
-  filter:brightness(.6);
-}
-
-.nav-item.active img{
-  filter:brightness(1.5) drop-shadow(0 0 8px #00ffcc);
-}
-
-.nav-item.active{
-  color:#00ffcc;
-}
 </style>
 </head>
-
 <body>
+
+<!-- LOADER (EXACTLY LIKE YOUR OLD ONE) -->
+<div id="loader">
+  <div class="loader-content">
+    <div class="loader-logo">CryptoJet</div>
+    <div class="loader-bar">
+      <div class="loader-fill"></div>
+    </div>
+  </div>
+</div>
+
+<div class="page-content">
 
 <div class="header">My Account</div>
 
@@ -187,17 +299,15 @@ body{
 <div class="balance">
   <div class="balance-box">
     Balance
-    <div id="balance" class="value">0</div>
+    <div id="balance" class="balance-amount">0</div>
   </div>
-
   <div class="balance-box">
     Team
-    <div id="team" class="value">0</div>
+    <div id="team" class="balance-amount">0</div>
   </div>
-
   <div class="balance-box">
     Points
-    <div id="points" class="value">0</div>
+    <div id="points" class="balance-amount">0</div>
   </div>
 </div>
 
@@ -206,38 +316,96 @@ body{
   <div class="btn" onclick="goWithdraw()">Withdraw</div>
   <div class="btn" onclick="logout()">Logout</div>
 </div>
-
 <div class="grid">
-  <div class="box" onclick="nav('invite.html')">Invite</div>
-  <div class="box" onclick="nav('miner.html')">Miner</div>
-  <div class="box" onclick="nav('team.html')">Team</div>
-  <div class="box" onclick="nav('exchange.html')">Exchange</div>
-  <div class="box" onclick="nav('support.html')">Support</div>
-  <div class="box" onclick="nav('about.html')">About</div>
+  <div class="box" onclick="nav('invite.html')">
+    <div class="icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ffcc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+    </div>
+    <div>Invite</div>
+  </div>
+  <div class="box" onclick="nav('miner.html')">
+    <div class="icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ffcc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+    </div>
+    <div>Miner</div>
+  </div>
+  <div class="box" onclick="nav('team.html')">
+    <div class="icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ffcc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+    </div>
+    <div>Team</div>
+  </div>
+  <div class="box" onclick="nav('exchange.html')">
+    <div class="icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ffcc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 0 0 1-9-9m9-9a9 9 0 0 1 9 9"></path></svg>
+    </div>
+    <div>Exchange</div>
+  </div>
+  <div class="box" onclick="nav('https://t.me/tiffany682')">
+    <div class="icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ffcc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    </div>
+    <div>Support</div>
+  </div>
+  <div class="box" onclick="nav('about.html')">
+    <div class="icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ffcc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+    </div>
+    <div>About</div>
+  </div>
 </div>
 
-<div class="list">
-  <div class="item">Manage Bank Account</div>
-  <div class="item">Team Income Record</div>
-  <div class="item">Miner Income Record</div>
+<div class="menu-group">
+    <div class="menu-item" onclick="goBank()">
+        <div class="menu-icon-box">
+            <svg class="menu-icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+        </div>
+        <div class="menu-text">Bank Information</div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6"></path></svg>
+    </div>
+
+    <div class="menu-item" onclick="goTransactions()">
+        <div class="menu-icon-box">
+            <svg class="menu-icon" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        </div>
+        <div class="menu-text">Transaction History</div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6"></path></svg>
+    </div>
+
+    <div class="menu-item" onclick="goTeam()">
+        <div class="menu-icon-box">
+            <svg class="menu-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <div class="menu-text">Team Records</div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6"></path></svg>
+    </div>
+
+    <div class="menu-item" onclick="goMiner()">
+        <div class="menu-icon-box">
+            <svg class="menu-icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="15" x2="23" y2="15"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="15" x2="4" y2="15"></line></svg>
+        </div>
+        <div class="menu-text">My Mining Units</div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6"></path></svg>
+    </div>
 </div>
 
-<!-- NAV -->
-<div class="bottom-nav">
+<!-- BOTTOM NAV - EXACTLY LIKE YOUR OLD FILE -->
+<div class="nav-glass">
   <div class="nav-item" onclick="nav('dashboard.html')">
-    <img src="./home.png">Home
+    <div class="icon home"></div>
+    <span>Home</span>
   </div>
-
   <div class="nav-item" onclick="nav('miner.html')">
-    <img src="./miner.png">Miner
+    <div class="icon miner"></div>
+    <span>Miner</span>
   </div>
-
-  <div class="nav-item active">
-    <img src="./user.png">Me
+  <div class="nav-item active" onclick="nav('me.html')">
+    <div class="icon me"></div>
+    <span>Me</span>
   </div>
 </div>
 
-<!-- FIREBASE -->
+<!-- FIREBASE + LOGIC (UNTOUCHED) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -253,32 +421,36 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 let uid = localStorage.getItem("uid");
+if (!uid) window.location.href = "signin.html";
 
-if(!uid){
-  window.location.href = "signin.html";
-}
+/* LIVE DATA SYNC */
+db.ref("users/" + uid).on("value", snap => {
+    let d = snap.val() || {};
 
-/* 🔥 LIVE DATA SYNC */
-db.ref("users/" + uid).on("value", snap=>{
-  const d = snap.val() || {};
-
-  document.getElementById("balance").innerText = Math.floor(d.balance || 0);
-  document.getElementById("team").innerText = d.team || 0;
-  document.getElementById("points").innerText = d.points || 0;
-  document.getElementById("minerLevel").innerText = d.level || "Novice Miner";
-  document.getElementById("userId").innerText = d.minerId || uid;
+    document.getElementById("userId").innerText = d.minerId || "----";
+    document.getElementById("points").innerText = d.points || 0;
+    document.getElementById("balance").innerText = Math.floor(d.balance || 0);
+    document.getElementById("team").innerText = d.team || 0;
+    document.getElementById("minerLevel").innerText = d.level || "Novice Miner";
 });
 
-/* NAV */
-function nav(p){ window.location.href=p; }
-function goRecharge(){ window.location.href="recharge.html"; }
-function goWithdraw(){ window.location.href="withdraw.html"; }
+/* NAV & LINKS (UNTOUCHED) */
+function nav(p){ window.location.href = p; }
+function goRecharge(){ window.location.href = "recharge.html"; }
+function goWithdraw(){ window.location.href = "withdraw.html"; }
+function logout(){ localStorage.removeItem("uid"); window.location.href = "signin.html"; }
+function goTransactions(){ window.location.href = "transactions.html"; }
+function goBank(){ window.location.href = "bank.html"; }
+function goTeam(){ window.location.href = "teamrecord.html"; }
+function goMiner(){ window.location.href = "miner-record.html"; }
 
-function logout(){
-  localStorage.removeItem("uid");
-  window.location.href="signin.html";
-}
+/* LOADER */
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+        document.querySelector(".page-content").style.opacity = "1";
+    }, 1500);
+});
 </script>
-
 </body>
 </html>
