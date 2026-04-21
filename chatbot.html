@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CryptoJet Assistant</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(180deg, #020617, #0a0f1c);
+        color: #e2e8f0;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-header {
+        background: rgba(15,23,42,0.97);
+        backdrop-filter: blur(20px);
+        padding: 16px 20px;
+        border-bottom: 1px solid rgba(0,240,255,0.15);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .header-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #00f0ff, #00ffcc);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+        box-shadow: 0 0 16px rgba(0,240,255,0.4);
+    }
+
+    .header-info { flex: 1; }
+    .header-name {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: #00f0ff;
+        text-shadow: 0 0 16px rgba(0,240,255,0.5);
+    }
+    .header-status {
+        font-size: 12px;
+        color: #22c55e;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 2px;
+    }
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        background: #22c55e;
+        border-radius: 50%;
+        animation: statusPulse 2s infinite;
+    }
+    @keyframes statusPulse {
+        0%,100% { opacity: 1; }
+        50% { opacity: 0.4; }
+    }
+
+    .chat-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px 16px 90px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        scroll-behavior: smooth;
+    }
+    .chat-container::-webkit-scrollbar { width: 4px; }
+    .chat-container::-webkit-scrollbar-thumb { background: #1e2937; border-radius: 4px; }
+
+    .msg-row {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+        margin-bottom: 10px;
+    }
+    .msg-row.user-row { flex-direction: row-reverse; }
+
+    .bot-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #00f0ff, #00ffcc);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        flex-shrink: 0;
+        margin-bottom: 2px;
+    }
+
+    .msg-wrap { display: flex; flex-direction: column; max-width: 82%; }
+    .user-row .msg-wrap { align-items: flex-end; }
+
+    .message {
+        padding: 13px 17px;
+        border-radius: 20px;
+        line-height: 1.6;
+        font-size: 15px;
+        position: relative;
+        word-break: break-word;
+    }
+
+    .user-msg {
+        background: linear-gradient(135deg, #00f0ff, #00ffcc);
+        color: #020617;
+        border-bottom-right-radius: 5px;
+        font-weight: 500;
+    }
+
+    .bot-msg {
+        background: rgba(30,41,59,0.95);
+        border: 1px solid rgba(0,240,255,0.18);
+        border-bottom-left-radius: 5px;
+        color: #e2e8f0;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .msg-time {
+        font-size: 11px;
+        color: #475569;
+        margin-top: 4px;
+        padding: 0 4px;
+    }
+
+    .typing-row {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+        margin-bottom: 10px;
+    }
+    .typing-bubble {
+        background: rgba(30,41,59,0.8);
+        border: 1px solid rgba(0,240,255,0.15);
+        padding: 14px 18px;
+        border-radius: 20px;
+        border-bottom-left-radius: 5px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .dot {
+        width: 7px;
+        height: 7px;
+        background: #00f0ff;
+        border-radius: 50%;
+        animation: dotBounce 1.3s infinite;
+        opacity: 0.7;
+    }
+    .dot:nth-child(2) { animation-delay: 0.18s; }
+    .dot:nth-child(3) { animation-delay: 0.36s; }
+    @keyframes dotBounce {
+        0%,80%,100% { transform: translateY(0); opacity: 0.5; }
+        40% { transform: translateY(-7px); opacity: 1; }
+    }
+
+    .bot-msg strong { color: #00f0ff; }
+    .bot-msg ul { padding-left: 18px; margin: 8px 0; }
+    .bot-msg ul li { margin-bottom: 5px; color: #cbd5e1; }
+    .bot-msg .highlight { color: #22c55e; font-weight: 600; }
+
+    .miner-cards { display: flex; flex-direction: column; gap: 10px; margin: 10px 0; }
+    .miner-card {
+        background: rgba(15,23,42,0.9);
+        border: 1px solid rgba(0,240,255,0.2);
+        border-radius: 14px;
+        padding: 14px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .miner-name { font-weight: 700; color: #00f0ff; font-size: 15px; }
+    .miner-price { color: #22c55e; font-weight: 700; font-size: 14px; }
+    .miner-daily { color: #94a3b8; font-size: 13px; margin-top: 2px; }
+
+    .suggestions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 6px 0 10px;
+        padding-left: 40px;
+    }
+    .sugg-btn {
+        background: rgba(30,41,59,0.85);
+        color: #00f0ff;
+        border: 1px solid rgba(0,240,255,0.25);
+        padding: 9px 16px;
+        border-radius: 9999px;
+        font-size: 13.5px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: 'Inter', sans-serif;
+    }
+    .sugg-btn:hover, .sugg-btn:active {
+        background: rgba(0,240,255,0.12);
+        border-color: rgba(0,240,255,0.5);
+        transform: scale(0.97);
+    }
+
+    .satisfaction-wrap { padding-left: 40px; margin-bottom: 10px; }
+    .satisfaction {
+        background: rgba(15,23,42,0.9);
+        border: 1px solid rgba(0,240,255,0.15);
+        border-radius: 16px;
+        padding: 14px 16px;
+        font-size: 14px;
+        color: #94a3b8;
+    }
+    .sat-btns { display: flex; gap: 10px; margin-top: 10px; }
+    .sat-btns button {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    .sat-yes { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3) !important; }
+    .sat-no  { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.25) !important; }
+
+    .input-area {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 14px 16px;
+        background: rgba(10,15,28,0.97);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(0,240,255,0.12);
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    #userInput {
+        flex: 1;
+        padding: 14px 20px;
+        border: 1.5px solid rgba(0,240,255,0.2);
+        border-radius: 9999px;
+        background: rgba(30,41,59,0.9);
+        color: white;
+        font-size: 15px;
+        outline: none;
+        font-family: 'Inter', sans-serif;
+        transition: border-color 0.2s;
+    }
+    #userInput:focus { border-color: rgba(0,240,255,0.5); }
+    #userInput::placeholder { color: #475569; }
+
+    #sendBtn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #00f0ff, #00ffcc);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+        box-shadow: 0 0 20px rgba(0,240,255,0.35);
+        transition: transform 0.15s, box-shadow 0.15s;
+    }
+    #sendBtn:active { transform: scale(0.92); }
+</style>
+</head>
+<body>
+
+<div class="chat-header">
+    <div class="header-avatar">🤖</div>
+    <div class="header-info">
+        <div class="header-name">CryptoJet AI</div>
+        <div class="header-status">
+            <div class="status-dot"></div>
+            Always Online
+        </div>
+    </div>
+</div>
+
+<div class="chat-container" id="chat"></div>
+
+<div class="input-area">
+    <input type="text" id="userInput" placeholder="Ask me anything...">
+    <button id="sendBtn" onclick="sendMessage()">➤</button>
+</div>
+
+<script>
+const knowledge = [
+    {
+        keys: ["how mining work","start mining","mining work","what is mining","how do i mine","mining process","miner work"],
+        followups: ["How do I recharge?","What miners are available?","When can I withdraw?"],
+        answers: [
+            `Mining on CryptoJet is <strong>100% automatic</strong>.<br><br>Here's how it works:<ul><li>Buy any miner from the Miners page</li><li>Tap <strong>Start Mining</strong> — it runs for 24 hours</li><li>Watch your earnings grow in real time</li><li>Once earnings hit a whole number, they move to your main balance</li><li>Restart every 24 hours to keep earning</li></ul>`,
+            `It's super simple. After buying a miner, hit <strong>Start Mining</strong> on the Miners page. It runs automatically for 24 hours, showing live earnings every second. When your earnings reach a full dollar, it's added to your balance automatically. Just restart daily! 🚀`,
+            `Think of it like a <strong>passive income machine</strong>. You buy a miner once, start it, and it earns for you around the clock. The live counter shows real-time decimals — once it rounds to a full dollar, it hits your balance. No manual work needed.`
+        ]
+    },
+    {
+        keys: ["recharge","top up","fund","deposit","add money","add balance","how to pay"],
+        followups: ["How long does approval take?","How do I withdraw?","What miners can I buy?"],
+        answers: [
+            `To recharge your balance:<ul><li>Go to the <strong>Recharge</strong> page</li><li>Enter the amount you want to add</li><li>Send payment to the displayed bank account or USDT wallet</li><li>Upload your <strong>receipt screenshot</strong></li><li>Admin reviews and approves — usually within minutes</li></ul>Once approved, the amount appears instantly in your balance. ✅`,
+            `Recharging is straightforward. Head to the Recharge page, choose your amount, send the payment, then upload proof. The admin reviews it fast and your balance updates automatically once approved.`,
+            `Go to <strong>Recharge</strong>, enter your amount, pay via bank transfer or USDT to the shown wallet, then snap and upload your receipt. Admin approval usually takes just a few minutes! 💰`
+        ]
+    },
+    {
+        keys: ["withdraw","cash out","get money","payment","how do i get paid","send money","payout"],
+        followups: ["What's the withdrawal fee?","What days can I withdraw?","How do I add my bank?"],
+        answers: [
+            `Withdrawals are available <strong>Monday to Saturday</strong>.<br><br>Steps:<ul><li>First, save your bank details on the <strong>Bank</strong> page</li><li>Set a withdrawal password</li><li>Go to <strong>Withdraw</strong>, enter amount</li><li>An <span class="highlight">18% fee</span> is deducted automatically</li><li>Submit — admin processes it shortly after</li></ul>`,
+            `To cash out: make sure your bank details are saved (Bank page), then head to Withdraw, enter your amount, type your password, and submit. <strong>18% fee</strong> is taken and the rest is sent to you. Available Mon–Sat.`,
+            `Head to the <strong>Withdraw</strong> page. You'll need your bank details saved and a withdrawal password set first (Bank page). Enter your amount, confirm with your password, and submit. <span class="highlight">18% fee applies</span>. Processing is usually fast! 💸`
+        ]
+    },
+    {
+        keys: ["miner price","how much","cost","buy miner","miners available","what miner","which miner","miner plan","packages"],
+        followups: ["How does mining work?","How do I recharge to buy?","Which miner is best?"],
+        answers: ["__MINER_CARDS__","__MINER_CARDS__","__MINER_CARDS__"]
+    },
+    {
+        keys: ["referral","refer","invite","link","bonus","friend","share"],
+        followups: ["How do I convert points?","How do I withdraw?","How many people can I refer?"],
+        answers: [
+            `Our referral system is <strong>really rewarding</strong>:<ul><li>Share your unique referral link</li><li>Get <strong>10 points</strong> when someone signs up with it</li><li>Earn bonus points when they buy miners</li><li>Head to the <strong>Reward</strong> page to convert: <span class="highlight">100 points = $1</span> added to your balance</li></ul>The more you refer, the more you earn passively!`,
+            `Share your referral link and earn points every time someone joins and buys a miner. On the <strong>Reward page</strong>, 100 points = $1 added straight to your balance. Stack enough referrals and it becomes a solid side income on top of mining! 🎯`,
+            `Referrals = extra money on top of your mining income. You get 10 points per signup and more when they buy miners. Convert your points on the Reward page — <strong>100 points = $1</strong>. Simple and profitable.`
+        ]
+    },
+    {
+        keys: ["balance not update","balance wrong","not showing","earnings not","why balance","balance issue","not adding"],
+        followups: ["How does mining work?","Is my miner running?","How do I restart my miner?"],
+        answers: [
+            `Your balance only updates when miner earnings <strong>reach a full dollar</strong>. The live counter shows decimals, but the main balance only adds whole numbers. So if you see $0.78 on your miner, it hasn't hit $1 yet — <strong>be patient, it'll flip soon!</strong> Also check that your miner is still running.`,
+            `This is totally normal! The balance shows <strong>whole dollars only</strong>. The live earning display shows decimals but nothing moves to your balance until it crosses $1. Make sure your miner is still active (check the Miners page).`,
+            `Don't worry — your earnings are there. The system only transfers earnings to your main balance once they hit a <strong>complete dollar amount</strong>. Also make sure you restarted your miner within the last 24 hours.`
+        ]
+    },
+    {
+        keys: ["bank","account","bank detail","add bank","bank number","account number","bank page"],
+        followups: ["How do I withdraw?","How do I set a withdrawal password?","What banks are supported?"],
+        answers: [
+            `Go to the <strong>Bank</strong> page from the menu. There you can:<ul><li>Add your bank name and account number</li><li>Set a secure withdrawal password</li></ul>These details are saved automatically and used every time you request a withdrawal. 🏦`,
+            `The Bank page lets you store your account details and set your withdrawal PIN. You only need to do this once — after that, withdrawals use them automatically.`,
+            `Head to <strong>Bank</strong> in the menu. Add your bank details and create a withdrawal password. <span class="highlight">This must be done before your first withdrawal</span>. Once saved, it's all automatic.`
+        ]
+    },
+    {
+        keys: ["approval","how long","wait","processing","when approve","admin approve","time take"],
+        followups: ["How do I recharge?","How do I withdraw?","What if it's taking too long?"],
+        answers: [
+            `Approvals usually happen <strong>within a few minutes to a few hours</strong> depending on when the admin is online. Recharges are typically faster. If it's been a very long time, reach out to support.`,
+            `Most approvals are done quickly — recharges especially. Withdrawals may take a bit longer but are processed the same day in most cases. Our admin is active during Nigerian business hours.`,
+            `Usually <strong>very fast</strong> — most recharges are approved within minutes. Withdrawals are Mon–Sat and processed during active hours. You'll see your balance update the moment it's approved.`
+        ]
+    },
+    {
+        keys: ["how it works","get started","begin","new here","just joined","first time","what do i do","step"],
+        followups: ["How do I recharge?","What miner should I buy?","How do I start mining?"],
+        answers: [
+            `Welcome to CryptoJet! Here's how to get started:<ul><li><strong>1.</strong> Recharge your balance (Recharge page)</li><li><strong>2.</strong> Buy a miner that fits your budget</li><li><strong>3.</strong> Tap Start Mining on the Miners page</li><li><strong>4.</strong> Watch your earnings grow automatically</li><li><strong>5.</strong> Withdraw Mon–Sat when you're ready</li></ul>That's the whole cycle — simple and profitable! 🚀`,
+            `The loop is simple: <strong>Recharge → Buy Miner → Start Mining → Withdraw</strong>. Every miner earns you daily passive income automatically. Restart your miner every 24 hours to keep earning.`,
+            `Getting started takes 3 steps: <span class="highlight">Fund your balance → Buy a miner → Hit Start</span>. After that, your miner runs itself. You just check in daily to restart it and watch your earnings grow.`
+        ]
+    },
+    {
+        keys: ["which miner best","recommend","best miner","suggest","should i buy","good miner","worth it"],
+        followups: ["How do I recharge?","What's the daily earning?","How does mining work?"],
+        answers: [
+            `Depends on your budget! Here's my quick guide:<ul><li><strong>Starting out?</strong> → S-244 at $10 is perfect to test the waters</li><li><strong>Want solid returns?</strong> → S-500 at $30 gives $1.5/day</li><li><strong>Serious earner?</strong> → S-1200 at $120 earns $4/day — pays itself back in 30 days</li></ul>All miners are worth it — just match your investment to your comfort level.`,
+            `Honest recommendation: if you have $50+, go for the <strong>S-900</strong> — $2/day is a solid return. If you're just starting, the <strong>S-244</strong> at $10 lets you see how it all works with low risk.`,
+            `The <strong>S-1200</strong> gives the best daily return at $4/day. But start where you're comfortable — even the $10 S-244 proves the concept. Scale up once you see your first earnings hit. 💎`
+        ]
+    },
+    {
+        keys: ["fee","charge","deduction","percent","how much deducted","18"],
+        followups: ["How do I withdraw?","What days can I withdraw?","How long does it take?"],
+        answers: [
+            `There's an <strong>18% fee</strong> on all withdrawals. This is deducted automatically when you submit. So if you withdraw $100, you receive $82.`,
+            `Withdrawals have an <span class="highlight">18% service fee</span>. It's auto-deducted — no surprises. For example: withdraw $50, get $41 sent to you.`,
+            `The fee is <strong>18% of your withdrawal amount</strong>. It's auto-deducted, so plan accordingly when setting your withdrawal amount.`
+        ]
+    },
+    {
+        keys: ["point","reward","redeem","convert","100 point","earn point"],
+        followups: ["How does referral work?","How do I withdraw?","Where is the Reward page?"],
+        answers: [
+            `You earn points through referrals. Every 100 points = <strong>$1 added to your balance</strong>. Go to the <strong>Reward</strong> page to see your points and convert them.`,
+            `Points come from referring friends. Stack 100 points, head to the Reward page, and convert them to <span class="highlight">$1 in real balance</span>. Keep referring to keep earning extra!`,
+            `The Reward page shows your point total. Convert at <strong>100 points = $1</strong>. It's free extra income on top of whatever your miners are earning.`
+        ]
+    },
+    {
+        keys: ["support","help","contact","telegram","human","agent","real person","talk to someone"],
+        followups: [],
+        isSupport: true,
+        answers: [
+            `I'll connect you to our support team right away. Tap below to open our <strong>Telegram support</strong> — a real agent will assist you! 🙋`,
+            `No problem! Our support team is on Telegram and responds quickly. Tap the button below to reach them directly.`,
+            `Our human support team is always ready to help. Tap below to chat with a real agent on Telegram.`
+        ]
+    }
+];
+
+const frustrationKeys = ["not working","scam","fraud","cheat","fake","lied","problem","issue","wrong","broken","annoyed","upset","why is","nothing","useless"];
+
+let lastTopic = null;
+let awaitingSatisfaction = false;
+
+function now() {
+    return new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+}
+function botAvatar() {
+    return `<div class="bot-avatar">🤖</div>`;
+}
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function scrollBottom() {
+    const c = document.getElementById('chat');
+    c.scrollTop = c.scrollHeight;
+}
+function escapeHtml(s) {
+    return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+function addUserMessage(text) {
+    const row = document.createElement('div');
+    row.className = 'msg-row user-row';
+    row.innerHTML = `<div class="msg-wrap"><div class="message user-msg">${escapeHtml(text)}</div><div class="msg-time">${now()}</div></div>`;
+    document.getElementById('chat').appendChild(row);
+    scrollBottom();
+}
+
+function showTyping() {
+    const row = document.createElement('div');
+    row.className = 'typing-row';
+    row.id = 'typingRow';
+    row.innerHTML = `${botAvatar()}<div class="typing-bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+    document.getElementById('chat').appendChild(row);
+    scrollBottom();
+}
+function removeTyping() {
+    const t = document.getElementById('typingRow');
+    if (t) t.remove();
+}
+
+function minerCardsHTML() {
+    const miners = [
+        { name:"S-244", price:"$10", daily:"$0.50 / day", note:"Can be purchased twice" },
+        { name:"S-500", price:"$30", daily:"$1.50 / day", note:"Most popular" },
+        { name:"S-900", price:"$50", daily:"$2.00 / day", note:"Best mid-tier" },
+        { name:"S-1200", price:"$120", daily:"$4.00 / day", note:"Top earner" },
+    ];
+    return `<div style="margin-bottom:6px;">Here are all available miners:</div>
+        <div class="miner-cards">${miners.map(m=>`
+            <div class="miner-card">
+                <div><div class="miner-name">${m.name}</div><div class="miner-daily">${m.daily} · ${m.note}</div></div>
+                <div class="miner-price">${m.price}</div>
+            </div>`).join('')}
+        </div>
+        <div style="font-size:13px;color:#64748b;margin-top:4px;">All miners pay back within ~25–30 days 💰</div>`;
+}
+
+async function typeBotMessage(htmlContent) {
+    const row = document.createElement('div');
+    row.className = 'msg-row';
+   row.innerHTML = `
+        <div class="bot-avatar">🤖</div>
+        <div class="msg-wrap">
+            <div class="message bot-msg" id="activeBotMsg"></div>
+            <div class="msg-time">${now()}</div>
+        </div>
+    `;
+    document.getElementById('chat').appendChild(row);
+    const msgDiv = row.querySelector('#activeBotMsg');
+    msgDiv.removeAttribute('id');
+    if (htmlContent.includes('<')) {
+        msgDiv.innerHTML = htmlContent;
+    } else {
+        const words = htmlContent.split(' ');
+        for (let i = 0; i < words.length; i++) {
+            msgDiv.textContent += (i > 0 ? ' ' : '') + words[i];
+            if (i % 3 === 0) { await sleep(28); scrollBottom(); }
+        }
+    }
+    scrollBottom();
+}
+
+function addSuggestions(followups) {
+    if (!followups || followups.length === 0) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'suggestions';
+    followups.forEach(q => {
+        const btn = document.createElement('button');
+        btn.className = 'sugg-btn';
+        btn.textContent = q;
+        btn.onclick = () => {
+            document.querySelectorAll('.suggestions').forEach(s => s.remove());
+            document.getElementById('userInput').value = q;
+            sendMessage();
+        };
+        wrap.appendChild(btn);
+    });
+    document.getElementById('chat').appendChild(wrap);
+    scrollBottom();
+}
+
+function addSatisfaction() {
+    if (awaitingSatisfaction) return;
+    awaitingSatisfaction = true;
+    const wrap = document.createElement('div');
+    wrap.className = 'satisfaction-wrap';
+    wrap.id = 'satWrap';
+    wrap.innerHTML = `<div class="satisfaction">Was this helpful?<div class="sat-btns"><button class="sat-yes" onclick="handleSat(true)">👍 Yes, thanks!</button><button class="sat-no" onclick="handleSat(false)">👎 Need more help</button></div></div>`;
+    document.getElementById('chat').appendChild(wrap);
+    scrollBottom();
+}
+
+function handleSat(yes) {
+    const wrap = document.getElementById('satWrap');
+    if (wrap) wrap.remove();
+    awaitingSatisfaction = false;
+    if (yes) {
+        addBotMessage("Glad I could help! 😊 Let me know if you have anything else.");
+    } else {
+        addBotMessage("No worries! Our support team can help further.");
+        addSupportButton();
+    }
+}
+
+function addSupportButton() {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'padding-left:40px;margin-bottom:10px;';
+    const btn = document.createElement('button');
+    btn.textContent = '💬 Open Telegram Support';
+    btn.style.cssText = `padding:14px 24px;background:linear-gradient(135deg,#00f0ff,#00ffcc);color:#020617;border:none;border-radius:9999px;font-weight:700;font-size:15px;cursor:pointer;width:100%;`;
+    btn.onclick = () => window.location.href = "support.html";
+    wrap.appendChild(btn);
+    document.getElementById('chat').appendChild(wrap);
+    scrollBottom();
+}
+
+async function addBotMessage(html, followups) {
+    await typeBotMessage(html);
+    if (followups && followups.length > 0) addSuggestions(followups);
+}
+
+function findAnswer(q) {
+    const lower = q.toLowerCase();
+    for (const word of frustrationKeys) {
+        if (lower.includes(word)) {
+            return {
+                answer: `I can hear that you're frustrated, and that's completely valid. 💙<br><br>Let me connect you with our <strong>live support team</strong> who can look into your specific issue right away.`,
+                followups: [], isSupport: true
+            };
+        }
+    }
+    let bestMatch = null, bestScore = 0;
+    for (const entry of knowledge) {
+        let score = 0;
+        for (const key of entry.keys) { if (lower.includes(key)) score++; }
+        if (score > bestScore) { bestScore = score; bestMatch = entry; }
+    }
+    if (bestMatch && bestScore > 0) {
+        lastTopic = bestMatch;
+        const variants = bestMatch.answers;
+        let answer = variants[Math.floor(Math.random() * variants.length)];
+        if (answer === '__MINER_CARDS__') answer = minerCardsHTML();
+        return { answer, followups: bestMatch.followups, isSupport: bestMatch.isSupport };
+    }
+    if (lastTopic && lastTopic.followups.length > 0) {
+        return { answer: `I'm not sure I understood that. Were you asking about one of these?`, followups: lastTopic.followups, isSupport: false };
+    }
+    return {
+        answer: `I don't have specific info on that yet. Try asking about mining, recharging, withdrawing, or miners. Or tap support for a real agent! 🙋`,
+        followups: ["How does mining work?","How do I recharge?","How do I withdraw?"],
+        isSupport: false
+    };
+}
+
+async function sendMessage() {
+    const input = document.getElementById('userInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    document.querySelectorAll('.suggestions').forEach(s => s.remove());
+    const satWrap = document.getElementById('satWrap');
+    if (satWrap) { satWrap.remove(); awaitingSatisfaction = false; }
+
+    addUserMessage(text);
+    input.value = '';
+    showTyping();
+    await sleep(700 + Math.random() * 700);
+    removeTyping();
+
+    const result = findAnswer(text);
+    await addBotMessage(result.answer, result.followups);
+    if (result.isSupport) addSupportButton();
+    else setTimeout(() => addSatisfaction(), 400);
+}
+
+document.getElementById('userInput').addEventListener('keypress', e => {
+    if (e.key === 'Enter') sendMessage();
+});
+
+window.onload = async () => {
+    await sleep(400);
+    await addBotMessage(
+        `Hey! 👋 I'm <strong>CryptoJet AI</strong> — your 24/7 mining assistant.<br><br>I can help with mining, recharges, withdrawals, miners, referrals, and more. What do you need?`,
+        ["How does mining work?","How do I recharge?","What miners are available?","How do I withdraw?","How does referral work?"]
+    );
+};
+</script>
+</body>
+</html>
