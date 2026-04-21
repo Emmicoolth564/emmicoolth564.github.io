@@ -184,16 +184,16 @@
 
         <div class="rate">100 Points = <strong>$1.00 USD</strong></div>
 
-        <button onclick="exchangePoints()" id="exchangeBtn" class="btn">CONVERT TO BALANCE</button>
+        <button onclick="exchangePoints()" id="exchangeBtn" class="btn">CONVERT TO TEAM INCOME</button>
 
         <div id="message" style="margin-top:16px;min-height:28px;"></div>
 
         <div class="instructions">
             <strong>How It Works</strong><br><br>
             • Minimum 100 points ($1.00)<br>
-            • Points instantly converted to main balance<br>
-            • Same amount added to Team Income<br>
-            • Use balance for withdrawals or miners<br>
+            • Points converted directly to Team Income<br>
+            • Cannot be withdrawn but usable for miners<br>
+            • Purchase miners using Team Income<br>
             • Exchange is irreversible and secure
         </div>
     </div>
@@ -254,13 +254,11 @@ function exchangePoints() {
 
     db.ref("users/" + uid).update({
       points: (d.points || 0) - pointsToExchange,
-      balance: (d.balance || 0) + dollars,
       teamIncome: (d.teamIncome || 0) + dollars
     }).then(() => {
       messageDiv.innerHTML = `
         <div class="success">
           ✅ Exchanged ${pointsToExchange} points<br>
-          +$${dollars} to Balance<br>
           +$${dollars} to Team Income
         </div>`;
       input.value = "";

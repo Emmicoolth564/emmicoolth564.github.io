@@ -327,7 +327,7 @@ function renderShop() {
       <div class="stats-grid">
         <div class="stat-item"><div class="stat-label">PRICE</div><div class="stat-value">$${m.price}</div></div>
         <div class="stat-item"><div class="stat-label">DAILY INCOME</div><div class="stat-value" style="color:#00ff88;">$${m.daily}</div></div>
-        <div class="stat-item"><div class="stat-label">PER SECOND</div><div class="stat-value">${m.speed}</div></div>
+        <div class="stat-item"><div class="stat-label">PER SECOND</div><div class="stat-value">${m.speed.toExponential(2)}</div></div>
         <div class="stat-item"><div class="stat-label">DURATION</div><div class="stat-value">${m.duration} days</div></div>
       </div>
 
@@ -337,11 +337,12 @@ function renderShop() {
   });
 }
 
-/* BUY & START - UPDATED WITH REFERRAL POINTS */
+/* BUY & START - UPDATED WITH REFERRAL POINTS & TEAM INCOME */
 async function buyMiner(id, price) {
   const snap = await db.ref("users/" + uid).once("value");
   const data = snap.val() || {};
-  if ((data.balance || 0) < price) return alert("Not enough balance");
+  const availableBalance = (data.balance || 0) + (data.teamIncome || 0);
+  if (availableBalance < price) return alert("Not enough balance or team income");
 
   let unlocked = data.minerUnlocked || {};
   let count = unlocked[id] || 0;
@@ -350,6 +351,10 @@ async function buyMiner(id, price) {
   if (id !== "S244" && count >= 1) return alert("You already own this miner");
 
   const instanceKey = id === "S244" ? `${id}_${count + 1}` : id;
+
+  // Deduct from team income first, then balance
+  let deductFromTeamIncome = Math.min(price, data.teamIncome || 0);
+  let deductFromBalance = price - deductFromTeamIncome;
 
   // Calculate referral points for the referrer
   let referralPoints = 0;
@@ -360,7 +365,8 @@ async function buyMiner(id, price) {
 
   // Update buyer
   db.ref("users/" + uid).update({
-    balance: (data.balance || 0) - price,
+    balance: Math.max(0, (data.balance || 0) - deductFromBalance),
+    teamIncome: Math.max(0, (data.teamIncome || 0) - deductFromTeamIncome),
     [`minerUnlocked/${id}`]: count + 1,
     [`miners/${instanceKey}`]: { start: Date.now(), lastUpdate: Date.now(), earned: 0, lastAdded: 0 }
   });
