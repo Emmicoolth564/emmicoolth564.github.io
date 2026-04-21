@@ -3,207 +3,179 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CryptoJet - Invite</title>
+<title>Invite & Earn • CryptoJet</title>
 
 <style>
-body{
-  margin:0;
-  font-family:'Segoe UI',sans-serif;
-  background: radial-gradient(circle at top,#020617,#000814);
-  color:white;
-  padding-bottom:90px;
-}
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 
-/* HEADER */
-.header{
-  text-align:center;
-  font-size:26px;
-  font-weight:900;
-  margin-top:20px;
-  color:#00ffcc;
-  animation:glow 2s infinite alternate;
-}
+    :root {
+        --neon: #00f0ff;
+        --accent: #00ffcc;
+    }
 
-@keyframes glow{
-  from{ text-shadow:0 0 5px #00ffcc;}
-  to{ text-shadow:0 0 25px #00ffcc;}
-}
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+        font-family: 'Inter', system-ui, sans-serif;
+        background: #020617;
+        color: #e2e8f0;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
 
-/* CARD */
-.card{
-  margin:15px;
-  padding:20px;
-  border-radius:18px;
-  background:#0f172a;
-  box-shadow:0 0 25px rgba(0,255,204,0.08);
-  animation:fadeUp .6s ease;
-}
+    .header {
+        padding: 30px 20px 20px;
+        text-align: center;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--neon);
+        text-shadow: 0 0 30px rgba(0, 240, 255, 0.6);
+        letter-spacing: 2px;
+    }
 
-/* LINK */
-.link{
-  background:#020617;
-  padding:15px;
-  border-radius:12px;
-  font-size:12px;
-  word-break:break-all;
-  margin-top:10px;
-}
+    .content-wrapper {
+        padding: 0 20px 100px;
+    }
 
-/* BUTTON */
-.btn{
-  margin-top:15px;
-  padding:15px;
-  border-radius:12px;
-  text-align:center;
-  font-weight:700;
-  background:linear-gradient(90deg,#00ffcc,#22c55e);
-  color:black;
-  transition:.3s;
-}
+    /* REFERRAL CARD */
+    .ref-card {
+        background: linear-gradient(145deg, #0f172a, #1e2937);
+        border-radius: 24px;
+        padding: 28px 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        border: 1px solid rgba(0,240,255,0.2);
+    }
 
-.btn:active{
-  transform:scale(.95);
-}
+    .ref-link {
+        background: #020617;
+        padding: 16px;
+        border-radius: 16px;
+        font-size: 14px;
+        word-break: break-all;
+        margin: 16px 0;
+        border: 1px solid rgba(0,240,255,0.15);
+        color: #94a3b8;
+    }
 
-/* STATS */
-.stats{
-  display:flex;
-  gap:10px;
-  margin-top:15px;
-}
+    .btn {
+        width: 100%;
+        padding: 16px;
+        border: none;
+        border-radius: 16px;
+        background: linear-gradient(90deg, #00f0ff, #00ffcc);
+        color: #000;
+        font-weight: 700;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0 0 25px rgba(0,240,255,0.4);
+        transition: 0.3s;
+    }
+    .btn:active { transform: scale(0.96); }
 
-.stat{
-  flex:1;
-  text-align:center;
-  padding:15px;
-  background:#020617;
-  border-radius:12px;
-}
+    /* STATS */
+    .stats {
+        display: flex;
+        gap: 12px;
+        margin: 24px 0;
+    }
+    .stat-box {
+        flex: 1;
+        background: #0f172a;
+        border-radius: 18px;
+        padding: 18px 12px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+    .stat-number {
+        font-size: 28px;
+        font-weight: 700;
+        color: #00ffcc;
+    }
+    .stat-label {
+        font-size: 13px;
+        color: #94a3b8;
+        margin-top: 4px;
+    }
 
-/* BONUS CARD */
-.bonus{
-  margin:15px;
-  padding:20px;
-  border-radius:18px;
-  background:linear-gradient(145deg,#022c22,#064e3b);
-  animation:fadeUp .8s ease;
-}
+    /* HOW IT WORKS */
+    .how-it-works {
+        background: #0f172a;
+        border-radius: 24px;
+        padding: 28px 24px;
+        margin-top: 30px;
+        line-height: 1.7;
+        color: #cbd5e1;
+    }
+    .how-it-works h3 {
+        color: #00ffcc;
+        margin-bottom: 16px;
+        font-size: 18px;
+    }
 
-/* INFO SECTION */
-.info{
-  margin:15px;
-  padding:20px;
-  border-radius:18px;
-  background:#0f172a;
-  line-height:1.6;
-  color:#cbd5f5;
-  animation:fadeUp 1s ease;
-}
-
-/* ANIMATION */
-@keyframes fadeUp{
-  from{opacity:0; transform:translateY(20px);}
-  to{opacity:1; transform:translateY(0);}
-}
-
-/* NAV */
-.bottom-nav{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  height:65px;
-  background:#020617;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-}
-
-.nav-item{
-  text-align:center;
-  font-size:11px;
-  color:#aaa;
-}
-
-.nav-item img{
-  width:22px;
-  display:block;
-  margin:auto;
-  margin-bottom:4px;
-  filter:brightness(.6);
-}
-
-.nav-item.active img{
-  filter:brightness(1.5) drop-shadow(0 0 8px #00ffcc);
-}
-
-.nav-item.active{
-  color:#00ffcc;
-}
+    /* BACK BUTTON */
+    .back-btn {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        color: #00ffcc;
+        background: rgba(0,255,204,0.12);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(0,255,204,0.25);
+        box-shadow: 0 0 25px rgba(0,255,204,0.5);
+        cursor: pointer;
+        z-index: 99999;
+    }
 </style>
 </head>
-
 <body>
+
+<div class="back-btn" onclick="history.back()">←</div>
 
 <div class="header">Invite & Earn</div>
 
-<div class="card">
-  <div style="font-weight:700;">Your Referral Link</div>
+<div class="content-wrapper">
 
-  <div id="refLink" class="link">Loading...</div>
+    <!-- REFERRAL CARD -->
+    <div class="ref-card">
+        <div style="font-weight:700; margin-bottom:12px;">Your Referral Link</div>
+        <div id="refLink" class="ref-link">Loading...</div>
+        <div class="btn" onclick="copyLink()">Copy Link</div>
 
-  <div class="btn" onclick="copyLink()">Copy Link</div>
-
-  <div class="stats">
-    <div class="stat">
-      <div id="refCount">0</div>
-      <small>Referrals</small>
+        <div class="stats">
+            <div class="stat-box">
+                <div id="refCount" class="stat-number">0</div>
+                <div class="stat-label">Referrals</div>
+            </div>
+            <div class="stat-box">
+                <div id="refEarn" class="stat-number">$0</div>
+                <div class="stat-label">Total Earned</div>
+            </div>
+        </div>
     </div>
 
-    <div class="stat">
-      <div>$<span id="refEarn">0</span></div>
-      <small>Total Earned</small>
+    <!-- HOW IT WORKS -->
+    <div class="how-it-works">
+        <h3>How Referral Works</h3>
+        <p><strong>1.</strong> Share your unique referral link with friends.</p>
+        <p><strong>2.</strong> When they sign up and buy any miner, you earn points instantly.</p>
+        <p><strong>3.</strong> The more active they are, the more you earn passively — even while you sleep.</p>
+        <p><strong>4.</strong> Claim your points anytime from the Rewards page.</p>
+        
+        <div style="margin-top:24px; padding:16px; background:#020617; border-radius:16px; font-size:14px;">
+            <strong>Pro Tip:</strong> The more miners your referrals buy, the bigger your passive income becomes.
+        </div>
     </div>
-  </div>
+
 </div>
 
-<!-- BONUS -->
-<div class="bonus">
-  <div style="font-size:18px;font-weight:700;">🔥 Earn More</div>
-  <div style="font-size:13px;margin-top:5px;">
-    Invite friends and earn passive income every time they mine.
-  </div>
-</div>
-
-<!-- INFO -->
-<div class="info">
-  <div style="font-weight:700;margin-bottom:10px;">Why Invite?</div>
-
-  Earn extra income by inviting others to CryptoJet.
-
-  Every user you invite becomes part of your mining network.
-  As they mine and grow, you earn rewards automatically.
-
-  The more active your team is, the more you earn — even while you sleep.
-
-  Build your network, increase your mining power, and maximize your profits over time.
-</div>
-
-<!-- NAV -->
-<div class="bottom-nav">
-  <div class="nav-item" onclick="nav('dashboard.html')">
-    <img src="./home.png">Home
-  </div>
-
-  <div class="nav-item" onclick="nav('miner.html')">
-    <img src="./miner.png">Miner
-  </div>
-
-  <div class="nav-item active">
-    <img src="./user.png">Me
-  </div>
-</div>
-
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -219,32 +191,28 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 let uid = localStorage.getItem("uid");
+if (!uid) window.location.href = "signin.html";
 
-if(!uid){
-  window.location.href="signin.html";
-}
-
-/* ✅ REF LINK FIXED */
+/* REFERRAL LINK */
 const refLink = window.location.origin + "/index.html?ref=" + uid;
 document.getElementById("refLink").innerText = refLink;
 
-/* COPY */
-function copyLink(){
-  navigator.clipboard.writeText(refLink);
-  alert("Copied!");
+/* COPY LINK */
+function copyLink() {
+    navigator.clipboard.writeText(refLink).then(() => {
+        const btn = document.querySelector('.btn');
+        const originalText = btn.innerText;
+        btn.innerText = "✅ Copied!";
+        setTimeout(() => btn.innerText = originalText, 2000);
+    });
 }
 
-/* 🔥 LIVE DATA */
-db.ref("users/" + uid).on("value", snap=>{
-  const d = snap.val() || {};
-
-  document.getElementById("refCount").innerText = d.referrals || 0;
-  document.getElementById("refEarn").innerText = Math.floor(d.balance || 0);
+/* LIVE DATA */
+db.ref("users/" + uid).on("value", snap => {
+    const d = snap.val() || {};
+    document.getElementById("refCount").innerText = d.referrals || 0;
+    document.getElementById("refEarn").innerText = Math.floor(d.balance || 0);
 });
-
-/* NAV */
-function nav(p){ window.location.href=p; }
 </script>
-
 </body>
 </html>
