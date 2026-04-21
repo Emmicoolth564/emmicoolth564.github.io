@@ -343,6 +343,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
 <script>
 // ==================== YOUR ORIGINAL FIREBASE & LOGIC (UNCHANGED) ====================
@@ -496,16 +497,36 @@ function saveBank() {
   load();
 }
 
-/* EDIT */
+/* EDIT - NOW WITH PASSWORD VERIFICATION */
 function edit() {
-  document.getElementById("modal").style.display = "flex";
+  // First, ask for password
+  let password = prompt("Enter your password to change bank account:");
+  
+  if (password === null) return; // User cancelled
+  if (!password) return toast("Password cannot be empty");
 
-  db.ref("users/" + uid).once("value").then(s => {
-    let d = s.val() || {};
-    document.getElementById("eName").value = d.name || "";
-    document.getElementById("eNumber").value = d.number || "";
-    document.getElementById("eBank").value = d.bank || "";
-    selected = d.bank || "";
+  // Verify password with Firebase Auth
+  firebase.auth().currentUser.reauthenticateWithCredential(
+    firebase.auth.EmailAuthProvider.credential(
+      firebase.auth().currentUser.email,
+      password
+    )
+  ).then(() => {
+    // Password correct - open modal
+    document.getElementById("modal").style.display = "flex";
+    
+    db.ref("users/" + uid).once("value").then(s => {
+      let d = s.val() || {};
+      document.getElementById("eName").value = d.name || "";
+      document.getElementById("eNumber").value = d.number || "";
+      document.getElementById("eBank").value = d.bank || "";
+      selected = d.bank || "";
+    });
+    
+    toast("Password verified - edit your account");
+  }).catch(err => {
+    toast("❌ Incorrect password");
+    console.error("Password verification failed:", err);
   });
 }
 
@@ -522,7 +543,7 @@ function updateBank() {
   });
 
   document.getElementById("modal").style.display = "none";
-  toast("Account updated successfully");
+  toast("✓ Account updated successfully");
   load();
 }
 

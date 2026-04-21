@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Analytics • CryptoJet</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+    --primary: #00f0ff;
+    --accent: #00ffcc;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --dark: #020617;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #020617 0%, #0a1428 50%, #020617 100%);
+    color: #e2e8f0;
+    min-height: 100vh;
+}
+
+/* LOADER */
+#loader {
+    position: fixed;
+    inset: 0;
+    background: #020617;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+#loader.hidden { opacity: 0; pointer-events: none; }
+
+.loader-content {
+    text-align: center;
+    color: var(--primary);
+}
+
+.loader-logo { font-size: 48px; font-weight: 900; margin-bottom: 20px; font-family: 'Space Grotesk'; }
+.loader-bar {
+    width: 200px;
+    height: 4px;
+    background: #111;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+.loader-fill { width: 0%; height: 100%; background: var(--primary); animation: load 2s ease forwards; }
+@keyframes load { to { width: 100%; } }
+.loader-text { font-size: 14px; color: #94a3b8; margin-top: 12px; }
+
+/* HEADER */
+.header {
+    padding: 28px 20px;
+    background: rgba(15,23,42,0.98);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0,240,255,0.2);
+    box-shadow: 0 8px 32px rgba(0,240,255,0.1);
+}
+
+.header h1 {
+    text-align: center;
+    font-family: 'Space Grotesk';
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary);
+    text-shadow: 0 0 30px rgba(0,240,255,0.4);
+    letter-spacing: 1px;
+}
+
+/* TABS */
+.tabs {
+    display: flex;
+    background: #0f172a;
+    border-radius: 20px;
+    padding: 8px;
+    margin: 20px;
+    gap: 6px;
+    overflow-x: auto;
+}
+
+.tab {
+    flex: 1;
+    padding: 14px 16px;
+    border: none;
+    border-radius: 16px;
+    background: transparent;
+    color: #94a3b8;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+.tab.active {
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    color: #000;
+    box-shadow: 0 8px 25px rgba(0,240,255,0.3);
+}
+
+/* CONTENT */
+.container { padding: 20px; max-width: 1400px; margin: 0 auto; padding-bottom: 100px; }
+
+/* USER GRID */
+.users-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+/* USER CARD */
+.user-card {
+    background: linear-gradient(135deg, rgba(15,23,42,0.85) 0%, rgba(20,30,48,0.85) 100%);
+    border-radius: 24px;
+    padding: 24px;
+    border: 1px solid rgba(0,240,255,0.2);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.user-card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 30px 60px rgba(0,240,255,0.2), 0 0 50px rgba(0,240,255,0.15);
+    transform: translateY(-6px);
+}
+
+.user-id {
+    font-family: 'Space Grotesk';
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.user-uid {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-bottom: 14px;
+    word-break: break-all;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,240,255,0.08);
+    font-size: 14px;
+}
+
+.stat-row:last-child { border-bottom: none; }
+.stat-label { color: #94a3b8; }
+.stat-value { font-weight: 700; color: var(--accent); }
+
+/* DETAIL PAGE */
+.detail-header {
+    background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(20,30,48,0.95));
+    border-radius: 24px;
+    padding: 28px;
+    margin-bottom: 28px;
+    border: 1px solid rgba(0,240,255,0.2);
+}
+
+.detail-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 16px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+.detail-box {
+    background: rgba(2,6,23,0.6);
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(0,240,255,0.15);
+}
+
+.detail-label { font-size: 12px; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; }
+.detail-value { font-size: 20px; font-weight: 700; color: var(--primary); }
+
+/* TABS IN DETAIL */
+.detail-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(0,240,255,0.15);
+    padding-bottom: 12px;
+}
+
+.detail-tab {
+    padding: 10px 16px;
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-bottom: 2px solid transparent;
+}
+
+.detail-tab.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+/* TRANSACTION CARD */
+.tx-card {
+    background: rgba(15,23,42,0.8);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(0,240,255,0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tx-info { flex: 1; }
+.tx-type { font-weight: 700; color: var(--accent); font-size: 14px; }
+.tx-date { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+.tx-amount { font-size: 18px; font-weight: 700; }
+.tx-status {
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.tx-status.approved { background: rgba(34,197,94,0.2); color: var(--success); }
+.tx-status.pending { background: rgba(245,158,11,0.2); color: var(--warning); }
+.tx-status.rejected { background: rgba(239,68,68,0.2); color: var(--danger); }
+
+/* BACK BUTTON */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(0,240,255,0.15);
+    border: 1px solid var(--primary);
+    border-radius: 12px;
+    color: var(--primary);
+    cursor: pointer;
+    font-weight: 600;
+    margin-bottom: 20px;
+    transition: all 0.3s;
+}
+
+.back-btn:hover {
+    background: rgba(0,240,255,0.25);
+    box-shadow: 0 0 15px rgba(0,240,255,0.3);
+}
+
+.empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: #64748b;
+    font-size: 16px;
+}
+
+/* SEARCH */
+.search-box {
+    background: rgba(15,23,42,0.8);
+    border: 1px solid rgba(0,240,255,0.2);
+    border-radius: 16px;
+    padding: 14px 16px;
+    color: white;
+    font-size: 15px;
+    width: 100%;
+    margin-bottom: 20px;
+    transition: all 0.3s;
+}
+
+.search-box:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0,240,255,0.2);
+}
+</style>
+</head>
+<body>
+
+<div id="loader">
+    <div class="loader-content">
+        <div class="loader-logo">CryptoJet</div>
+        <div class="loader-bar"><div class="loader-fill"></div></div>
+        <div class="loader-text">Loading Analytics...</div>
+    </div>
+</div>
+
+<div class="header">
+    <h1>📊 ADMIN ANALYTICS</h1>
+</div>
+
+<div class="tabs">
+    <button class="tab active" onclick="switchView('users')">All Users</button>
+    <button class="tab" onclick="switchView('pending')">⏳ Pending Tx</button>
+    <button class="tab" onclick="switchView('all-tx')">All Transactions</button>
+</div>
+
+<div class="container">
+    <!-- USERS VIEW -->
+    <div id="users-view" class="view">
+        <input type="text" id="searchBox" class="search-box" placeholder="🔍 Search by Miner ID or UID...">
+        <div id="users-list" class="users-grid"></div>
+    </div>
+
+    <!-- PENDING TXN VIEW -->
+    <div id="pending-view" class="view" style="display: none;">
+        <div id="pending-list"></div>
+    </div>
+
+    <!-- ALL TRANSACTIONS VIEW -->
+    <div id="all-tx-view" class="view" style="display: none;">
+        <div id="all-tx-list"></div>
+    </div>
+
+    <!-- DETAIL VIEW -->
+    <div id="detail-view" style="display: none;">
+        <button class="back-btn" onclick="backToUsers()">← Back</button>
+        <div id="detail-content"></div>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
+  authDomain: "cj-miner.firebaseapp.com",
+  databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cj-miner"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const ADMIN_UID = "1G40GHwudBcea5GGdEeIIKFT5rL2";
+const uid = localStorage.getItem("uid");
+
+if (uid !== ADMIN_UID) {
+    alert("Access denied");
+    window.location.href = "signin.html";
+}
+
+let allUsers = {};
+
+function hideLoader() {
+    document.getElementById("loader").classList.add("hidden");
+    setTimeout(() => document.getElementById("loader").style.display = "none", 500);
+}
+
+function switchView(view) {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    event.target.classList.add("active");
+
+    document.querySelectorAll(".view").forEach(v => v.style.display = "none");
+    
+    if (view === "users") {
+        document.getElementById("users-view").style.display = "block";
+        loadUsers();
+    } else if (view === "pending") {
+        document.getElementById("pending-view").style.display = "block";
+        loadPending();
+    } else if (view === "all-tx") {
+        document.getElementById("all-tx-view").style.display = "block";
+        loadAllTransactions();
+    }
+}
+
+async function loadUsers() {
+    const snap = await db.ref("users").once("value");
+    allUsers = snap.val() || {};
+    renderUsers();
+}
+
+function renderUsers(search = "") {
+    const list = document.getElementById("users-list");
+    list.innerHTML = "";
+
+    Object.entries(allUsers).forEach(([uid, user]) => {
+        const minerId = user.minerId || "N/A";
+        if (search && !minerId.toLowerCase().includes(search.toLowerCase()) && !uid.includes(search)) return;
+
+        const card = document.createElement("div");
+        card.className = "user-card";
+        card.onclick = () => viewUserDetail(uid, user);
+
+        const totalMiners = Object.keys(user.minerUnlocked || {}).length;
+        const balance = Math.floor(user.balance || 0);
+        const team = Math.floor(user.team || 0);
+
+        card.innerHTML = `
+            <div class="user-id">${minerId}</div>
+            <div class="user-uid">UID: ${uid.substring(0, 12)}...</div>
+            
+            <div class="stat-row">
+                <span class="stat-label">Balance</span>
+                <span class="stat-value">$${balance}</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Team Income</span>
+                <span class="stat-value">$${team}</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Active Miners</span>
+                <span class="stat-value">${totalMiners}</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Points</span>
+                <span class="stat-value">${user.points || 0}</span>
+            </div>
+        `;
+        list.appendChild(card);
+    });
+
+    if (list.children.length === 0) {
+        list.innerHTML = `<div class="empty">No users found</div>`;
+    }
+}
+
+document.getElementById("searchBox")?.addEventListener("input", (e) => {
+    renderUsers(e.target.value);
+});
+
+function viewUserDetail(userId, userData) {
+    document.getElementById("users-view").style.display = "none";
+    document.getElementById("detail-view").style.display = "block";
+
+    let html = `
+        <div class="detail-header">
+            <h2>${userData.minerId || "Unknown"}</h2>
+            <p style="color: #94a3b8; font-size: 13px; margin-bottom: 16px;">Internal UID: ${userId}</p>
+            
+            <div class="detail-grid">
+                <div class="detail-box">
+                    <div class="detail-label">Balance</div>
+                    <div class="detail-value">$${Math.floor(userData.balance || 0)}</div>
+                </div>
+                <div class="detail-box">
+                    <div class="detail-label">Team Income</div>
+                    <div class="detail-value">$${Math.floor(userData.team || 0)}</div>
+                </div>
+                <div class="detail-box">
+                    <div class="detail-label">Points</div>
+                    <div class="detail-value">${userData.points || 0}</div>
+                </div>
+                <div class="detail-box">
+                    <div class="detail-label">Active Miners</div>
+                    <div class="detail-value">${Object.keys(userData.minerUnlocked || {}).length}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-tabs">
+            <button class="detail-tab active" onclick="showDetailTab(this, 'miners')">⛏️ Miners</button>
+            <button class="detail-tab" onclick="showDetailTab(this, 'earnings')">📈 Mining</button>
+        </div>
+
+        <div id="detail-miners">`;
+
+    // Miners
+    if (userData.minerUnlocked && Object.keys(userData.minerUnlocked).length > 0) {
+        Object.entries(userData.minerUnlocked).forEach(([id, count]) => {
+            for (let i = 1; i <= count; i++) {
+                const key = id === "S244" ? `${id}_${i}` : id;
+                const miner = userData.miners?.[key];
+                if (miner) {
+                    const startDate = new Date(miner.start).toLocaleDateString();
+                    const earnedAmount = (miner.earned || 0).toFixed(2);
+                    html += `
+                        <div class="tx-card">
+                            <div class="tx-info">
+                                <div class="tx-type">${id} #${i}</div>
+                                <div class="tx-date">Started: ${startDate}</div>
+                            </div>
+                            <div style="text-align: right; color: var(--accent); font-weight: 700;">$${earnedAmount}</div>
+                        </div>`;
+                }
+            }
+        });
+    } else {
+        html += `<div class="empty">No miners</div>`;
+    }
+    html += `</div>
+
+        <div id="detail-earnings" style="display: none;">`;
+
+    // Mining Records
+    if (userData.miningRecords && Object.keys(userData.miningRecords).length > 0) {
+        let total = 0;
+        Object.values(userData.miningRecords).reverse().slice(0, 20).forEach(record => {
+            const date = new Date(record.timestamp).toLocaleString();
+            const amount = parseFloat(record.amount || 0);
+            total += amount;
+            html += `
+                <div class="tx-card">
+                    <div class="tx-info">
+                        <div class="tx-type">${record.miner || "Mining"}</div>
+                        <div class="tx-date">${date}</div>
+                    </div>
+                    <div style="color: var(--success); font-weight: 700;">+$${amount}</div>
+                </div>`;
+        });
+    } else {
+        html += `<div class="empty">No records</div>`;
+    }
+    html += `</div>`;
+
+    document.getElementById("detail-content").innerHTML = html;
+}
+
+function showDetailTab(el, tab) {
+    document.querySelectorAll(".detail-tab").forEach(t => t.classList.remove("active"));
+    el.classList.add("active");
+
+    document.querySelectorAll("[id^='detail-']").forEach(d => d.style.display = "none");
+    document.getElementById(`detail-${tab}`).style.display = "block";
+}
+
+function backToUsers() {
+    document.getElementById("detail-view").style.display = "none";
+    document.getElementById("users-view").style.display = "block";
+}
+
+async function loadPending() {
+    const snap = await db.ref("transactions").once("value");
+    const txns = snap.val() || {};
+    let html = "";
+
+    Object.entries(txns).forEach(([key, tx]) => {
+        if (tx.status !== "pending") return;
+
+        html += `
+            <div class="tx-card">
+                <div class="tx-info">
+                    <div class="tx-type">${tx.type?.toUpperCase() || "UNKNOWN"}</div>
+                    <div class="tx-date">User: ${tx.uid?.substring(0, 12)}... | ${new Date(tx.date || Date.now()).toLocaleString()}</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="color: var(--accent); font-weight: 700; margin-bottom: 4px;">$${tx.amount}</div>
+                    <div class="tx-status pending">PENDING</div>
+                </div>
+            </div>`;
+    });
+
+    if (!html) html = `<div class="empty">No pending transactions</div>`;
+    document.getElementById("pending-list").innerHTML = html;
+}
+
+async function loadAllTransactions() {
+    const snap = await db.ref("transactions").once("value");
+    const txns = snap.val() || {};
+    let html = "";
+
+    Object.values(txns).reverse().forEach(tx => {
+        const statusClass = (tx.status || "approved").toLowerCase();
+        html += `
+            <div class="tx-card">
+                <div class="tx-info">
+                    <div class="tx-type">${tx.type?.toUpperCase() || "UNKNOWN"}</div>
+                    <div class="tx-date">${new Date(tx.date || Date.now()).toLocaleString()}</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="color: var(--accent); font-weight: 700; margin-bottom: 4px;">$${tx.amount}</div>
+                    <div class="tx-status ${statusClass}">${tx.status?.toUpperCase() || "UNKNOWN"}</div>
+                </div>
+            </div>`;
+    });
+
+    if (!html) html = `<div class="empty">No transactions</div>`;
+    document.getElementById("all-tx-list").innerHTML = html;
+}
+
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        loadUsers();
+        hideLoader();
+    }, 1200);
+});
+</script>
+</body>
+</html>
