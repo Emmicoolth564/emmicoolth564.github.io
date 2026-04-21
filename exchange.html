@@ -241,6 +241,12 @@ function exchangePoints() {
     return;
   }
 
+  if (pointsToExchange % 100 !== 0) {
+    messageDiv.innerHTML = `<div class="error">❌ Points must be in multiples of 100 (100, 200, 300...)</div>`;
+    btn.disabled = false;
+    return;
+  }
+
   if (pointsToExchange > currentPoints) {
     messageDiv.innerHTML = `<div class="error">❌ You don't have enough points</div>`;
     btn.disabled = false;
@@ -254,7 +260,7 @@ function exchangePoints() {
 
     db.ref("users/" + uid).update({
       points: (d.points || 0) - pointsToExchange,
-      teamIncome: (d.teamIncome || 0) + dollars
+      team: (d.team || 0) + dollars
     }).then(() => {
       messageDiv.innerHTML = `
         <div class="success">

@@ -341,7 +341,7 @@ function renderShop() {
 async function buyMiner(id, price) {
   const snap = await db.ref("users/" + uid).once("value");
   const data = snap.val() || {};
-  const availableBalance = (data.balance || 0) + (data.teamIncome || 0);
+  const availableBalance = (data.balance || 0) + (data.team || 0);
   if (availableBalance < price) return alert("Not enough balance or team income");
 
   let unlocked = data.minerUnlocked || {};
@@ -353,8 +353,8 @@ async function buyMiner(id, price) {
   const instanceKey = id === "S244" ? `${id}_${count + 1}` : id;
 
   // Deduct from team income first, then balance
-  let deductFromTeamIncome = Math.min(price, data.teamIncome || 0);
-  let deductFromBalance = price - deductFromTeamIncome;
+  let deductFromTeam = Math.min(price, data.team || 0);
+  let deductFromBalance = price - deductFromTeam;
 
   // Calculate referral points for the referrer
   let referralPoints = 0;
@@ -366,7 +366,7 @@ async function buyMiner(id, price) {
   // Update buyer
   db.ref("users/" + uid).update({
     balance: Math.max(0, (data.balance || 0) - deductFromBalance),
-    teamIncome: Math.max(0, (data.teamIncome || 0) - deductFromTeamIncome),
+    team: Math.max(0, (data.team || 0) - deductFromTeam),
     [`minerUnlocked/${id}`]: count + 1,
     [`miners/${instanceKey}`]: { start: Date.now(), lastUpdate: Date.now(), earned: 0, lastAdded: 0 }
   });
