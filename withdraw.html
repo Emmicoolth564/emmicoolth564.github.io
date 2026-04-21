@@ -101,7 +101,7 @@ const ADMIN_CHAT_ID = 8632260150;
 db.ref("users/" + uid).on("value", snap => {
     const d = snap.val() || {};
     currentBalance = d.balance || 0;
-    savedBank = d.bank || null;
+    savedBank = d.bank ? { bank: d.bank, name: d.name, number: d.number } : null;
     withdrawalPassword = d.withdrawalPassword || null;
 
     document.getElementById("balance").innerText = "$" + currentBalance.toFixed(2);

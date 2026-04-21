@@ -158,10 +158,10 @@ let userData = null;
 
 // UPDATED MINER PLANS WITH CYCLE HOURS
 const miners = {
-  S244:  { name:"S-244",  speed:0.000005789, price:10,  duration:30, daily:0.5,   cycleHours:48, img:"purchase1.png" },
-  S500:  { name:"S-500",  speed:0.00001737,  price:30,  duration:30, daily:1.5,   cycleHours:48, img:"purchase2.png" },
-  S900:  { name:"S-900",  speed:0.0000233,   price:50,  duration:35, daily:2,     cycleHours:24, img:"purchase3.png" },
-  S1200: { name:"S-1200", speed:0.0000463,   price:120, duration:45, daily:4,     cycleHours:24, img:"purchase4.png" }
+  S244:  { name:"S-244",  speed:0.000005787037037, price:10,  duration:30, daily:0.5,   cycleHours:48, img:"purchase1.png" },
+  S500:  { name:"S-500",  speed:0.000017361111111,  price:30,  duration:30, daily:1.5,   cycleHours:48, img:"purchase2.png" },
+  S900:  { name:"S-900",  speed:0.000023148148148,   price:50,  duration:35, daily:2,     cycleHours:24, img:"purchase3.png" },
+  S1200: { name:"S-1200", speed:0.000046296296296,   price:120, duration:45, daily:4,     cycleHours:24, img:"purchase4.png" }
 };
 
 function showTab(tab) {
@@ -211,7 +211,13 @@ function catchUpMining() {
 
         const floor = Math.floor(minerData.earned);
         if (floor > (minerData.lastAdded || 0)) {
-          totalToAdd += (floor - (minerData.lastAdded || 0));
+          const added = floor - (minerData.lastAdded || 0);
+          totalToAdd += added;
+          db.ref("users/" + uid + "/miningRecords").push({
+            amount: added,
+            miner: miners[id].name + (id === "S244" ? ` #${i}` : ""),
+            timestamp: now
+          });
           minerData.lastAdded = floor;
         }
       }
@@ -376,7 +382,7 @@ async function buyMiner(id, price) {
 function startMiner(id, instance) {
   const key = id === "S244" ? `${id}_${instance}` : id;
   const now = Date.now();
-  db.ref("users/" + uid + "/miners/" + key).update({ start: now, lastUpdate: now });
+  db.ref("users/" + uid + "/miners/" + key).update({ start: now, lastUpdate: now, earned: 0, lastAdded: 0 });
   loadPage();
 }
 
@@ -406,7 +412,13 @@ function startMining() {
 
         const floor = Math.floor(minerData.earned);
         if (floor > (minerData.lastAdded || 0)) {
-          totalToAdd += (floor - (minerData.lastAdded || 0));
+          const added = floor - (minerData.lastAdded || 0);
+          totalToAdd += added;
+          db.ref("users/" + uid + "/miningRecords").push({
+            amount: added,
+            miner: miners[id].name + (id === "S244" ? ` #${i}` : ""),
+            timestamp: now
+          });
           minerData.lastAdded = floor;
         }
       }
