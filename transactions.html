@@ -226,6 +226,9 @@ if (!uid) {
 
 let currentTab = "all";
 let allTransactions = [];
+let cachedTransactions = null;
+let lastLoadTime = 0;
+const CACHE_DURATION = 30000; // Cache for 30 seconds
 
 function switchTab(tab) {
     currentTab = tab;
@@ -235,14 +238,27 @@ function switchTab(tab) {
 }
 
 async function loadTransactions() {
+    const now = Date.now();
+    
+    // Use cache if available and fresh
+    if (cachedTransactions && (now - lastLoadTime) < CACHE_DURATION) {
+        allTransactions = cachedTransactions;
+        renderTransactions();
+        return;
+    }
+    
     document.getElementById("loader").classList.remove("hidden");
 
     try {
-        const snap = await db.ref("transactions").once("value");
+        // Get only transactions for the current user
+        const snap = await db.ref("transactions").orderByChild("uid").equalTo(uid).once("value");
         const txns = snap.val() || {};
 
         allTransactions = [];
         Object.entries(txns).forEach(([key, tx]) => {
+            // Only show transactions for current user
+            if (tx.uid !== uid) return;
+            
             // Skip recharge receipts
             if (tx.type === "recharge" && tx.status === "approved") return;
 
@@ -255,6 +271,10 @@ async function loadTransactions() {
 
         // Sort by timestamp descending
         allTransactions.sort((a, b) => b.timestamp - a.timestamp);
+        
+        // Cache the results
+        cachedTransactions = allTransactions;
+        lastLoadTime = now;
 
         renderTransactions();
     } catch (err) {

@@ -364,6 +364,9 @@ if (uid !== ADMIN_UID) {
 }
 
 let allUsers = {};
+let cachedUsers = null;
+let lastUserLoadTime = 0;
+const CACHE_DURATION = 60000; // Cache for 60 seconds
 
 function hideLoader() {
     document.getElementById("loader").classList.add("hidden");
@@ -389,8 +392,19 @@ function switchView(view) {
 }
 
 async function loadUsers() {
+    const now = Date.now();
+    
+    // Use cache if available and fresh
+    if (cachedUsers && (now - lastUserLoadTime) < CACHE_DURATION) {
+        allUsers = cachedUsers;
+        renderUsers();
+        return;
+    }
+    
     const snap = await db.ref("users").once("value");
     allUsers = snap.val() || {};
+    cachedUsers = allUsers;
+    lastUserLoadTime = now;
     renderUsers();
 }
 
@@ -409,10 +423,11 @@ function renderUsers(search = "") {
         const totalMiners = Object.keys(user.minerUnlocked || {}).length;
         const balance = Math.floor(user.balance || 0);
         const team = Math.floor(user.team || 0);
+        const botId = user.botId || "N/A";
 
         card.innerHTML = `
-            <div class="user-id">${minerId}</div>
-            <div class="user-uid">UID: ${uid.substring(0, 12)}...</div>
+            <div class="user-id" style="cursor: pointer; color: var(--primary);" onclick="event.stopPropagation(); alert('Bot ID: ${botId}\\nClick to copy'); navigator.clipboard.writeText('${botId}');">${minerId}</div>
+            <div class="user-uid" style="color: #00ffcc; font-weight: 600;">🤖 Bot ID: <span style="cursor: pointer; user-select: all;">${botId}</span></div>
             
             <div class="stat-row">
                 <span class="stat-label">Balance</span>
@@ -548,14 +563,25 @@ async function loadPending() {
     const txns = snap.val() || {};
     let html = "";
 
+    // Get all users for reference
+    const userSnap = await db.ref("users").once("value");
+    const users = userSnap.val() || {};
+
     Object.entries(txns).forEach(([key, tx]) => {
         if (tx.status !== "pending") return;
 
+        const user = users[tx.uid] || {};
+        const botId = user.botId || "Unknown";
+        const minerId = user.minerId || "N/A";
+
         html += `
-            <div class="tx-card">
+            <div class="tx-card" style="cursor: pointer;" onclick="viewUserDetail('${tx.uid}', ${JSON.stringify(user).replace(/'/g, "&#39;")})">
                 <div class="tx-info">
                     <div class="tx-type">${tx.type?.toUpperCase() || "UNKNOWN"}</div>
-                    <div class="tx-date">User: ${tx.uid?.substring(0, 12)}... | ${new Date(tx.date || Date.now()).toLocaleString()}</div>
+                    <div class="tx-date">
+                        🤖 Bot ID: <span style="color: var(--accent); font-weight: 700; user-select: all;">${botId}</span> | 
+                        Miner: ${minerId} | ${new Date(tx.date || Date.now()).toLocaleString()}
+                    </div>
                 </div>
                 <div style="text-align: right;">
                     <div style="color: var(--accent); font-weight: 700; margin-bottom: 4px;">$${tx.amount}</div>
