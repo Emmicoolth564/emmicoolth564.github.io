@@ -29,26 +29,30 @@ body {
 .back { font-size:28px; color:#22c55e; cursor:pointer; margin-right:8px; }
 .header h3 { flex:1; text-align:center; font-size:18px; font-weight:700; }
 
-/* SKELETON LOADER */
-.skeleton-wrap { padding: 16px; }
-.skeleton-card {
-    background: #0f172a;
-    border-radius: 18px;
-    padding: 20px;
-    margin-bottom: 12px;
+/* FULL PAGE LOADER */
+.page-loader {
+    position: fixed;
+    inset: 0;
+    background: #020617;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    gap: 20px;
+    transition: opacity 0.4s;
 }
-.skeleton-line {
-    background: linear-gradient(90deg, #1e2937 25%, #2d3f55 50%, #1e2937 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.4s infinite;
-    border-radius: 8px;
-    height: 14px;
-    margin-bottom: 8px;
+.page-loader.hidden { opacity: 0; pointer-events: none; }
+.spinner {
+    width: 52px;
+    height: 52px;
+    border: 5px solid rgba(34,197,94,0.15);
+    border-top: 5px solid #22c55e;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
 }
-@keyframes shimmer { to { background-position: -200% 0; } }
+.spinner-text { font-size: 14px; color: #64748b; font-weight: 500; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* TABS */
 .tabs {
@@ -63,7 +67,6 @@ body {
     overflow-x: auto;
 }
 .tabs::-webkit-scrollbar { display: none; }
-
 .tab {
     flex-shrink: 0;
     padding: 9px 16px;
@@ -75,7 +78,6 @@ body {
     font-size: 13px;
     cursor: pointer;
     transition: all 0.2s;
-    white-space: nowrap;
 }
 .tab.active {
     background: rgba(34,197,94,0.12);
@@ -85,6 +87,23 @@ body {
 
 /* CONTENT */
 .content { padding: 14px 16px 100px; }
+
+/* SUMMARY */
+.summary {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.summary-box {
+    flex: 1;
+    background: #0f172a;
+    border-radius: 14px;
+    padding: 14px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+.summary-label { font-size: 11px; color: #64748b; margin-bottom: 4px; font-weight: 600; text-transform: uppercase; }
+.summary-value { font-size: 17px; font-weight: 700; }
 
 /* TX CARD */
 .tx-card {
@@ -96,50 +115,33 @@ body {
     justify-content: space-between;
     align-items: center;
     border: 1px solid rgba(255,255,255,0.06);
-    animation: fadeIn 0.3s ease;
+    animation: fadeIn 0.25s ease;
 }
-@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+@keyframes fadeIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
 
 .tx-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 19px;
     margin-right: 14px;
     flex-shrink: 0;
 }
-.icon-recharge { background: rgba(34,197,94,0.15); }
-.icon-withdraw { background: rgba(239,68,68,0.15); }
+.icon-recharge { background: rgba(34,197,94,0.12); }
+.icon-withdraw  { background: rgba(239,68,68,0.12); }
 
 .tx-left { display: flex; align-items: center; flex: 1; min-width: 0; }
 .tx-info { min-width: 0; }
-.tx-type {
-    font-size: 15px;
-    font-weight: 700;
-    color: #e2e8f0;
-    margin-bottom: 3px;
-}
-.tx-date {
-    font-size: 12px;
-    color: #475569;
-}
-.tx-method {
-    font-size: 12px;
-    color: #64748b;
-    margin-top: 2px;
-    text-transform: capitalize;
-}
+.tx-type  { font-size: 15px; font-weight: 700; color: #e2e8f0; margin-bottom: 3px; }
+.tx-date  { font-size: 12px; color: #475569; }
+.tx-method{ font-size: 12px; color: #64748b; margin-top: 2px; text-transform: capitalize; }
 
 .tx-right { text-align: right; flex-shrink: 0; margin-left: 12px; }
-.tx-amount {
-    font-size: 17px;
-    font-weight: 700;
-    margin-bottom: 6px;
-}
-.amount-in { color: #22c55e; }
+.tx-amount { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.amount-in  { color: #22c55e; }
 .amount-out { color: #f87171; }
 
 .tx-badge {
@@ -155,33 +157,29 @@ body {
 .badge-pending  { background: rgba(245,158,11,0.15); color: #f59e0b; }
 .badge-rejected { background: rgba(239,68,68,0.15);  color: #f87171; }
 
+/* empty state — just a small spinner, no text */
 .empty {
-    text-align: center;
-    padding: 80px 20px;
-    color: #475569;
-}
-.empty .empty-icon { font-size: 48px; margin-bottom: 16px; }
-.empty p { font-size: 15px; }
-
-/* Summary bar */
-.summary {
     display: flex;
-    gap: 10px;
-    margin-bottom: 16px;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
 }
-.summary-box {
-    flex: 1;
-    background: #0f172a;
-    border-radius: 14px;
-    padding: 14px;
-    text-align: center;
-    border: 1px solid rgba(255,255,255,0.05);
+.mini-spinner {
+    width: 36px;
+    height: 36px;
+    border: 4px solid rgba(34,197,94,0.1);
+    border-top: 4px solid #22c55e;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
 }
-.summary-label { font-size: 11px; color: #64748b; margin-bottom: 4px; font-weight: 600; text-transform: uppercase; }
-.summary-value { font-size: 16px; font-weight: 700; }
 </style>
 </head>
 <body>
+
+<div class="page-loader" id="pageLoader">
+    <div class="spinner"></div>
+    <div class="spinner-text">Loading your transactions...</div>
+</div>
 
 <div class="header">
     <div class="back" onclick="history.back()">←</div>
@@ -196,35 +194,17 @@ body {
     <div class="tab" onclick="switchTab('rejected', this)">❌ Rejected</div>
 </div>
 
-<div class="content">
-    <!-- Skeleton shown immediately -->
-    <div class="skeleton-wrap" id="skeleton">
-        ${[1,2,3,4].map(() => `
-        <div class="skeleton-card">
-            <div style="flex:1">
-                <div class="skeleton-line" style="width:40%;"></div>
-                <div class="skeleton-line" style="width:60%;"></div>
-            </div>
-            <div style="text-align:right;width:80px">
-                <div class="skeleton-line" style="width:100%;"></div>
-                <div class="skeleton-line" style="width:70%;margin-left:auto"></div>
-            </div>
-        </div>`).join('')}
-    </div>
-
-    <div id="summary" style="display:none">
-        <div class="summary">
-            <div class="summary-box">
-                <div class="summary-label">Total In</div>
-                <div class="summary-value amount-in" id="totalIn">$0</div>
-            </div>
-            <div class="summary-box">
-                <div class="summary-label">Total Out</div>
-                <div class="summary-value amount-out" id="totalOut">$0</div>
-            </div>
+<div class="content" id="mainContent" style="display:none">
+    <div class="summary">
+        <div class="summary-box">
+            <div class="summary-label">Total Recharged</div>
+            <div class="summary-value amount-in" id="totalIn">$0.00</div>
+        </div>
+        <div class="summary-box">
+            <div class="summary-label">Total Withdrawn</div>
+            <div class="summary-value amount-out" id="totalOut">$0.00</div>
         </div>
     </div>
-
     <div id="tx-list"></div>
 </div>
 
@@ -256,60 +236,71 @@ function switchTab(tab, el) {
     renderTransactions();
 }
 
-// Real-time listener — updates instantly when admin approves/rejects
+// Real-time listener — auto-updates the moment admin approves/rejects
 db.ref("transactions").orderByChild("uid").equalTo(uid).on("value", snap => {
     const txns = snap.val() || {};
 
     allTransactions = Object.entries(txns)
         .map(([key, tx]) => ({
-            id: key,
-            ...tx,
-            // Strip out receipt/proof image — never show in history
-            proof: null,
-            timestamp: tx.date || Date.now()
+            id:        key,
+            type:      tx.type   || "recharge",
+            method:    tx.method || "bank",
+            amount:    tx.amount || 0,
+            status:    tx.status || "pending",
+            timestamp: tx.date   || Date.now()
+            // proof intentionally excluded — receipts never shown in history
         }))
         .sort((a, b) => b.timestamp - a.timestamp);
 
-    document.getElementById("skeleton").style.display = "none";
-    document.getElementById("summary").style.display = "block";
+    // First load: hide loader, show content
+    document.getElementById("pageLoader").classList.add("hidden");
+    document.getElementById("mainContent").style.display = "block";
+
     renderTransactions();
 });
+
+function formatDateTime(ts) {
+    const d    = new Date(ts);
+    const day  = d.getDate();
+    const mon  = d.toLocaleString('en-NG', { month: 'short' });
+    const yr   = d.getFullYear();
+    let   hr   = d.getHours();
+    const min  = d.getMinutes().toString().padStart(2, '0');
+    const ampm = hr >= 12 ? 'PM' : 'AM';
+    hr = hr % 12 || 12;
+    return `${day} ${mon} ${yr}  ·  ${hr}:${min} ${ampm}`;
+}
 
 function renderTransactions() {
     const list = document.getElementById("tx-list");
 
-    let filtered = allTransactions;
-    if (currentTab !== "all") {
-        filtered = allTransactions.filter(tx => tx.status === currentTab);
-    }
+    // Summary counts (always based on all transactions)
+    const totalIn  = allTransactions
+        .filter(t => t.type === "recharge" && t.status === "approved")
+        .reduce((s, t) => s + t.amount, 0);
+    const totalOut = allTransactions
+        .filter(t => t.type === "withdraw" && t.status === "approved")
+        .reduce((s, t) => s + t.amount, 0);
 
-    // Update summary (always based on ALL transactions)
-    const totalIn  = allTransactions.filter(t => t.type === "recharge" && t.status === "approved").reduce((s, t) => s + (t.amount || 0), 0);
-    const totalOut = allTransactions.filter(t => t.type === "withdraw" && t.status === "approved").reduce((s, t) => s + (t.amount || 0), 0);
     document.getElementById("totalIn").textContent  = "$" + totalIn.toFixed(2);
     document.getElementById("totalOut").textContent = "$" + totalOut.toFixed(2);
 
+    const filtered = currentTab === "all"
+        ? allTransactions
+        : allTransactions.filter(tx => tx.status === currentTab);
+
     if (filtered.length === 0) {
-        list.innerHTML = `
-            <div class="empty">
-                <div class="empty-icon">📭</div>
-                <p>No ${currentTab === "all" ? "" : currentTab} transactions yet</p>
-            </div>`;
+        list.innerHTML = `<div class="empty"><div class="mini-spinner"></div></div>`;
         return;
     }
 
     list.innerHTML = filtered.map(tx => {
-        const date = new Date(tx.timestamp);
-        const day  = date.toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric' });
-        const time = date.toLocaleTimeString('en-NG', { hour:'2-digit', minute:'2-digit' });
-
         const isRecharge = tx.type === "recharge";
+        const label      = isRecharge ? "Recharge" : "Withdrawal";
         const icon       = isRecharge ? "💳" : "🏦";
         const iconClass  = isRecharge ? "icon-recharge" : "icon-withdraw";
         const amtClass   = isRecharge ? "amount-in" : "amount-out";
-        const amtPrefix  = isRecharge ? "+$" : "−$";
-        const label      = isRecharge ? "Recharge" : "Withdrawal";
-        const badgeClass = `badge-${tx.status || "pending"}`;
+        const prefix     = isRecharge ? "+" : "−";
 
         return `
         <div class="tx-card">
@@ -317,13 +308,13 @@ function renderTransactions() {
                 <div class="tx-icon ${iconClass}">${icon}</div>
                 <div class="tx-info">
                     <div class="tx-type">${label}</div>
-                    <div class="tx-date">${day} · ${time}</div>
-                    <div class="tx-method">${tx.method || "—"}</div>
+                    <div class="tx-date">${formatDateTime(tx.timestamp)}</div>
+                    <div class="tx-method">${tx.method}</div>
                 </div>
             </div>
             <div class="tx-right">
-                <div class="tx-amount ${amtClass}">${amtPrefix}${Number(tx.amount).toFixed(2)}</div>
-                <div class="tx-badge ${badgeClass}">${(tx.status || "pending").toUpperCase()}</div>
+                <div class="tx-amount ${amtClass}">${prefix}$${Number(tx.amount).toFixed(2)}</div>
+                <div class="tx-badge badge-${tx.status}">${tx.status.toUpperCase()}</div>
             </div>
         </div>`;
     }).join("");
