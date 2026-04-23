@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tasks • CryptoJet</title>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+    :root { --neon: #00f0ff; --accent: #00ffcc; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+        font-family: 'Inter', system-ui, sans-serif;
+        background: #020617;
+        color: #e2e8f0;
+        min-height: 100vh;
+        overflow-y: auto;
+    }
+
+    .header {
+        padding: 20px 16px;
+        display: flex;
+        align-items: center;
+        background: rgba(2,6,23,0.95);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(0,240,255,0.2);
+    }
+    .back { font-size:28px; color:#00ffcc; cursor:pointer; }
+    .header h3 { flex:1; text-align:center; font-size:22px; font-weight:700; font-family:'Space Grotesk', sans-serif; }
+
+    .tabs {
+        display:flex;
+        background:#0f172a;
+        border-radius:9999px;
+        padding:6px;
+        margin:20px 16px 16px;
+    }
+    .tab {
+        flex:1;
+        padding:14px;
+        text-align:center;
+        font-weight:600;
+        border-radius:9999px;
+        cursor:pointer;
+        color:#94a3b8;
+    }
+    .tab.active {
+        background:#00ffcc;
+        color:#000;
+        box-shadow:0 4px 15px rgba(0,255,204,0.4);
+    }
+
+    .content-wrapper { padding:0 16px 30px; }
+
+    .card {
+        background:#0f172a;
+        border-radius:24px;
+        padding:28px 24px;
+        box-shadow:0 10px 30px rgba(0,0,0,0.4);
+        margin-bottom:20px;
+    }
+
+    /* Calendar */
+    .calendar {
+        display:grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap:8px;
+        margin:20px 0;
+    }
+    .day {
+        aspect-ratio:1;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border-radius:12px;
+        font-weight:600;
+        background:#1e2937;
+        transition:0.3s;
+    }
+    .day.claimed {
+        background:#00ffcc;
+        color:#000;
+        box-shadow:0 0 15px #00ffcc;
+    }
+    .day.today {
+        border:2px solid #00ffcc;
+    }
+
+    /* Social Tasks */
+    .task-item {
+        background:#1e2937;
+        padding:18px;
+        border-radius:16px;
+        margin-bottom:12px;
+        display:flex;
+        align-items:center;
+        gap:16px;
+    }
+    .task-icon {
+        width:48px;
+        height:48px;
+        background:rgba(0,255,204,0.1);
+        border-radius:12px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:24px;
+    }
+    .btn-claim {
+        background:#00ffcc;
+        color:#000;
+        padding:10px 20px;
+        border-radius:9999px;
+        font-weight:700;
+        font-size:14px;
+        white-space:nowrap;
+    }
+
+    .success { color:#00ffcc; text-align:center; margin:20px 0; font-weight:600; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="back" onclick="history.back()">←</div>
+    <h3>Tasks</h3>
+</div>
+
+<div class="tabs">
+    <div class="tab active" id="tab-daily" onclick="switchTab(0)">Daily Check-in</div>
+    <div class="tab" id="tab-social" onclick="switchTab(1)">Social Tasks</div>
+</div>
+
+<div id="content" class="content-wrapper"></div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
+  authDomain: "cj-miner.firebaseapp.com",
+  databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cj-miner"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const uid = localStorage.getItem("uid");
+if (!uid) window.location.href = "signin.html";
+
+let currentPoints = 0;
+
+// Load user points
+db.ref("users/" + uid).on("value", snap => {
+  const d = snap.val() || {};
+  currentPoints = d.points || 0;
+});
+
+function switchTab(tab) {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".tab")[tab].classList.add("active");
+    renderContent(tab);
+}
+
+function renderContent(tab) {
+    const content = document.getElementById("content");
+    
+    if (tab === 0) { // Daily Check-in
+        content.innerHTML = `
+        <div class="card">
+            <h3 style="text-align:center;margin-bottom:20px;">Daily Check-in</h3>
+            <p style="text-align:center;color:#94a3b8;margin-bottom:24px;">Sign in every day to earn 1 point</p>
+            
+            <div class="calendar" id="calendar"></div>
+            
+            <button onclick="claimDaily()" style="width:100%;padding:16px;background:#00ffcc;color:#000;font-weight:700;border-radius:16px;margin-top:10px;">Claim Today's Reward (+1 point)</button>
+            
+            <div class="instructions" style="margin-top:30px;background:#1e2937;padding:20px;border-radius:16px;font-size:14px;">
+                <strong>How it works</strong><br><br>
+                • Claim once per day<br>
+                • 30-day streak gives bonus points<br>
+                • Claimed days turn neon green
+            </div>
+        </div>`;
+        renderCalendar();
+    } else { // Social Tasks
+        content.innerHTML = `
+        <div class="card">
+            <h3 style="margin-bottom:20px;">Social Tasks</h3>
+            
+            <div class="task-item">
+                <div class="task-icon">📘</div>
+                <div style="flex:1;">
+                    <strong>Follow us on Facebook</strong><br>
+                    <small>Get 3 points</small>
+                </div>
+                <button onclick="doSocialTask('facebook')" class="btn-claim">Follow & Claim</button>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-icon">🐦</div>
+                <div style="flex:1;">
+                    <strong>Follow us on X (Twitter)</strong><br>
+                    <small>Get 3 points</small>
+                </div>
+                <button onclick="doSocialTask('twitter')" class="btn-claim">Follow & Claim</button>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-icon">📸</div>
+                <div style="flex:1;">
+                    <strong>Follow us on Instagram</strong><br>
+                    <small>Get 3 points</small>
+                </div>
+                <button onclick="doSocialTask('instagram')" class="btn-claim">Follow & Claim</button>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-icon">📢</div>
+                <div style="flex:1;">
+                    <strong>Join our Telegram Channel</strong><br>
+                    <small>Get 3 points</small>
+                </div>
+                <button onclick="doSocialTask('telegram')" class="btn-claim">Join & Claim</button>
+            </div>
+        </div>`;
+    }
+}
+
+function renderCalendar() {
+    const calendar = document.getElementById("calendar");
+    const today = new Date();
+    const daysInMonth = 30;
+    let html = '';
+
+    for (let i = 1; i <= daysInMonth; i++) {
+        const isToday = i === today.getDate();
+        html += `<div class="day ${isToday ? 'today' : ''}" id="day-${i}">${i}</div>`;
+    }
+    calendar.innerHTML = html;
+}
+
+async function claimDaily() {
+    const today = new Date().toISOString().split('T')[0];
+    
+    const snap = await db.ref("users/" + uid + "/claimedDays").once("value");
+    let claimed = snap.val() || {};
+
+    if (claimed[today]) {
+        alert("You already claimed today's reward!");
+        return;
+    }
+
+    claimed[today] = true;
+
+    await db.ref("users/" + uid).update({
+        points: firebase.database.ServerValue.increment(1),
+        claimedDays: claimed
+    });
+
+    alert("✅ +1 point added!");
+    renderCalendar();
+}
+
+function doSocialTask(platform) {
+    let url = "";
+    if (platform === "facebook") url = "https://facebook.com/yourpage";
+    else if (platform === "twitter") url = "https://x.com/yourhandle";
+    else if (platform === "instagram") url = "https://instagram.com/yourhandle";
+    else if (platform === "telegram") url = "https://t.me/yourchannel";
+
+    window.open(url, "_blank");
+
+    setTimeout(() => {
+        if (confirm("Did you follow? Click OK to claim 3 points")) {
+            db.ref("users/" + uid).update({
+                points: firebase.database.ServerValue.increment(3)
+            });
+            alert("✅ +3 points added for following!");
+        }
+    }, 1500);
+}
+
+window.onload = () => {
+    renderContent(0);
+};
+</script>
+</body>
+</html>
