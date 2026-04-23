@@ -4,120 +4,208 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tasks • CryptoJet</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+:root { --neon: #00ffcc; --bg: #020617; --surface: #0c1628; --surface2: #111f35; --border: rgba(255,255,255,0.07); }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:#e2e8f0; min-height:100vh; }
 
-    :root { --neon: #00f0ff; --accent: #00ffcc; }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-        font-family: 'Inter', system-ui, sans-serif;
-        background: #020617;
-        color: #e2e8f0;
-        min-height: 100vh;
-        overflow-y: auto;
-    }
+/* ── HEADER ─────────── */
+.header {
+    padding:20px 16px;
+    display:flex; align-items:center;
+    background:rgba(2,6,23,0.97);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(0,255,204,0.12);
+    position:sticky; top:0; z-index:100;
+}
+.back { font-size:26px; color:var(--neon); cursor:pointer; }
+.header h3 { flex:1; text-align:center; font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; }
 
-    .header {
-        padding: 20px 16px;
-        display: flex;
-        align-items: center;
-        background: rgba(2,6,23,0.95);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(0,240,255,0.2);
-    }
-    .back { font-size:28px; color:#00ffcc; cursor:pointer; }
-    .header h3 { flex:1; text-align:center; font-size:22px; font-weight:700; font-family:'Space Grotesk', sans-serif; }
+/* ── TABS ─────────────── */
+.tabs {
+    display:flex; background:var(--surface);
+    border-radius:9999px; padding:5px;
+    margin:18px 16px 20px; gap:4px;
+}
+.tab {
+    flex:1; padding:13px; text-align:center;
+    font-weight:600; font-size:14px;
+    border-radius:9999px; cursor:pointer; color:#64748b;
+    transition:all 0.2s;
+}
+.tab.active { background:var(--neon); color:#000; box-shadow:0 4px 20px rgba(0,255,204,0.35); }
 
-    .tabs {
-        display:flex;
-        background:#0f172a;
-        border-radius:9999px;
-        padding:6px;
-        margin:20px 16px 16px;
-    }
-    .tab {
-        flex:1;
-        padding:14px;
-        text-align:center;
-        font-weight:600;
-        border-radius:9999px;
-        cursor:pointer;
-        color:#94a3b8;
-    }
-    .tab.active {
-        background:#00ffcc;
-        color:#000;
-        box-shadow:0 4px 15px rgba(0,255,204,0.4);
-    }
+.content { padding:0 16px 100px; }
 
-    .content-wrapper { padding:0 16px 30px; }
+/* ── DAILY CHECK-IN ─────── */
+.streak-hero {
+    background:linear-gradient(135deg,#0c1628,#0f2a1e);
+    border:1px solid rgba(0,255,204,0.2);
+    border-radius:24px;
+    padding:28px 24px;
+    text-align:center;
+    margin-bottom:20px;
+    position:relative;
+    overflow:hidden;
+}
+.streak-hero::before {
+    content:'';
+    position:absolute;
+    top:-40px; left:50%; transform:translateX(-50%);
+    width:200px; height:200px;
+    background:radial-gradient(circle, rgba(0,255,204,0.08) 0%, transparent 70%);
+    pointer-events:none;
+}
+.streak-number {
+    font-family:'Space Grotesk',sans-serif;
+    font-size:64px; font-weight:800;
+    color:var(--neon);
+    line-height:1;
+    text-shadow:0 0 30px rgba(0,255,204,0.5);
+}
+.streak-label { font-size:13px; color:#64748b; margin-top:4px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; }
+.streak-pts { font-size:15px; color:#94a3b8; margin-top:10px; }
+.streak-pts strong { color:var(--neon); }
 
-    .card {
-        background:#0f172a;
-        border-radius:24px;
-        padding:28px 24px;
-        box-shadow:0 10px 30px rgba(0,0,0,0.4);
-        margin-bottom:20px;
-    }
+.claim-btn {
+    width:100%; padding:16px;
+    background:linear-gradient(135deg, #00ffcc, #00d4aa);
+    color:#000; font-weight:800; font-size:16px;
+    border:none; border-radius:16px; cursor:pointer;
+    box-shadow:0 8px 25px rgba(0,255,204,0.3);
+    transition:all 0.2s; margin-top:20px;
+    font-family:'Space Grotesk',sans-serif;
+}
+.claim-btn:active { transform:scale(0.98); }
+.claim-btn:disabled { background:#1e2937; color:#475569; box-shadow:none; cursor:not-allowed; }
 
-    /* Calendar */
-    .calendar {
-        display:grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap:8px;
-        margin:20px 0;
-    }
-    .day {
-        aspect-ratio:1;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        border-radius:12px;
-        font-weight:600;
-        background:#1e2937;
-        transition:0.3s;
-    }
-    .day.claimed {
-        background:#00ffcc;
-        color:#000;
-        box-shadow:0 0 15px #00ffcc;
-    }
-    .day.today {
-        border:2px solid #00ffcc;
-    }
+/* Calendar grid */
+.cal-wrap {
+    background:var(--surface);
+    border-radius:20px; padding:20px;
+    margin-bottom:16px;
+    border:1px solid var(--border);
+}
+.cal-title { font-size:13px; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:14px; }
+.calendar {
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:6px;
+}
+.day-label { font-size:10px; font-weight:700; color:#334155; text-align:center; padding-bottom:4px; text-transform:uppercase; }
+.day {
+    aspect-ratio:1;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:10px;
+    font-size:12px; font-weight:600;
+    background:#1e2937; color:#475569;
+    transition:all 0.2s;
+    position:relative;
+}
+.day.claimed { background:var(--neon); color:#000; box-shadow:0 0 10px rgba(0,255,204,0.4); }
+.day.today { border:2px solid var(--neon); color:#e2e8f0; }
+.day.today.claimed { color:#000; }
+.day.future { opacity:0.4; }
 
-    /* Social Tasks */
-    .task-item {
-        background:#1e2937;
-        padding:18px;
-        border-radius:16px;
-        margin-bottom:12px;
-        display:flex;
-        align-items:center;
-        gap:16px;
-    }
-    .task-icon {
-        width:48px;
-        height:48px;
-        background:rgba(0,255,204,0.1);
-        border-radius:12px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-size:24px;
-    }
-    .btn-claim {
-        background:#00ffcc;
-        color:#000;
-        padding:10px 20px;
-        border-radius:9999px;
-        font-weight:700;
-        font-size:14px;
-        white-space:nowrap;
-    }
+/* How it works */
+.how-card {
+    background:var(--surface);
+    border-radius:18px; padding:18px 20px;
+    border:1px solid var(--border);
+}
+.how-card h4 { font-size:14px; font-weight:700; margin-bottom:12px; }
+.how-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; font-size:13px; color:#94a3b8; }
+.how-dot { width:6px; height:6px; background:var(--neon); border-radius:50%; flex-shrink:0; }
 
-    .success { color:#00ffcc; text-align:center; margin:20px 0; font-weight:600; }
+/* ── SOCIAL TASKS ─────── */
+.task-card {
+    background:var(--surface);
+    border-radius:20px; padding:18px 20px;
+    margin-bottom:12px;
+    border:1px solid var(--border);
+    transition:border-color 0.2s;
+}
+.task-card.completed { border-color:rgba(0,255,204,0.3); }
+
+.task-top { display:flex; align-items:center; gap:14px; }
+
+/* Brand icons */
+.brand-icon {
+    width:48px; height:48px; border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+}
+.brand-telegram  { background:#229ED9; }
+.brand-whatsapp  { background:#25D366; }
+.brand-facebook  { background:#1877F2; }
+.brand-twitter   { background:#000; border:1px solid #333; }
+.brand-instagram { background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+
+.task-info { flex:1; min-width:0; }
+.task-name { font-size:15px; font-weight:700; margin-bottom:3px; }
+.task-reward { font-size:13px; color:#64748b; }
+.task-reward strong { color:var(--neon); }
+
+.task-actions { margin-top:14px; display:flex; gap:8px; }
+
+.btn-open {
+    flex:1; padding:11px;
+    background:var(--surface2); color:#e2e8f0;
+    border:1.5px solid var(--border);
+    border-radius:12px; font-weight:600; font-size:14px;
+    cursor:pointer; transition:all 0.2s; text-align:center;
+}
+.btn-open:hover { border-color:rgba(0,255,204,0.3); }
+
+.btn-verify {
+    flex:1; padding:11px;
+    background:var(--neon); color:#000;
+    border:none; border-radius:12px;
+    font-weight:700; font-size:14px; cursor:pointer;
+    transition:all 0.2s; text-align:center;
+    position:relative; overflow:hidden;
+}
+.btn-verify:disabled {
+    background:#1e2937; color:#334155; cursor:not-allowed;
+}
+.btn-verify .countdown-overlay {
+    position:absolute; inset:0;
+    background:rgba(0,255,204,0.15);
+    transform-origin:left;
+    transition:transform 0.1s linear;
+}
+
+.task-done {
+    margin-top:14px;
+    display:flex; align-items:center; gap:8px;
+    padding:12px 16px;
+    background:rgba(0,255,204,0.08);
+    border-radius:12px;
+    font-size:13px; font-weight:600; color:var(--neon);
+}
+
+/* Points badge top */
+.points-bar {
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--surface);
+    border-radius:16px; padding:14px 18px;
+    margin-bottom:16px;
+    border:1px solid var(--border);
+}
+.pts-label { font-size:13px; color:#64748b; font-weight:600; }
+.pts-value { font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; color:var(--neon); }
+
+/* Toast */
+.toast {
+    position:fixed; bottom:30px; left:50%; transform:translateX(-50%);
+    background:var(--neon); color:#000;
+    padding:12px 24px; border-radius:999px;
+    font-weight:700; font-size:14px;
+    opacity:0; transition:opacity 0.3s; z-index:999999;
+    pointer-events:none; white-space:nowrap;
+}
 </style>
 </head>
 <body>
@@ -125,24 +213,25 @@
 <div class="header">
     <div class="back" onclick="history.back()">←</div>
     <h3>Tasks</h3>
+    <div style="width:26px"></div>
 </div>
 
 <div class="tabs">
-    <div class="tab active" id="tab-daily" onclick="switchTab(0)">Daily Check-in</div>
-    <div class="tab" id="tab-social" onclick="switchTab(1)">Social Tasks</div>
+    <div class="tab active" id="tab-0" onclick="switchTab(0)">📅 Daily Check-in</div>
+    <div class="tab"        id="tab-1" onclick="switchTab(1)">📲 Social Tasks</div>
 </div>
 
-<div id="content" class="content-wrapper"></div>
+<div class="content" id="content"></div>
+<div class="toast" id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
-  authDomain: "cj-miner.firebaseapp.com",
-  databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "cj-miner"
+    apiKey: "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
+    authDomain: "cj-miner.firebaseapp.com",
+    databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "cj-miner"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
@@ -151,141 +240,245 @@ const uid = localStorage.getItem("uid");
 if (!uid) window.location.href = "signin.html";
 
 let currentPoints = 0;
+let claimedDays   = {};
+let completedTasks = {};
+let activeTimers  = {}; // track countdown timers per task
 
-// Load user points
+// Social tasks config
+const SOCIAL_TASKS = [
+    {
+        id: "telegram",
+        name: "Join our Telegram Channel",
+        url: "https://t.me/cryptojet562",
+        points: 2,
+        brand: "brand-telegram",
+        icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>`
+    },
+    {
+        id: "whatsapp",
+        name: "Follow our WhatsApp Channel",
+        url: "https://whatsapp.com/channel/0029Vb7Tj5b5K3zds3vOhu2a",
+        points: 2,
+        brand: "brand-whatsapp",
+        icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`
+    },
+    {
+        id: "facebook",
+        name: "Follow us on Facebook",
+        url: "https://facebook.com/yourpage",
+        points: 2,
+        brand: "brand-facebook",
+        icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`
+    },
+    {
+        id: "twitter",
+        name: "Follow us on X (Twitter)",
+        url: "https://x.com/yourhandle",
+        points: 2,
+        brand: "brand-twitter",
+        icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`
+    },
+    {
+        id: "instagram",
+        name: "Follow us on Instagram",
+        url: "https://instagram.com/yourhandle",
+        points: 2,
+        brand: "brand-instagram",
+        icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>`
+    }
+];
+
+// Load user data live
 db.ref("users/" + uid).on("value", snap => {
-  const d = snap.val() || {};
-  currentPoints = d.points || 0;
+    const d = snap.val() || {};
+    currentPoints   = d.points || 0;
+    claimedDays     = d.claimedDays || {};
+    completedTasks  = d.completedTasks || {};
+    // Re-render current tab silently
+    const activeTab = document.querySelector(".tab.active");
+    if (activeTab) {
+        const idx = activeTab.id === "tab-0" ? 0 : 1;
+        renderContent(idx);
+    }
 });
 
 function switchTab(tab) {
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-    document.querySelectorAll(".tab")[tab].classList.add("active");
+    document.querySelectorAll(".tab").forEach((t,i) => t.classList.toggle("active", i === tab));
     renderContent(tab);
 }
 
+// ── DAILY CHECK-IN ──────────────────────────────────────────────────────────
 function renderContent(tab) {
     const content = document.getElementById("content");
-    
-    if (tab === 0) { // Daily Check-in
-        content.innerHTML = `
-        <div class="card">
-            <h3 style="text-align:center;margin-bottom:20px;">Daily Check-in</h3>
-            <p style="text-align:center;color:#94a3b8;margin-bottom:24px;">Sign in every day to earn 1 point</p>
-            
-            <div class="calendar" id="calendar"></div>
-            
-            <button onclick="claimDaily()" style="width:100%;padding:16px;background:#00ffcc;color:#000;font-weight:700;border-radius:16px;margin-top:10px;">Claim Today's Reward (+1 point)</button>
-            
-            <div class="instructions" style="margin-top:30px;background:#1e2937;padding:20px;border-radius:16px;font-size:14px;">
-                <strong>How it works</strong><br><br>
-                • Claim once per day<br>
-                • 30-day streak gives bonus points<br>
-                • Claimed days turn neon green
-            </div>
-        </div>`;
-        renderCalendar();
-    } else { // Social Tasks
-        content.innerHTML = `
-        <div class="card">
-            <h3 style="margin-bottom:20px;">Social Tasks</h3>
-            
-            <div class="task-item">
-                <div class="task-icon">📘</div>
-                <div style="flex:1;">
-                    <strong>Follow us on Facebook</strong><br>
-                    <small>Get 3 points</small>
-                </div>
-                <button onclick="doSocialTask('facebook')" class="btn-claim">Follow & Claim</button>
-            </div>
-            
-            <div class="task-item">
-                <div class="task-icon">🐦</div>
-                <div style="flex:1;">
-                    <strong>Follow us on X (Twitter)</strong><br>
-                    <small>Get 3 points</small>
-                </div>
-                <button onclick="doSocialTask('twitter')" class="btn-claim">Follow & Claim</button>
-            </div>
-            
-            <div class="task-item">
-                <div class="task-icon">📸</div>
-                <div style="flex:1;">
-                    <strong>Follow us on Instagram</strong><br>
-                    <small>Get 3 points</small>
-                </div>
-                <button onclick="doSocialTask('instagram')" class="btn-claim">Follow & Claim</button>
-            </div>
-            
-            <div class="task-item">
-                <div class="task-icon">📢</div>
-                <div style="flex:1;">
-                    <strong>Join our Telegram Channel</strong><br>
-                    <small>Get 3 points</small>
-                </div>
-                <button onclick="doSocialTask('telegram')" class="btn-claim">Join & Claim</button>
-            </div>
-        </div>`;
-    }
+    if (tab === 0) renderDaily(content);
+    else renderSocial(content);
 }
 
-function renderCalendar() {
-    const calendar = document.getElementById("calendar");
-    const today = new Date();
-    const daysInMonth = 30;
-    let html = '';
+function renderDaily(content) {
+    const today     = new Date();
+    const todayKey  = today.toISOString().split("T")[0];
+    const claimedToday = !!claimedDays[todayKey];
+    const streakCount  = Object.keys(claimedDays).length;
+
+    const dayLabels = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+    const daysInMonth = new Date(today.getFullYear(), today.getMonth()+1, 0).getDate();
+
+    let calDays = "";
+    // Day labels row
+    dayLabels.forEach(l => { calDays += `<div class="day-label">${l}</div>`; });
+
+    // Blank offset for first day of month
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+    for (let i = 0; i < firstDay; i++) calDays += `<div></div>`;
 
     for (let i = 1; i <= daysInMonth; i++) {
+        const key     = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(i).padStart(2,"0")}`;
+        const claimed = !!claimedDays[key];
         const isToday = i === today.getDate();
-        html += `<div class="day ${isToday ? 'today' : ''}" id="day-${i}">${i}</div>`;
+        const isFuture = i > today.getDate();
+        let cls = "day";
+        if (claimed) cls += " claimed";
+        if (isToday) cls += " today";
+        if (isFuture) cls += " future";
+        calDays += `<div class="${cls}">${i}</div>`;
     }
-    calendar.innerHTML = html;
+
+    content.innerHTML = `
+        <div class="points-bar">
+            <span class="pts-label">⚡ Your Points</span>
+            <span class="pts-value">${currentPoints.toLocaleString()} pts</span>
+        </div>
+
+        <div class="streak-hero">
+            <div class="streak-number">${streakCount}</div>
+            <div class="streak-label">Day Streak</div>
+            <div class="streak-pts">Each check-in earns <strong>+1 point</strong></div>
+            <button class="claim-btn" onclick="claimDaily()" ${claimedToday ? "disabled" : ""}>
+                ${claimedToday ? "✅ Already claimed today" : "Claim Today's Reward  +1 point"}
+            </button>
+        </div>
+
+        <div class="cal-wrap">
+            <div class="cal-title">${today.toLocaleString("default",{month:"long"})} ${today.getFullYear()}</div>
+            <div class="calendar">${calDays}</div>
+        </div>
+
+        <div class="how-card">
+            <h4>How it works</h4>
+            <div class="how-row"><div class="how-dot"></div>Claim once every 24 hours</div>
+            <div class="how-row"><div class="how-dot"></div>Each day adds +1 point to your balance</div>
+            <div class="how-row"><div class="how-dot"></div>A 30-day streak earns a bonus reward</div>
+            <div class="how-row"><div class="how-dot"></div>Claimed days glow green on the calendar</div>
+        </div>`;
 }
 
 async function claimDaily() {
-    const today = new Date().toISOString().split('T')[0];
-    
-    const snap = await db.ref("users/" + uid + "/claimedDays").once("value");
-    let claimed = snap.val() || {};
-
-    if (claimed[today]) {
-        alert("You already claimed today's reward!");
-        return;
-    }
-
-    claimed[today] = true;
+    const todayKey = new Date().toISOString().split("T")[0];
+    // Double-check in Firebase to prevent abuse
+    const snap = await db.ref("users/" + uid + "/claimedDays/" + todayKey).once("value");
+    if (snap.val()) { toast("Already claimed today!"); return; }
 
     await db.ref("users/" + uid).update({
         points: firebase.database.ServerValue.increment(1),
-        claimedDays: claimed
+        [`claimedDays/${todayKey}`]: true
+    });
+    toast("✅ +1 point added!");
+}
+
+// ── SOCIAL TASKS ────────────────────────────────────────────────────────────
+function renderSocial(content) {
+    content.innerHTML = `
+        <div class="points-bar">
+            <span class="pts-label">⚡ Your Points</span>
+            <span class="pts-value">${currentPoints.toLocaleString()} pts</span>
+        </div>
+        ${SOCIAL_TASKS.map(t => buildTaskCard(t)).join("")}
+        <div style="background:#0c1628;border-radius:16px;padding:16px 18px;border:1px solid rgba(255,255,255,0.06);margin-top:4px;">
+            <div style="font-size:12px;color:#475569;line-height:1.7;">
+                🔒 <strong style="color:#64748b">Verification required</strong> — You must open the link and join/follow. A 15-second timer ensures you've had time to complete the action before claiming.
+            </div>
+        </div>`;
+}
+
+function buildTaskCard(task) {
+    const done = !!completedTasks[task.id];
+    return `
+    <div class="task-card ${done ? "completed" : ""}" id="taskcard-${task.id}">
+        <div class="task-top">
+            <div class="brand-icon ${task.brand}">${task.icon}</div>
+            <div class="task-info">
+                <div class="task-name">${task.name}</div>
+                <div class="task-reward">Reward: <strong>+${task.points} points</strong></div>
+            </div>
+        </div>
+        ${done
+            ? `<div class="task-done">✅ Completed — ${task.points} points earned</div>`
+            : `<div class="task-actions">
+                <button class="btn-open" onclick="openTask('${task.id}')">Open Link</button>
+                <button class="btn-verify" id="verifybtn-${task.id}" disabled onclick="verifyTask('${task.id}')">
+                    Wait 15s
+                </button>
+               </div>`
+        }
+    </div>`;
+}
+
+function openTask(taskId) {
+    const task = SOCIAL_TASKS.find(t => t.id === taskId);
+    if (!task) return;
+
+    // Open the link
+    window.open(task.url, "_blank");
+
+    // Start 15s countdown — only then enable verify
+    const btn = document.getElementById("verifybtn-" + taskId);
+    if (!btn || btn.dataset.started) return;
+    btn.dataset.started = "1";
+
+    let secs = 15;
+    btn.textContent = `Wait ${secs}s`;
+
+    const interval = setInterval(() => {
+        secs--;
+        if (secs <= 0) {
+            clearInterval(interval);
+            btn.disabled = false;
+            btn.textContent = "Verify & Claim";
+            btn.style.background = "var(--neon)";
+            btn.style.color = "#000";
+        } else {
+            btn.textContent = `Wait ${secs}s`;
+        }
+    }, 1000);
+}
+
+async function verifyTask(taskId) {
+    // Check Firebase — prevent double-claim even if they click twice
+    const snap = await db.ref("users/" + uid + "/completedTasks/" + taskId).once("value");
+    if (snap.val()) { toast("Already claimed!"); return; }
+
+    const task  = SOCIAL_TASKS.find(t => t.id === taskId);
+    if (!task) return;
+
+    const btn = document.getElementById("verifybtn-" + taskId);
+    if (btn) { btn.disabled = true; btn.textContent = "Claiming..."; }
+
+    await db.ref("users/" + uid).update({
+        points: firebase.database.ServerValue.increment(task.points),
+        [`completedTasks/${taskId}`]: true
     });
 
-    alert("✅ +1 point added!");
-    renderCalendar();
+    toast(`✅ +${task.points} points added!`);
 }
 
-function doSocialTask(platform) {
-    let url = "";
-    if (platform === "facebook") url = "https://facebook.com/yourpage";
-    else if (platform === "twitter") url = "https://x.com/yourhandle";
-    else if (platform === "instagram") url = "https://instagram.com/yourhandle";
-    else if (platform === "telegram") url = "https://t.me/yourchannel";
-
-    window.open(url, "_blank");
-
-    setTimeout(() => {
-        if (confirm("Did you follow? Click OK to claim 3 points")) {
-            db.ref("users/" + uid).update({
-                points: firebase.database.ServerValue.increment(3)
-            });
-            alert("✅ +3 points added for following!");
-        }
-    }, 1500);
+function toast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.style.opacity = 1;
+    setTimeout(() => t.style.opacity = 0, 2500);
 }
 
-window.onload = () => {
-    renderContent(0);
-};
+window.onload = () => renderContent(0);
 </script>
 </body>
 </html>
