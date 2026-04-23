@@ -13,185 +13,84 @@
     .back { font-size:28px; color:#22c55e; cursor:pointer; }
     .header h3 { flex:1; text-align:center; font-size:20px; font-weight:600; }
 
-    /* TABS */
     .tabs { display:flex; background:#0f172a; border-radius:9999px; padding:6px; margin:20px 16px 16px; }
     .tab { flex:1; padding:14px; text-align:center; font-weight:600; border-radius:9999px; cursor:pointer; color:#94a3b8; transition:all 0.2s; }
     .tab.active { background:#22c55e; color:#022c22; box-shadow:0 4px 15px rgba(34,197,94,0.4); }
 
     .content-wrapper { padding:0 16px 40px; }
-
-    /* CARDS */
     .card { background:#0f172a; border-radius:24px; padding:26px 22px; box-shadow:0 10px 30px rgba(0,0,0,0.4); margin-bottom:16px; }
 
-    /* INPUTS */
-    input, select, textarea {
-        width:100%; padding:15px 18px; margin-top:10px;
-        background:#1e2937; border:2px solid transparent;
-        border-radius:14px; color:white; font-size:15px;
-        font-family:'Inter',sans-serif;
-        transition:border-color 0.2s;
-    }
+    input, select, textarea { width:100%; padding:15px 18px; margin-top:10px; background:#1e2937; border:2px solid transparent; border-radius:14px; color:white; font-size:15px; font-family:'Inter',sans-serif; transition:border-color 0.2s; }
     input:focus, select:focus, textarea:focus { border-color:#22c55e; outline:none; box-shadow:0 0 0 3px rgba(34,197,94,0.15); }
 
-    /* BUTTON */
     .button { width:100%; padding:16px; background:#22c55e; color:#022c22; font-weight:700; font-size:16px; border:none; border-radius:16px; cursor:pointer; box-shadow:0 6px 20px rgba(34,197,94,0.3); transition:all 0.2s; margin-top:16px; }
     .button:active { transform:scale(0.98); }
-    .button:disabled { background:#1e2937; color:#475569; box-shadow:none; cursor:not-allowed; }
 
-    /* NGN PREVIEW */
     .ngn-rate { font-size:14px; color:#94a3b8; text-align:center; margin-top:10px; font-weight:500; }
 
-    /* ── STEP 2 BANK DETAILS ──────────────────── */
-    .bank-details-card {
-        background:linear-gradient(135deg,#0f2318,#0c1f30);
-        border:1px solid rgba(34,197,94,0.2);
-        border-radius:20px;
-        padding:22px;
-        margin-bottom:18px;
-        position:relative;
-    }
-    .timer {
-        position:absolute; top:16px; right:16px;
-        background:#ef4444; color:white;
-        font-size:12px; font-weight:700;
-        padding:5px 12px; border-radius:999px;
-        animation:blink 1s infinite;
-    }
+    .bank-details-card { background:linear-gradient(135deg,#0f2318,#0c1f30); border:1px solid rgba(34,197,94,0.2); border-radius:20px; padding:22px; margin-bottom:18px; position:relative; }
+    .timer { position:absolute; top:16px; right:16px; background:#ef4444; color:white; font-size:12px; font-weight:700; padding:5px 12px; border-radius:999px; animation:blink 1s infinite; }
     @keyframes blink { 50%{ opacity:0.5; } }
 
-    .bank-row {
-        display:flex; justify-content:space-between; align-items:center;
-        padding:10px 0;
-        border-bottom:1px solid rgba(255,255,255,0.05);
-    }
+    .bank-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
     .bank-row:last-child { border-bottom:none; }
     .bank-row-label { font-size:12px; color:#64748b; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; }
     .bank-row-value { font-size:15px; font-weight:700; color:#e2e8f0; display:flex; align-items:center; gap:8px; }
-    .bank-row-value.highlight { color:#22c55e; font-size:20px; }
     .bank-row-value.ref { color:#f59e0b; font-size:16px; }
 
-    .copy-btn {
-        background:#1e3a2a; color:#22c55e; border:1px solid rgba(34,197,94,0.3);
-        padding:5px 10px; border-radius:8px; font-size:12px; font-weight:700;
-        cursor:pointer; white-space:nowrap; transition:all 0.15s;
-    }
+    .copy-btn { background:#1e3a2a; color:#22c55e; border:1px solid rgba(34,197,94,0.3); padding:5px 10px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; transition:all 0.15s; }
     .copy-btn:active { transform:scale(0.95); }
 
-    .amount-to-pay {
-        text-align:center; padding:14px;
-        background:rgba(34,197,94,0.08);
-        border-radius:14px; margin:16px 0 0;
-        border:1px solid rgba(34,197,94,0.15);
-    }
+    .amount-to-pay { text-align:center; padding:14px; background:rgba(34,197,94,0.08); border-radius:14px; margin:16px 0 0; border:1px solid rgba(34,197,94,0.15); }
     .amount-to-pay .pay-label { font-size:12px; color:#64748b; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px; }
     .amount-to-pay .pay-amount { font-size:28px; font-weight:700; color:#22c55e; }
     .amount-to-pay .pay-sub { font-size:12px; color:#64748b; margin-top:2px; }
 
-    /* ── INSTRUCTIONS BOX ────────────────────── */
-    .instructions-box {
-        background:#0c1a2e;
-        border:1px solid rgba(245,158,11,0.25);
-        border-left:3px solid #f59e0b;
-        border-radius:14px;
-        padding:16px 18px;
-        margin-bottom:18px;
-    }
-    .instructions-box .inst-title {
-        font-size:13px; font-weight:700; color:#f59e0b;
-        margin-bottom:10px;
-        display:flex; align-items:center; gap:6px;
-    }
-    .instructions-box ul {
-        list-style:none; display:flex; flex-direction:column; gap:8px;
-    }
-    .instructions-box li {
-        font-size:13px; color:#94a3b8; line-height:1.5;
-        display:flex; gap:8px; align-items:flex-start;
-    }
-    .instructions-box li .num {
-        background:rgba(245,158,11,0.15); color:#f59e0b;
-        font-size:10px; font-weight:800;
-        min-width:18px; height:18px;
-        border-radius:50%; display:flex; align-items:center; justify-content:center;
-        flex-shrink:0; margin-top:1px;
-    }
+    .instructions-box { background:#0c1a2e; border:1px solid rgba(245,158,11,0.25); border-left:3px solid #f59e0b; border-radius:14px; padding:16px 18px; margin-bottom:18px; }
+    .inst-title { font-size:13px; font-weight:700; color:#f59e0b; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+    .instructions-box ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
+    .instructions-box li { font-size:13px; color:#94a3b8; line-height:1.5; display:flex; gap:8px; align-items:flex-start; }
+    .num { background:rgba(245,158,11,0.15); color:#f59e0b; font-size:10px; font-weight:800; min-width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
 
-    /* ── UPLOAD AREA ─────────────────────────── */
-    .upload-area {
-        border:2px dashed #334155; border-radius:16px;
-        padding:28px 20px; text-align:center; cursor:pointer;
-        margin-top:14px; transition:border-color 0.2s;
-    }
+    .upload-area { border:2px dashed #334155; border-radius:16px; padding:28px 20px; text-align:center; cursor:pointer; margin-top:14px; transition:border-color 0.2s; }
     .upload-area:hover { border-color:#22c55e; }
     .upload-area .upload-icon { font-size:28px; margin-bottom:8px; }
     .upload-area .upload-text { font-size:14px; color:#64748b; }
     .preview-img { max-width:100%; max-height:200px; border-radius:14px; margin-top:14px; display:none; }
 
-    /* ── USDT NETWORK CARDS ───────────────────── */
     .network-select { display:flex; flex-direction:column; gap:12px; margin-bottom:4px; }
-    .network-card {
-        border-radius:18px; padding:18px 20px;
-        cursor:pointer; border:2px solid #1e2937;
-        transition:all 0.2s; background:#0c1628;
-        position:relative; overflow:hidden;
-    }
+    .network-card { border-radius:18px; padding:18px 20px; cursor:pointer; border:2px solid #1e2937; transition:all 0.2s; background:#0c1628; position:relative; }
     .network-card.selected { border-color:#22c55e; background:rgba(34,197,94,0.06); }
     .network-card .net-header { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
-    .net-logo {
-        width:42px; height:42px; border-radius:12px;
-        display:flex; align-items:center; justify-content:center;
-        font-weight:800; font-size:13px; flex-shrink:0;
-    }
+    .net-logo { width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; flex-shrink:0; }
     .net-logo.bep { background:linear-gradient(135deg,#f0b90b,#f8d06b); color:#000; }
     .net-logo.trc { background:linear-gradient(135deg,#ef4444,#f97316); color:#fff; }
     .net-name { font-size:16px; font-weight:700; }
     .net-sub  { font-size:12px; color:#64748b; }
-    .net-badge {
-        position:absolute; top:14px; right:14px;
-        padding:3px 10px; border-radius:999px;
-        font-size:11px; font-weight:700;
-    }
-    .net-badge.fast { background:rgba(34,197,94,0.15); color:#22c55e; }
+    .net-badge { position:absolute; top:14px; right:14px; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:700; }
+    .net-badge.fast  { background:rgba(34,197,94,0.15);  color:#22c55e; }
     .net-badge.cheap { background:rgba(245,158,11,0.15); color:#f59e0b; }
-
     .net-benefits { display:flex; flex-direction:column; gap:5px; margin-bottom:10px; }
     .net-benefit { font-size:12px; color:#94a3b8; display:flex; gap:7px; align-items:center; }
     .net-benefit::before { content:'✓'; color:#22c55e; font-weight:700; flex-shrink:0; }
-    .net-fee {
-        background:#1e2937; border-radius:10px; padding:8px 12px;
-        font-size:12px; color:#64748b; display:flex; justify-content:space-between;
-    }
+    .net-fee { background:#1e2937; border-radius:10px; padding:8px 12px; font-size:12px; color:#64748b; display:flex; justify-content:space-between; }
     .net-fee strong { color:#e2e8f0; }
 
-    /* ── WALLET DISPLAY ──────────────────────── */
-    .wallet-box {
-        background:#0c1628; border:1px solid rgba(34,197,94,0.2);
-        border-radius:14px; padding:14px 16px; margin-top:14px;
-    }
+    .wallet-box { background:#0c1628; border:1px solid rgba(34,197,94,0.2); border-radius:14px; padding:14px 16px; margin-top:14px; }
     .wallet-label { font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
-    .wallet-addr {
-        font-size:12px; color:#22c55e; font-family:monospace;
-        word-break:break-all; line-height:1.6; margin-bottom:10px;
-    }
+    .wallet-addr { font-size:12px; color:#22c55e; font-family:monospace; word-break:break-all; line-height:1.6; margin-bottom:10px; }
 
-    /* TX HASH INPUT */
     .txhash-section { margin-top:14px; }
     .txhash-label { font-size:13px; font-weight:600; color:#e2e8f0; margin-bottom:4px; display:flex; justify-content:space-between; align-items:center; }
     .txhash-hint { font-size:11px; color:#475569; font-weight:400; }
 
-    /* LOADER */
     .loader { position:fixed; inset:0; background:rgba(2,6,23,0.95); display:none; align-items:center; justify-content:center; z-index:99999; flex-direction:column; color:#22c55e; font-size:16px; gap:20px; }
     .spinner { width:72px; height:72px; border:7px solid rgba(34,197,94,0.15); border-top:7px solid #22c55e; border-radius:50%; animation:spin 1s linear infinite; }
     @keyframes spin { to{ transform:rotate(360deg); } }
 
-    /* TOAST */
     .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#22c55e; color:#022c22; padding:13px 26px; border-radius:999px; font-weight:700; font-size:14px; box-shadow:0 8px 25px rgba(34,197,94,0.4); opacity:0; transition:all 0.3s; z-index:100000; white-space:nowrap; pointer-events:none; }
 
-    /* VERIFIED BADGE */
-    .verified-box {
-        background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3);
-        border-radius:14px; padding:16px; text-align:center; margin-top:14px;
-    }
+    .verified-box { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); border-radius:14px; padding:16px; text-align:center; margin-top:14px; }
     .verified-box .v-icon { font-size:32px; margin-bottom:6px; }
     .verified-box .v-text { font-size:15px; font-weight:700; color:#22c55e; }
     .verified-box .v-sub { font-size:13px; color:#64748b; margin-top:4px; }
@@ -233,7 +132,11 @@ const db = firebase.database();
 const uid = localStorage.getItem("uid");
 if (!uid) window.location.href = "signin.html";
 
-const FUNCTIONS_BASE = "https://europe-west1-cj-miner.cloudfunctions.net";
+// ── FUNCTION URLs ─────────────────────────────────────────────
+const URL_APPROVE_RECHARGE = "https://approverecharge-t34xxkwqvq-ew.a.run.app";
+const URL_REJECT_RECHARGE  = "https://rejectrecharge-t34xxkwqvq-ew.a.run.app";
+const URL_VERIFY_USDT      = "https://verifyusdt-t34xxkwqvq-ew.a.run.app";
+
 const SECRET         = "cryptojet_secret_2024";
 const BOT_TOKEN      = "8688577357:AAHt9nAPIESkZiDZFDGRmyaJmzxogrpY3PY";
 const ADMIN_CHAT_ID  = 8632260150;
@@ -244,14 +147,13 @@ const WALLETS = {
     trc20: "TZHhMiV4r9ucL6UXN7QR9rvyv2KB5DZWVZ"
 };
 
-let proofBase64      = null;
-let currentStep      = 1;
+let proofBase64       = null;
+let currentStep       = 1;
 let selectedAmountUSD = 0;
-let selectedNetwork  = null;
-let timerInterval    = null;
-let currentTab       = "bank";
+let selectedNetwork   = null;
+let timerInterval     = null;
+let currentTab        = "bank";
 
-// ── TAB SWITCH ────────────────────────────────────────────────
 function switchTab(tab) {
     currentTab = tab;
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
@@ -260,7 +162,6 @@ function switchTab(tab) {
     renderTab(tab);
 }
 
-// ── RENDER ────────────────────────────────────────────────────
 function renderTab(tab) {
     if (tab === "bank") renderBank();
     else renderUSDT();
@@ -280,7 +181,6 @@ function renderBank() {
             <div id="ngnPreview" class="ngn-rate">You will pay: ₦0.00</div>
             <button onclick="confirmBankAmount()" class="button">Continue →</button>
         </div>`;
-
         document.getElementById("usdAmount").addEventListener("input", e => {
             const usd = parseFloat(e.target.value) || 0;
             document.getElementById("ngnPreview").textContent =
@@ -289,7 +189,6 @@ function renderBank() {
     } else {
         const ngn = (selectedAmountUSD * 1500).toLocaleString("en-US");
         c.innerHTML = `
-        <!-- INSTRUCTIONS -->
         <div class="instructions-box">
             <div class="inst-title">⚠️ Important Instructions</div>
             <ul>
@@ -302,12 +201,9 @@ function renderBank() {
             </ul>
         </div>
 
-        <!-- BANK DETAILS -->
         <div class="bank-details-card">
             <div class="timer" id="countdown">30:00</div>
-
             <div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;font-weight:700;">Transfer To</div>
-
             <div class="bank-row">
                 <div class="bank-row-label">Bank</div>
                 <div class="bank-row-value">Opay</div>
@@ -326,11 +222,10 @@ function renderBank() {
             <div class="bank-row">
                 <div class="bank-row-label">Reference Code</div>
                 <div class="bank-row-value ref">
-                    <span id="refCode">${REFERENCE_CODE}</span>
+                    <span>${REFERENCE_CODE}</span>
                     <button class="copy-btn" onclick="copyText('${REFERENCE_CODE}','Reference code')" style="border-color:rgba(245,158,11,0.3);color:#f59e0b;background:rgba(245,158,11,0.08)">Copy</button>
                 </div>
             </div>
-
             <div class="amount-to-pay">
                 <div class="pay-label">Amount to Transfer</div>
                 <div class="pay-amount">₦${ngn}</div>
@@ -338,7 +233,6 @@ function renderBank() {
             </div>
         </div>
 
-        <!-- UPLOAD -->
         <div class="card" style="padding:20px;">
             <div style="font-size:15px;font-weight:600;margin-bottom:4px;">Upload Receipt</div>
             <div style="font-size:13px;color:#64748b;margin-bottom:2px;">Attach a clear screenshot of your bank transfer</div>
@@ -350,7 +244,6 @@ function renderBank() {
             <img id="bankPreview" class="preview-img" alt="Receipt">
             <button onclick="submitBank()" class="button">I Have Paid • Submit</button>
         </div>`;
-
         startCountdown();
     }
 }
@@ -384,8 +277,8 @@ async function submitBank() {
     await txRef.set({ ...txData, proof: proofBase64 });
     await db.ref("userTransactions/" + uid + "/" + txRef.key).set(txData);
 
-    const approveUrl = `${FUNCTIONS_BASE}/approveRecharge?txId=${txRef.key}&secret=${SECRET}`;
-    const rejectUrl  = `${FUNCTIONS_BASE}/rejectRecharge?txId=${txRef.key}&secret=${SECRET}`;
+    const approveUrl = `${URL_APPROVE_RECHARGE}?txId=${txRef.key}&secret=${SECRET}`;
+    const rejectUrl  = `${URL_REJECT_RECHARGE}?txId=${txRef.key}&secret=${SECRET}`;
     const minerId    = await getMinerId();
 
     const caption =
@@ -424,109 +317,83 @@ async function submitBank() {
 function renderUSDT() {
     const c = document.getElementById("content");
     if (currentStep === 1) {
-        // Network selection
         c.innerHTML = `
         <div class="card">
             <h3 style="font-size:19px;font-weight:700;margin-bottom:6px;">USDT Deposit</h3>
             <p style="font-size:13px;color:#64748b;margin-bottom:20px;">Choose your preferred payment network</p>
             <div class="network-select">
-
-                <!-- BEP20 -->
                 <div class="network-card" id="card-bep20" onclick="selectNetwork('bep20')">
                     <div class="net-badge cheap">BSC</div>
                     <div class="net-header">
                         <div class="net-logo bep">BNB</div>
-                        <div>
-                            <div class="net-name">BEP20 (BSC)</div>
-                            <div class="net-sub">Binance Smart Chain</div>
-                        </div>
+                        <div><div class="net-name">BEP20 (BSC)</div><div class="net-sub">Binance Smart Chain</div></div>
                     </div>
                     <div class="net-benefits">
                         <div class="net-benefit">Ultra-low gas fees — often under $0.10</div>
                         <div class="net-benefit">Fast confirmation — 3 seconds per block</div>
-                        <div class="net-benefit">Ideal for medium to large deposits</div>
                         <div class="net-benefit">Supported by all major wallets & Binance</div>
                     </div>
-                    <div class="net-fee">
-                        <span>Network Fee</span>
-                        <strong>~$0.05 – $0.20</strong>
-                    </div>
+                    <div class="net-fee"><span>Network Fee</span><strong>~$0.05 – $0.20</strong></div>
                 </div>
-
-                <!-- TRC20 -->
                 <div class="network-card" id="card-trc20" onclick="selectNetwork('trc20')">
                     <div class="net-badge fast">TRON</div>
                     <div class="net-header">
                         <div class="net-logo trc">TRX</div>
-                        <div>
-                            <div class="net-name">TRC20 (TRON)</div>
-                            <div class="net-sub">TRON Network</div>
-                        </div>
+                        <div><div class="net-name">TRC20 (TRON)</div><div class="net-sub">TRON Network</div></div>
                     </div>
                     <div class="net-benefits">
                         <div class="net-benefit">Near-zero fees — cheapest USDT transfers</div>
                         <div class="net-benefit">Lightning fast — confirmations in ~3 seconds</div>
                         <div class="net-benefit">Most popular network on Binance & Bybit</div>
-                        <div class="net-benefit">Best option for small to medium deposits</div>
                     </div>
-                    <div class="net-fee">
-                        <span>Network Fee</span>
-                        <strong>~$0.00 – $1.00</strong>
-                    </div>
+                    <div class="net-fee"><span>Network Fee</span><strong>~$0.00 – $1.00</strong></div>
                 </div>
-
             </div>
         </div>`;
     } else {
-        // Payment screen
-        const net     = selectedNetwork;
-        const wallet  = WALLETS[net];
-        const label   = net === "bep20" ? "BEP20 (BSC)" : "TRC20 (TRON)";
-        const color   = net === "bep20" ? "#f0b90b" : "#ef4444";
+        const net    = selectedNetwork;
+        const wallet = WALLETS[net];
+        const label  = net === "bep20" ? "BEP20 (BSC)" : "TRC20 (TRON)";
+        const color  = net === "bep20" ? "#f0b90b" : "#ef4444";
 
         c.innerHTML = `
-        <!-- INSTRUCTIONS -->
         <div class="instructions-box">
             <div class="inst-title">⚠️ ${label} Deposit Instructions</div>
             <ul>
-                <li><span class="num">1</span>Send <strong>USDT only</strong> on the <strong style="color:${color}">${label}</strong> network — sending on wrong network causes permanent loss</li>
+                <li><span class="num">1</span>Send <strong>USDT only</strong> on the <strong style="color:${color}">${label}</strong> network — wrong network causes permanent loss</li>
                 <li><span class="num">2</span>Copy the wallet address carefully and double-check before sending</li>
-                <li><span class="num">3</span>After sending, paste your <strong>Transaction Hash (TX ID)</strong> in the field below — this is how we verify automatically</li>
+                <li><span class="num">3</span>After sending, paste your <strong>Transaction Hash (TX ID)</strong> below — this is how we verify automatically</li>
                 <li><span class="num">4</span>Do not close this page until you have submitted your TX hash</li>
                 <li><span class="num">5</span>Minimum deposit: <strong>$5 USDT</strong></li>
                 <li><span class="num">6</span>Balance auto-credits within 1–5 minutes after blockchain confirmation</li>
             </ul>
         </div>
 
-        <!-- WALLET CARD -->
         <div class="card" style="padding:20px;">
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
                 <div class="net-logo ${net}" style="width:36px;height:36px;border-radius:10px;font-size:11px">${net==="bep20"?"BNB":"TRX"}</div>
                 <div>
                     <div style="font-size:15px;font-weight:700;">${label} Wallet Address</div>
-                    <div style="font-size:12px;color:#64748b;">USDT only • ${net === "bep20" ? "BEP20" : "TRC20"} network</div>
+                    <div style="font-size:12px;color:#64748b;">USDT only • ${label}</div>
                 </div>
             </div>
             <div class="wallet-box">
                 <div class="wallet-label">Wallet Address</div>
-                <div class="wallet-addr" id="walletAddr">${wallet}</div>
+                <div class="wallet-addr">${wallet}</div>
                 <button class="copy-btn" style="width:100%;padding:9px;text-align:center;border-radius:10px;" onclick="copyText('${wallet}','Wallet address')">📋 Copy Wallet Address</button>
             </div>
 
-            <!-- AMOUNT -->
             <input id="usdAmountUSDT" type="number" placeholder="Amount sent in USD (e.g. 100)" style="margin-top:16px;">
 
-            <!-- TX HASH -->
             <div class="txhash-section">
                 <div class="txhash-label">
                     Transaction Hash (TX ID)
                     <span class="txhash-hint">Required for auto-verification</span>
                 </div>
-                <input id="txHash" type="text" placeholder="Paste your TX hash here e.g. 0xabc...">
+                <input id="txHash" type="text" placeholder="Paste your TX hash here">
                 <div style="font-size:11px;color:#475569;margin-top:6px;">Find this in your wallet app under transaction history after sending</div>
             </div>
 
-            <!-- UPLOAD -->
             <div style="font-size:14px;font-weight:600;margin-top:16px;margin-bottom:2px;">Screenshot (optional but recommended)</div>
             <div class="upload-area" onclick="document.getElementById('proofUSDT').click()">
                 <input type="file" id="proofUSDT" accept="image/*" style="display:none" onchange="handleFile(this,'usdtPreview')">
@@ -536,7 +403,7 @@ function renderUSDT() {
             <img id="usdtPreview" class="preview-img" alt="Receipt">
 
             <button onclick="submitUSDT()" class="button">Verify & Submit</button>
-            <button onclick="goBackUSDT()" style="width:100%;padding:13px;margin-top:8px;background:transparent;color:#64748b;border:1px solid #1e2937;border-radius:14px;cursor:pointer;font-size:14px;">← Change Network</button>
+            <button onclick="goBackUSDT()" style="width:100%;padding:13px;margin-top:8px;background:transparent;color:#64748b;border:1px solid #1e2937;border-radius:14px;cursor:pointer;font-size:14px;font-family:'Inter',sans-serif;">← Change Network</button>
         </div>`;
     }
 }
@@ -558,37 +425,28 @@ async function submitUSDT() {
     const txHash = document.getElementById("txHash").value.trim();
 
     if (!amount || amount < 5) return toast("Minimum deposit is $5 USDT");
-    if (!txHash)              return toast("Please paste your Transaction Hash");
+    if (!txHash)               return toast("Please paste your Transaction Hash");
 
     showLoader("Verifying your transaction on blockchain...");
 
-    // Check if TX hash already used
     const dupSnap = await db.ref("usedTxHashes/" + sanitizeTxKey(txHash)).once("value");
     if (dupSnap.val()) { hideLoader(); return toast("This TX hash was already used"); }
 
-    // Save pending transaction
     const txData = { uid, type:"recharge", method:selectedNetwork, amount, status:"pending", txHash, date:Date.now() };
     const txRef  = db.ref("transactions").push();
     await txRef.set({ ...txData, proof: proofBase64 || null });
     await db.ref("userTransactions/" + uid + "/" + txRef.key).set(txData);
-
-    // Mark TX hash as used immediately to prevent double-submit
     await db.ref("usedTxHashes/" + sanitizeTxKey(txHash)).set({ uid, txId: txRef.key, date: Date.now() });
 
-    // Trigger Cloud Function to verify on blockchain
     try {
-        const verifyUrl = `${FUNCTIONS_BASE}/verifyUSDT?txId=${txRef.key}&secret=${SECRET}`;
+        const verifyUrl = `${URL_VERIFY_USDT}?txId=${txRef.key}&secret=${SECRET}`;
         const resp      = await fetch(verifyUrl);
         const result    = await resp.text();
         hideLoader();
         if (result.includes("APPROVED")) {
             showVerified(amount);
-        } else if (result.includes("PENDING")) {
-            toast("Transaction submitted — verifying on blockchain...");
-            proofBase64 = null; currentStep = 1; selectedNetwork = null;
-            setTimeout(() => renderUSDT(), 2500);
         } else {
-            toast("TX hash not confirmed yet — admin will review manually");
+            toast("Transaction submitted — verifying on blockchain...");
             proofBase64 = null; currentStep = 1; selectedNetwork = null;
             setTimeout(() => renderUSDT(), 2500);
         }
@@ -601,8 +459,7 @@ async function submitUSDT() {
 }
 
 function showVerified(amount) {
-    const c = document.getElementById("content");
-    c.innerHTML = `
+    document.getElementById("content").innerHTML = `
     <div class="card" style="text-align:center;padding:40px 24px;">
         <div class="verified-box">
             <div class="v-icon">✅</div>
@@ -617,20 +474,16 @@ function sanitizeTxKey(hash) {
     return hash.replace(/[.#$/\[\]]/g,"_").substring(0,100);
 }
 
-// ── HELPERS ──────────────────────────────────────────────────
 function handleFile(input, previewId) {
     const file = input.files[0];
     if (!file) return;
-    new Promise((res,rej) => {
-        const r = new FileReader();
-        r.onload = e => res(e.target.result);
-        r.onerror = rej;
-        r.readAsDataURL(file);
-    }).then(data => {
-        proofBase64 = data;
+    const r = new FileReader();
+    r.onload = e => {
+        proofBase64 = e.target.result;
         const img = document.getElementById(previewId);
-        if (img) { img.src = data; img.style.display = "block"; }
-    });
+        if (img) { img.src = e.target.result; img.style.display = "block"; }
+    };
+    r.readAsDataURL(file);
 }
 
 function copyText(text, label) {
