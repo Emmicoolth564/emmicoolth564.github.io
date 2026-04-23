@@ -4,351 +4,411 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Feeds • CryptoJet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
 
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-        font-family: 'Inter', system-ui, sans-serif;
-        background: #020617;
-        color: #e2e8f0;
-        min-height: 100vh;
-        overflow-x: hidden;
-    }
+:root {
+    --bg: #020617;
+    --surface: #0c1628;
+    --surface2: #111f35;
+    --border: rgba(255,255,255,0.07);
+    --gold: #f59e0b;
+    --gold-dim: rgba(245,158,11,0.15);
+    --green: #22c55e;
+    --green-dim: rgba(34,197,94,0.12);
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --subtle: #1e3050;
+}
 
-    .header {
-        padding: 25px 16px 15px;
-        text-align: center;
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 26px;
-        font-weight: 700;
-        color: #00f0ff;
-        text-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
-        position: relative;
-    }
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
 
-    .feeds-badge {
-        position: absolute;
-        top: 22px;
-        right: 20px;
-        background: #ef4444;
-        color: white;
-        font-size: 12px;
-        font-weight: 700;
-        padding: 3px 8px;
-        border-radius: 9999px;
-        min-width: 22px;
-        text-align: center;
-        display: none;
-        animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-        0%,100% { transform: scale(1); }
-        50% { transform: scale(1.12); }
-    }
+/* ── HEADER ─────────────────────────────────────────────────── */
+.header {
+    padding: 22px 20px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(2,6,23,0.97);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 200;
+}
+.header-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    background: linear-gradient(90deg, #f59e0b, #fcd34d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.feeds-badge {
+    background: #ef4444;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    display: none;
+    animation: badgePulse 2s infinite;
+    font-family: 'DM Sans', sans-serif;
+}
+@keyframes badgePulse {
+    0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+    50% { transform: scale(1.08); box-shadow: 0 0 0 6px rgba(239,68,68,0); }
+}
 
-    .tabs {
-        display: flex;
-        background: #0f172a;
-        border-radius: 9999px;
-        padding: 6px;
-        margin: 0 16px 20px;
-        gap: 4px;
-        overflow-x: auto;
-        scrollbar-width: none;
-    }
-    .tabs::-webkit-scrollbar { display: none; }
-    .tab {
-        flex: 1;
-        padding: 13px 12px;
-        text-align: center;
-        font-weight: 600;
-        font-size: 14px;
-        border-radius: 9999px;
-        cursor: pointer;
-        color: #94a3b8;
-        white-space: nowrap;
-        transition: all 0.2s;
-    }
-    .tab.active {
-        background: #22c55e;
-        color: #022c22;
-        box-shadow: 0 4px 15px rgba(34,197,94,0.4);
-    }
+/* ── TABS ─────────────────────────────────────────────────────── */
+.tabs-wrap {
+    background: var(--bg);
+    padding: 14px 16px 12px;
+    position: sticky;
+    top: 63px;
+    z-index: 199;
+    border-bottom: 1px solid var(--border);
+}
+.tabs {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    color: var(--muted);
+    background: var(--surface);
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+}
+.tab.active {
+    background: var(--gold-dim);
+    border-color: var(--gold);
+    color: var(--gold);
+}
 
-    .content-wrapper { padding: 0 16px 30px; }
+/* ── CONTENT ─────────────────────────────────────────────────── */
+.content { padding: 18px 16px 100px; }
 
-    .new-badge {
-        display: inline-block;
-        background: #22c55e;
-        color: #022c22;
-        font-size: 10px;
-        font-weight: 700;
-        padding: 2px 7px;
-        border-radius: 9999px;
-        margin-left: 6px;
-        vertical-align: middle;
-    }
+.section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 14px 2px;
+    font-family: 'DM Sans', sans-serif;
+}
 
-    .feed-card {
-        background: #0f172a;
-        border-radius: 22px;
-        padding: 22px;
-        margin-bottom: 18px;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        transition: transform 0.3s, box-shadow 0.3s;
-        position: relative;
-    }
-    .feed-card.new-post {
-        border: 1px solid rgba(34,197,94,0.25);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 0 1px rgba(34,197,94,0.1);
-    }
-    .feed-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 25px 50px rgba(0,240,255,0.12);
-    }
+/* ── FEED CARD ───────────────────────────────────────────────── */
+.feed-card {
+    background: var(--surface);
+    border-radius: 20px;
+    padding: 20px 20px 16px;
+    margin-bottom: 14px;
+    border: 1px solid var(--border);
+    transition: transform 0.2s, border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+.feed-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(245,158,11,0.4), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.feed-card:hover::before { opacity: 1; }
+.feed-card:hover { transform: translateY(-2px); border-color: rgba(245,158,11,0.2); }
+.feed-card.new-post { border-color: rgba(34,197,94,0.2); }
+.feed-card.new-post::before { background: linear-gradient(90deg, transparent, rgba(34,197,94,0.5), transparent); opacity: 1; }
 
-    .feed-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 14px;
-        font-size: 13px;
-        color: #64748b;
-    }
+.card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+.cat-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: var(--surface2);
+    color: var(--muted);
+}
+.cat-tag.news     { background: rgba(59,130,246,0.12); color: #60a5fa; }
+.cat-tag.update   { background: rgba(34,197,94,0.12);  color: #4ade80; }
+.cat-tag.community{ background: rgba(168,85,247,0.12); color: #c084fc; }
+.cat-tag.feedback { background: rgba(245,158,11,0.12); color: #fcd34d; }
+.cat-tag.rewards  { background: rgba(236,72,153,0.12); color: #f472b6; }
 
-    .cat-tag {
-        background: #1e2937;
-        padding: 4px 12px;
-        border-radius: 9999px;
-        font-size: 12px;
-        color: #94a3b8;
-    }
+.card-time {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.new-badge {
+    background: var(--green);
+    color: #022c22;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
 
-    .feed-title {
-        font-weight: 600;
-        font-size: 17px;
-        line-height: 1.45;
-        margin-bottom: 14px;
-    }
+.feed-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.45;
+    color: var(--text);
+    margin-bottom: 16px;
+    letter-spacing: -0.1px;
+}
 
-    .feed-meta {
-        display: flex;
-        gap: 18px;
-        font-size: 14px;
-        color: #94a3b8;
-    }
-    .action {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        cursor: pointer;
-        transition: color 0.2s;
-    }
-    .action:hover { color: #22c55e; }
-    .action.liked { color: #f87171; }
-    .action.locked-comments { cursor: default; opacity: 0.5; }
+/* ── REACTIONS BAR ───────────────────────────────────────────── */
+.reactions-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+}
 
-    .modal {
-        position: fixed;
-        inset: 0;
-        background: rgba(2,6,23,0.92);
-        display: none;
-        align-items: flex-end;
-        z-index: 100000;
-    }
-    .modal-content {
-        background: #0f172a;
-        width: 100%;
-        max-height: 88vh;
-        border-radius: 28px 28px 0 0;
-        padding: 24px;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-    }
+.reaction-bubble {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    background: var(--surface2);
+    border-radius: 999px;
+    font-size: 15px;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: all 0.15s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.reaction-bubble:hover { background: var(--subtle); border-color: rgba(255,255,255,0.1); }
+.reaction-bubble.reacted { background: var(--gold-dim); border-color: rgba(245,158,11,0.4); }
+.reaction-count {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    min-width: 14px;
+}
+.reaction-bubble.reacted .reaction-count { color: var(--gold); }
 
-    .comment {
-        background: #1e2937;
-        border-radius: 16px;
-        padding: 14px;
-        margin-bottom: 10px;
-        display: flex;
-        gap: 12px;
-        align-items: flex-start;
-    }
+.more-reactions-btn {
+    padding: 6px 10px;
+    background: var(--surface2);
+    border-radius: 999px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+}
+.more-reactions-btn:hover { background: var(--subtle); }
 
-    .letter-avatar {
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        font-size: 13px;
-        flex-shrink: 0;
-        color: white;
-    }
+/* ── EMOJI PICKER ────────────────────────────────────────────── */
+.emoji-picker {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border-radius: 24px 24px 0 0;
+    padding: 20px 16px 40px;
+    border-top: 1px solid var(--border);
+    z-index: 99999;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.emoji-picker.open { transform: translateY(0); }
+.picker-handle {
+    width: 40px; height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 auto 18px;
+}
+.picker-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 4px;
+}
+.emoji-option {
+    font-size: 26px;
+    padding: 8px 4px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+}
+.emoji-option:hover, .emoji-option:active { background: var(--subtle); transform: scale(1.2); }
 
-    .comment-body { flex: 1; }
-    .comment-name { font-weight: 600; font-size: 14px; margin-bottom: 4px; color: #e2e8f0; }
-    .comment-text { font-size: 14px; color: #cbd5e1; line-height: 1.5; }
-    .comment-time { font-size: 12px; color: #475569; margin-top: 4px; }
+.picker-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2,6,23,0.7);
+    z-index: 99998;
+    display: none;
+}
+.picker-overlay.open { display: block; }
 
-    .comments-scroll { flex: 1; overflow-y: auto; max-height: 340px; margin-bottom: 16px; }
+/* ── FLOATING EMOJI ANIMATION ────────────────────────────────── */
+.float-emoji {
+    position: fixed;
+    font-size: 28px;
+    pointer-events: none;
+    z-index: 999999;
+    animation: floatUp 1.2s ease forwards;
+}
+@keyframes floatUp {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    60%  { opacity: 1; transform: translateY(-80px) scale(1.3); }
+    100% { opacity: 0; transform: translateY(-140px) scale(0.8); }
+}
 
-    .comment-input-area { border-top: 1px solid #1e2937; padding-top: 16px; }
-    .comment-input-area input {
-        width: 100%;
-        padding: 14px 18px;
-        border-radius: 16px;
-        background: #1e2937;
-        border: 2px solid transparent;
-        color: white;
-        font-size: 15px;
-        outline: none;
-        transition: border-color 0.2s;
-    }
-    .comment-input-area input:focus { border-color: #22c55e; }
-    .comment-input-area button {
-        margin-top: 10px;
-        width: 100%;
-        padding: 15px;
-        background: #22c55e;
-        color: #022c22;
-        border: none;
-        border-radius: 16px;
-        font-weight: 700;
-        font-size: 16px;
-        cursor: pointer;
-    }
+/* ── LOADER ──────────────────────────────────────────────────── */
+.page-loader {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    gap: 18px;
+    transition: opacity 0.4s;
+}
+.page-loader.hidden { opacity: 0; pointer-events: none; }
+.loader-ring {
+    width: 50px; height: 50px;
+    border: 4px solid rgba(245,158,11,0.15);
+    border-top: 4px solid var(--gold);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+.loader-text {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-    .locked-notice {
-        text-align: center;
-        padding: 16px;
-        background: #1e2937;
-        border-radius: 14px;
-        color: #64748b;
-        font-size: 14px;
-        margin-top: 8px;
-    }
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--green);
+    color: #022c22;
+    padding: 11px 24px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 999999;
+    pointer-events: none;
+    white-space: nowrap;
+}
 
-    .no-comments {
-        text-align: center;
-        padding: 30px 20px;
-        color: #475569;
-        font-size: 15px;
-    }
-
-    .loading-comments {
-        text-align: center;
-        padding: 20px;
-        color: #475569;
-        font-size: 14px;
-    }
-
-    .post-own {
-        background: #0f172a;
-        border-radius: 22px;
-        padding: 20px;
-        margin: 4px 16px 30px;
-    }
-    .post-own h3 { margin-bottom: 12px; font-size: 16px; color: #94a3b8; }
-    .post-own textarea {
-        width: 100%;
-        height: 80px;
-        padding: 14px;
-        background: #1e2937;
-        border: 2px solid transparent;
-        border-radius: 16px;
-        color: white;
-        font-size: 15px;
-        resize: none;
-        outline: none;
-        transition: border-color 0.2s;
-    }
-    .post-own textarea:focus { border-color: #22c55e; }
-    .post-own button {
-        margin-top: 12px;
-        width: 100%;
-        padding: 15px;
-        background: #22c55e;
-        color: #022c22;
-        border: none;
-        border-radius: 16px;
-        font-weight: 700;
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-    .toast {
-        position: fixed;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #22c55e;
-        color: #022c22;
-        padding: 12px 26px;
-        border-radius: 9999px;
-        font-weight: 600;
-        opacity: 0;
-        transition: opacity 0.3s;
-        z-index: 999999;
-        pointer-events: none;
-        white-space: nowrap;
-    }
-
-    .section-label {
-        font-size: 12px;
-        font-weight: 600;
-        color: #475569;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        margin: 0 0 14px;
-        padding: 0 2px;
-    }
+/* ── EMPTY ───────────────────────────────────────────────────── */
+.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+}
+.mini-spin {
+    width: 32px; height: 32px;
+    border: 3px solid rgba(245,158,11,0.1);
+    border-top: 3px solid var(--gold);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
 </style>
 </head>
 <body>
 
+<div class="page-loader" id="pageLoader">
+    <div class="loader-ring"></div>
+    <div class="loader-text">Loading feeds...</div>
+</div>
+
 <div class="header">
-    Feeds
-    <div class="feeds-badge" id="feedsBadge"></div>
+    <div style="width:50px"></div>
+    <div class="header-title">⚡ Feeds</div>
+    <div class="feeds-badge" id="feedsBadge">New</div>
 </div>
 
-<div class="tabs">
-    <div class="tab active" onclick="switchTab(0)">All</div>
-    <div class="tab" onclick="switchTab(1)">News</div>
-    <div class="tab" onclick="switchTab(2)">Updates</div>
-    <div class="tab" onclick="switchTab(3)">Community</div>
-    <div class="tab" onclick="switchTab(4)">Feedback</div>
-</div>
-
-<div id="content" class="content-wrapper"></div>
-
-<div class="post-own">
-    <h3>Share your thoughts with the community</h3>
-    <textarea id="ownPost" placeholder="Write something..."></textarea>
-    <button onclick="postOwnFeed()">Post to Community</button>
-</div>
-
-<div class="modal" id="modal" onclick="if(event.target.id==='modal')hideModal()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div id="modal-header" style="margin-bottom:16px;"></div>
-        <div class="comments-scroll" id="comments-scroll">
-            <div class="loading-comments">Loading comments...</div>
-        </div>
-        <div id="comment-input-wrap"></div>
+<div class="tabs-wrap">
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab(0,this)">All</div>
+        <div class="tab" onclick="switchTab(1,this)">📰 News</div>
+        <div class="tab" onclick="switchTab(2,this)">🔧 Updates</div>
+        <div class="tab" onclick="switchTab(3,this)">👥 Community</div>
+        <div class="tab" onclick="switchTab(4,this)">💬 Feedback</div>
     </div>
+</div>
+
+<div class="content" id="content"></div>
+
+<!-- Emoji picker -->
+<div class="picker-overlay" id="pickerOverlay" onclick="closePicker()"></div>
+<div class="emoji-picker" id="emojiPicker">
+    <div class="picker-handle"></div>
+    <div class="picker-title">React to this post</div>
+    <div class="emoji-grid" id="emojiGrid"></div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 <script>
 const firebaseConfig = {
     apiKey: "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
@@ -359,426 +419,240 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-const uid = localStorage.getItem("uid") || "guest";
-let userMinerId = "CS-000";
-let currentOpenPostId = null;
-let currentPostLocked = false;
-let likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "{}");
-let livePosts = [];
+const uid = localStorage.getItem("uid") || ("guest_" + Math.random().toString(36).slice(2,8));
 let currentTab = 0;
+let livePosts = [];
+let myReactions = JSON.parse(localStorage.getItem("myReactions_v2") || "{}");
+let currentPickerPostId = null;
 
-db.ref("users/" + uid).once("value", snap => {
-    const d = snap.val() || {};
-    userMinerId = d.minerId || ("CS-" + Math.floor(100 + Math.random() * 900));
-});
-
-const avatarColors = [
-    "#7c3aed","#2563eb","#059669","#d97706","#dc2626",
-    "#0891b2","#be185d","#16a34a","#ea580c","#0369a1"
+// ── ALL EMOJIS for picker ─────────────────────────────────────
+const ALL_EMOJIS = [
+    "🔥","❤️","🚀","💎","🤑","💯","😍","🙌",
+    "👏","⚡","💪","🏆","🎯","✅","😎","🤩",
+    "💰","📈","🌙","⭐","🎉","🥳","😂","👍",
+    "😮","🫡","🫶","❤️‍🔥","💥","✨","🌊","🦁",
+    "👀","🙏","😤","💫","🤯","🔑","🏅","🎊"
 ];
-function getAvatarColor(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    return avatarColors[Math.abs(hash) % avatarColors.length];
-}
-function getInitials(id) {
-    if (!id) return "CJ";
-    const parts = id.split("-");
-    if (parts.length > 1) return parts[0].substring(0,2).toUpperCase();
-    const letters = id.replace(/[0-9]/g,"");
-    return (letters.substring(0,2) || id.substring(0,2)).toUpperCase();
-}
-function letterAvatar(id, size=38) {
-    const color = getAvatarColor(id||"CJ");
-    const initials = getInitials(id);
-    return `<div class="letter-avatar" style="width:${size}px;height:${size}px;background:${color};">${initials}</div>`;
-}
+
+// ── DEFAULT REACTIONS shown on each card ──────────────────────
+const DEFAULT_REACTIONS = ["🔥","❤️","🚀","💎"];
+
+// ── STATIC POSTS with real timestamps ────────────────────────
+// Today = April 23, 2026
+const NOW = Date.now();
+const mins  = m  => m  * 60 * 1000;
+const hrs   = h  => h  * 3600 * 1000;
+const days  = d  => d  * 86400 * 1000;
+const weeks = w  => w  * 7 * days(1);
+const months = m => m  * 30 * days(1);
+const years  = y => y  * 365 * days(1);
+
+const staticPosts = [
+    { id:"p1",  type:"news",      category:"Crypto News",    title:"Bitcoin ETF Inflows Hit Record $2.3 Billion This Week",           ts: NOW - mins(11)     },
+    { id:"p2",  type:"update",    category:"Product Update", title:"CryptoJet v2.4 Released – Faster Withdrawals & New Miner Tiers",  ts: NOW - years(2)     },
+    { id:"p3",  type:"community", category:"Top Earner",     title:"@CryptoQueenNG just earned $8,420 this month with S-900!",        ts: NOW - years(3)     },
+    { id:"p4",  type:"news",      category:"Crypto News",    title:"Ethereum Pectra Upgrade Live – What Miners Need to Know",         ts: NOW - days(1)      },
+    { id:"p5",  type:"community", category:"Rewards",        title:"Double Points Weekend – Refer & Earn 2x on All Miner Purchases",  ts: NOW - months(6)    },
+    { id:"p6",  type:"update",    category:"Product Update", title:"USDT Withdrawals Now Instant – No More 30min Wait",               ts: NOW - months(10)   },
+    { id:"p7",  type:"community", category:"Community",      title:"Share your mining journey and win $500 in rewards!",              ts: NOW - months(4)    },
+    { id:"p8",  type:"news",      category:"Crypto News",    title:"Solana Hits New ATH – Is This the Next 10x?",                    ts: NOW - years(1)     },
+    { id:"p9",  type:"feedback",  category:"Feedback",       title:"User suggestion: Add dark mode toggle for dashboard",             ts: NOW - days(5)      },
+    { id:"p10", type:"update",    category:"Product Update", title:"New S-1500 Miner Coming Soon – 2.5x Hashrate",                   ts: NOW - months(4)    },
+    { id:"p11", type:"community", category:"Community",      title:"Weekly Mining Contest – Top 10 earners get bonus USDT",           ts: NOW - weeks(4)     },
+    { id:"p12", type:"news",      category:"Crypto News",    title:"Nigeria Crypto Regulation Update – Good News for Miners",         ts: NOW - weeks(1)     },
+    { id:"p13", type:"community", category:"Rewards",        title:"Referral Leaderboard – Top 5 this month get free S-500",          ts: NOW - weeks(2)     },
+    { id:"p14", type:"update",    category:"Product Update", title:"Bank withdrawals now support 28 Nigerian banks",                  ts: NOW - weeks(2)     },
+    { id:"p15", type:"community", category:"Community",      title:"Meet our top miner from Lagos – @MiningBossNG",                   ts: NOW - weeks(3)     },
+];
 
 function timeAgo(ts) {
     const diff = Date.now() - ts;
-    const m = Math.floor(diff/60000), h = Math.floor(diff/3600000), d = Math.floor(diff/86400000);
-    if (m < 1) return "just now";
-    if (m < 60) return m + "m ago";
-    if (h < 24) return h + "h ago";
-    if (d < 7) return d + "d ago";
-    return new Date(ts).toLocaleDateString();
+    const s = Math.floor(diff/1000), m = Math.floor(s/60), h = Math.floor(m/60), d = Math.floor(h/24);
+    const mo = Math.floor(d/30), y = Math.floor(d/365);
+    if (s < 60)  return "just now";
+    if (m < 60)  return m + "m ago";
+    if (h < 24)  return h + "h ago";
+    if (d < 7)   return d + "d ago";
+    if (d < 30)  return Math.floor(d/7) + "w ago";
+    if (mo < 12) return mo + " mo ago";
+    return y + "yr" + (y > 1 ? "s" : "") + " ago";
 }
 
-const commentTemplates = [
-    "This is exactly what I needed to read today 🔥",
-    "CryptoJet never disappoints, this is huge!",
-    "Shoutout to the whole CryptoJet team 🙌",
-    "Finally some good news in the crypto space",
-    "My portfolio is looking better every week with CryptoJet",
-    "This changes everything for miners like us",
-    "Been waiting for this update for so long!",
-    "Real talk – CryptoJet is ahead of everyone else",
-    "Just shared this with my team, thanks for the update",
-    "This is why I keep recommending CryptoJet to friends",
-    "Legends only 💎 CryptoJet doing big things",
-    "The gains are real, trust the process 🚀",
-    "Keep building! We believe in the project",
-    "Woke up to this news, best morning ever",
-    "Every update makes mining more profitable 📈",
-    "Dropped this link in my Telegram group, everyone is buzzing",
-    "Consistent delivery – that's what sets CryptoJet apart",
-    "More updates like this please! 🔥🔥",
-    "Big moves coming. I can feel it",
-    "Not a day goes by without CryptoJet impressing me",
-    "Hodling strong because of updates like this",
-    "The community is growing fast – love to see it",
-    "Just withdrew again and it was seamless 💯",
-    "Can't believe how much I've earned this month",
-    "Crypto mining finally feels worth it again",
-    "My miner hasn't stopped running, printing money 🤑",
-    "Reading this at 2am and still hyped",
-    "Tell a friend to tell a friend – CryptoJet is the move",
-    "Passive income is real and this proves it",
-    "Bought the S-500 last month, already doubled my investment",
-    "Support team responds super fast too, 10/10 experience",
-    "Another win for the community 🏆",
-    "This is the kind of platform I always dreamed of",
-    "Rewards keep stacking – life is good",
-    "Best investment I've made in the past 2 years",
-    "Nothing beats waking up to earnings notifications",
-    "Living the passive income life 🌴",
-    "The S-1500 better drop soon, I'm ready to upgrade",
-    "Every post from CryptoJet is pure motivation",
-    "This community is too positive, I love it here",
-    "New here but already impressed 👀",
-    "Been mining for 8 months straight, no issues",
-    "Crypto is the only savings plan that works for me now",
-    "Running three miners, can't stop won't stop 🔥",
-    "This platform changed how I think about income",
-    "The fees are fair and the payouts are real",
-    "Never been more excited about passive income",
-    "Sleeping while my miners work – the dream 😴💰",
-    "Reinvesting my profits into the next tier",
-    "Someone pinch me, this is too good to be true",
-    "Absolute W for the whole CryptoJet family",
-    "Let's go! Big news deserves big energy",
-    "I tell everyone I know about this platform",
-    "Keeping it real – this platform is the truth 💯",
-    "Quietly stacking USDT since day one",
-    "This community keeps me motivated daily",
-    "Grateful for this platform every single day",
-    "Still can't believe how passive this income is",
-    "More announcements like this please! 🎉",
-    "Reading every update and loving all of it",
-    "CryptoJet is built different fr fr",
-    "Today is a good day to be a CryptoJet miner 😎",
-    "Real platform, real people, real money 💵",
-    "This just motivated me to reinvest again",
-    "Couldn't ask for a better community to be part of",
-    "Always excited when I see a new post here",
-    "Mining + community = unstoppable combo",
-    "Proud CryptoJet miner checking in! ✊",
-    "The growth of this platform is inspiring",
-    "Started small, now I can't imagine life without this",
-    "My weekly earnings hit a new record because of this",
-    "Best decision I ever made was buying my first miner",
-    "The team here really cares about the community",
-    "Just hit my first $1000 in earnings – legend status 🏅",
-    "Proof that consistent mining pays off big",
-    "The referral bonuses alone are worth it",
-    "No better time to be in crypto than right now",
-    "Platform keeps getting better every single month",
-    "The S-900 is my best investment to date",
-    "CryptoJet + discipline = financial freedom",
-    "Can't wait to see what comes next from this team",
-    "Already told 5 people today about this news",
-    "This is the update I was waiting for 🙌",
-    "Real earnings, real withdrawals – no games here",
-    "My dashboard is looking beautiful right now 📊",
-    "Crypto don't sleep and neither do my miners",
-    "Stacking USDT one day at a time 💪",
-    "Low effort, high reward – that's CryptoJet",
-    "The passive income lifestyle is real and it starts here",
-    "Just topped up my miner subscription – worth every penny",
-    "The community here is genuinely supportive",
-    "News like this makes me want to upgrade immediately",
-    "We are early and that's the biggest advantage",
-    "Imagine not being part of CryptoJet in 2024 😂",
-    "Checking my balance every morning like clockwork",
-    "This is what financial freedom looks like",
-    "Three months in and still no complaints",
-    "The best crypto move I made was joining this platform",
-    "I sleep well knowing my money is working for me",
-    "Woke up to another withdrawal confirmation 🎉",
-    "Pure passive income – this is the way",
-    "Big W for all CryptoJet miners out there",
-    "This post just made my whole week better",
-    "From zero crypto knowledge to earning daily – thanks CJ!",
-    "The grind is real and the rewards are realer",
-    "Blessed to be part of this community 🙏"
-];
-
-function fakeCommentsForPost(postIndex, count) {
-    const comments = [];
-    for (let i = 0; i < count; i++) {
-        const csNum = 100 + ((postIndex * 73 + i * 17 + i * i * 3) % 900);
-        const minerId = "CS-" + csNum;
-        const templateIdx = (postIndex * 11 + i * 7 + i) % commentTemplates.length;
-        const text = commentTemplates[templateIdx];
-        const hoursAgo = 24 * 30 * (1 + (i % 6)) + (i * 3);
-        comments.push({ minerId, text, timestamp: Date.now() - hoursAgo * 3600000 });
-    }
-    return comments;
+function getCatClass(type) {
+    const map = { news:"news", update:"update", community:"community", feedback:"feedback", rewards:"rewards" };
+    return map[type] || "";
 }
 
-const staticPosts = [
-    {id:"p1",  type:"news",      title:"Bitcoin ETF Inflows Hit Record $2.3 Billion This Week",          time:"11m ago",       category:"Crypto News",    likes:1248000, locked:true},
-    {id:"p2",  type:"update",    title:"CryptoJet v2.4 Released – Faster Withdrawals & New Miner Tiers", time:"2 yrs ago",     category:"Product Update", likes:874000,  locked:true},
-    {id:"p3",  type:"community", title:"@CryptoQueenNG just earned $8,420 this month with S-900!",       time:"3 yrs ago",     category:"Top Earner",     likes:456000,  locked:true},
-    {id:"p4",  type:"news",      title:"Ethereum Pectra Upgrade Live – What Miners Need to Know",        time:"Yesterday",     category:"Crypto News",    likes:987000,  locked:true},
-    {id:"p5",  type:"community", title:"Double Points Weekend – Refer & Earn 2x on All Miner Purchases", time:"6 months ago",  category:"Rewards",        likes:2310000, locked:true},
-    {id:"p6",  type:"update",    title:"USDT Withdrawals Now Instant – No More 30min Wait",              time:"10 months ago", category:"Product Update", likes:678000,  locked:true},
-    {id:"p7",  type:"community", title:"Share your mining journey and win $500 in rewards!",             time:"4 months ago",  category:"Community",      likes:543000,  locked:true},
-    {id:"p8",  type:"news",      title:"Solana Hits New ATH – Is This the Next 10x?",                   time:"1 yr ago",      category:"Crypto News",    likes:892000,  locked:true},
-    {id:"p9",  type:"feedback",  title:"User suggestion: Add dark mode toggle for dashboard",            time:"5d ago",        category:"Feedback",       likes:12400,   locked:true},
-    {id:"p10", type:"update",    title:"New S-1500 Miner Coming Soon – 2.5x Hashrate",                  time:"4 months ago",  category:"Product Update", likes:456000,  locked:true},
-    {id:"p11", type:"community", title:"Weekly Mining Contest – Top 10 earners get bonus USDT",          time:"4 weeks ago",   category:"Community",      likes:312000,  locked:true},
-    {id:"p12", type:"news",      title:"Nigeria Crypto Regulation Update – Good News for Miners",        time:"1 week ago",    category:"Crypto News",    likes:678000,  locked:true},
-    {id:"p13", type:"community", title:"Referral Leaderboard – Top 5 this month get free S-500",         time:"2 weeks ago",   category:"Rewards",        likes:1240000, locked:true},
-    {id:"p14", type:"update",    title:"Bank withdrawals now support 28 Nigerian banks",                 time:"2 weeks ago",   category:"Product Update", likes:456000,  locked:true},
-    {id:"p15", type:"community", title:"Meet our top miner from Lagos – @MiningBossNG",                  time:"3 weeks ago",   category:"Community",      likes:312000,  locked:true},
-];
-
-let liveLikes = {};
-
-function checkUnreadBadge() {
-    const lastSeen = parseInt(localStorage.getItem("lastSeenFeed") || "0");
-    db.ref("feedMeta/latestTimestamp").once("value", snap => {
-        const latest = snap.val() || 0;
-        if (latest > lastSeen) {
-            db.ref("feedPosts").orderByChild("timestamp").startAt(lastSeen + 1).once("value", snap2 => {
-                const count = snap2.numChildren();
-                if (count > 0) {
-                    const badge = document.getElementById("feedsBadge");
-                    badge.textContent = count;
-                    badge.style.display = "inline-block";
-                }
-            });
-        }
-    });
-}
-
-function markFeedsAsSeen() {
-    localStorage.setItem("lastSeenFeed", Date.now().toString());
-    document.getElementById("feedsBadge").style.display = "none";
-}
-
-function switchTab(n) {
+// ── RENDER ────────────────────────────────────────────────────
+function switchTab(n, el) {
     currentTab = n;
-    document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === n));
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    el.classList.add("active");
     renderContent();
 }
 
 function renderContent() {
-    const content = document.getElementById('content');
-    content.innerHTML = '';
-    const typeMap = [null,'news','update','community','feedback'];
-    const filter = typeMap[currentTab];
-    const filteredLive = filter ? livePosts.filter(p => p.type === filter) : livePosts;
+    const content = document.getElementById("content");
+    content.innerHTML = "";
+
+    const typeMap = [null,"news","update","community","feedback"];
+    const filter  = typeMap[currentTab];
+
+    const filteredLive   = filter ? livePosts.filter(p => p.type === filter)  : livePosts;
     const filteredStatic = filter ? staticPosts.filter(p => p.type === filter) : staticPosts;
 
+    if (filteredLive.length === 0 && filteredStatic.length === 0) {
+        content.innerHTML = `<div class="empty"><div class="mini-spin"></div></div>`;
+        return;
+    }
+
     if (filteredLive.length > 0) {
-        const label = document.createElement('div');
-        label.className = 'section-label';
-        label.textContent = 'New Posts';
-        content.appendChild(label);
-        filteredLive.forEach((post, i) => renderCard(post, content, true, i));
+        appendLabel(content, "Latest");
+        filteredLive.forEach(p => content.appendChild(buildCard(p, true)));
     }
 
     if (filteredStatic.length > 0) {
-        if (filteredLive.length > 0) {
-            const label2 = document.createElement('div');
-            label2.className = 'section-label';
-            label2.style.marginTop = '20px';
-            label2.textContent = 'Older Posts';
-            content.appendChild(label2);
-        }
-        filteredStatic.forEach((post, i) => renderCard(post, content, false, i));
+        if (filteredLive.length > 0) appendLabel(content, "Archive");
+        filteredStatic.forEach(p => content.appendChild(buildCard(p, false)));
     }
 }
 
-function renderCard(post, container, isNew, index) {
-    const likes = liveLikes[post.id] || post.likes || 1000;
-    const liked = likedPosts[post.id];
-    const card = document.createElement('div');
-    card.className = 'feed-card' + (isNew ? ' new-post' : '');
-    card.id = 'card-' + post.id;
-    const timeLabel = isNew ? timeAgo(post.timestamp || Date.now()) : (post.time || "");
-    const commentCount = post.locked ? (115 + index * 3).toLocaleString() : '...';
-    const commentAction = post.locked
-        ? `openLockedPost('${post.id}',${index})`
-        : `openPost('${post.id}')`;
+function appendLabel(parent, text) {
+    const el = document.createElement("div");
+    el.className = "section-label";
+    el.textContent = text;
+    parent.appendChild(el);
+}
+
+function buildCard(post, isNew) {
+    const card = document.createElement("div");
+    card.className = "feed-card" + (isNew ? " new-post" : "");
+    card.id = "card-" + post.id;
+
+    const ts = post.ts || post.timestamp || Date.now();
+    const timeStr = timeAgo(ts);
 
     card.innerHTML = `
-        <div class="feed-header">
-            <span class="cat-tag">${post.category}</span>
-            <span>${timeLabel}${isNew ? '<span class="new-badge">NEW</span>' : ''}</span>
+        <div class="card-top">
+            <span class="cat-tag ${getCatClass(post.type)}">${post.category}</span>
+            <span class="card-time">
+                ${timeStr}
+                ${isNew ? '<span class="new-badge">NEW</span>' : ''}
+            </span>
         </div>
-        <div class="feed-title">${escapeHtml(post.title)}</div>
-        <div class="feed-meta">
-            <span class="action ${liked ? 'liked' : ''}" id="like-${post.id}" onclick="likePost('${post.id}',${post.likes||1000})">
-                ❤️ <span id="likecount-${post.id}">${likes.toLocaleString()}</span>
-            </span>
-            <span class="action ${post.locked ? 'locked-comments' : ''}" onclick="${commentAction}">
-                💬 <span id="commentcount-${post.id}">${commentCount}</span>
-            </span>
+        <div class="feed-title">${escHtml(post.title)}</div>
+        <div class="reactions-bar" id="rxbar-${post.id}">
+            <div class="empty" style="padding:4px"><div class="mini-spin" style="width:20px;height:20px;border-width:2px"></div></div>
         </div>
     `;
-    container.appendChild(card);
 
-    db.ref("feedLikes/" + post.id).on("value", snap => {
-        const count = snap.val() || post.likes || 1000;
-        liveLikes[post.id] = count;
-        const el = document.getElementById("likecount-" + post.id);
-        if (el) el.textContent = count.toLocaleString();
+    // Load live reactions
+    db.ref("feedReactions/" + post.id).on("value", snap => {
+        renderReactionsBar(post.id, snap.val() || {});
     });
 
-    if (isNew) {
-        db.ref("feedComments/" + post.id).on("value", snap => {
-            const el = document.getElementById("commentcount-" + post.id);
-            if (el) el.textContent = snap.numChildren().toLocaleString();
+    return card;
+}
+
+function renderReactionsBar(postId, reactionsData) {
+    const bar = document.getElementById("rxbar-" + postId);
+    if (!bar) return;
+
+    // Collect top reactions
+    const totals = {};
+    Object.values(reactionsData).forEach(userRxs => {
+        Object.entries(userRxs).forEach(([emoji, val]) => {
+            if (val) totals[emoji] = (totals[emoji] || 0) + 1;
         });
+    });
+
+    // Show default emojis + any extras with count > 0
+    const shown = new Set([...DEFAULT_REACTIONS]);
+    Object.keys(totals).forEach(e => shown.add(e));
+    const myRx = (myReactions[postId] || {});
+
+    bar.innerHTML = "";
+    [...shown].slice(0, 8).forEach(emoji => {
+        const count = totals[emoji] || 0;
+        const reacted = !!myRx[emoji];
+        const btn = document.createElement("div");
+        btn.className = "reaction-bubble" + (reacted ? " reacted" : "");
+        btn.innerHTML = `${emoji} <span class="reaction-count">${count > 0 ? formatCount(count) : ""}</span>`;
+        btn.onclick = (e) => toggleReaction(postId, emoji, e);
+        bar.appendChild(btn);
+    });
+
+    // More button
+    const moreBtn = document.createElement("div");
+    moreBtn.className = "more-reactions-btn";
+    moreBtn.innerHTML = "＋";
+    moreBtn.onclick = () => openPicker(postId);
+    bar.appendChild(moreBtn);
+}
+
+function formatCount(n) {
+    if (n >= 1000000) return (n/1000000).toFixed(1).replace(".0","") + "M";
+    if (n >= 1000)    return (n/1000).toFixed(1).replace(".0","") + "K";
+    return n;
+}
+
+function toggleReaction(postId, emoji, e) {
+    if (!myReactions[postId]) myReactions[postId] = {};
+    const already = myReactions[postId][emoji];
+
+    if (already) {
+        myReactions[postId][emoji] = false;
+        db.ref(`feedReactions/${postId}/${uid}/${encodeEmoji(emoji)}`).set(false);
+    } else {
+        myReactions[postId][emoji] = true;
+        db.ref(`feedReactions/${postId}/${uid}/${encodeEmoji(emoji)}`).set(true);
+        // Float emoji
+        floatEmoji(emoji, e);
     }
+    localStorage.setItem("myReactions_v2", JSON.stringify(myReactions));
 }
 
-function likePost(id, defaultLikes) {
-    if (likedPosts[id]) return;
-    likedPosts[id] = true;
-    localStorage.setItem("likedPosts", JSON.stringify(likedPosts));
-    const current = liveLikes[id] || defaultLikes;
-    db.ref("feedLikes/" + id).set(current + 1);
-    const btn = document.getElementById("like-" + id);
-    if (btn) btn.classList.add("liked");
+function encodeEmoji(emoji) {
+    // Firebase keys can't have special chars — use codepoints
+    return [...emoji].map(c => c.codePointAt(0).toString(16)).join("_");
 }
 
-function openPost(id) {
-    currentOpenPostId = id;
-    currentPostLocked = false;
-    const post = livePosts.find(p => p.id === id);
-    if (!post) return;
-
-    document.getElementById("modal-header").innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-            <span class="cat-tag">${post.category}</span>
-            <span onclick="hideModal()" style="font-size:24px;cursor:pointer;color:#64748b;">✕</span>
-        </div>
-        <h2 style="font-size:18px;line-height:1.4;margin-bottom:4px;">${escapeHtml(post.title)}</h2>
-        <p style="font-size:13px;color:#64748b;margin-top:6px;">${timeAgo(post.timestamp)}</p>
-        <hr style="border-color:#1e2937;margin:16px 0 12px;">
-        <h4 style="font-size:14px;color:#94a3b8;">Comments</h4>
-    `;
-    document.getElementById("comment-input-wrap").innerHTML = `
-        <div class="comment-input-area">
-            <input type="text" id="commentInput" placeholder="Write a comment..." maxlength="300">
-            <button onclick="postComment()">Post Comment</button>
-        </div>
-    `;
-
-    const scroll = document.getElementById("comments-scroll");
-    scroll.innerHTML = '<div class="loading-comments">Loading...</div>';
-    document.getElementById("modal").style.display = "flex";
-
-    db.ref("feedComments/" + id).orderByChild("timestamp").on("value", snap => {
-        const comments = [];
-        snap.forEach(c => comments.push({ key: c.key, ...c.val() }));
-        if (comments.length === 0) {
-            scroll.innerHTML = '<div class="no-comments">No comments yet. Be the first! 👇</div>';
-            return;
-        }
-        scroll.innerHTML = comments.map(c => `
-            <div class="comment">
-                ${letterAvatar(c.minerId)}
-                <div class="comment-body">
-                    <div class="comment-name">${escapeHtml(c.minerId||"Anonymous")}</div>
-                    <div class="comment-text">${escapeHtml(c.text)}</div>
-                    <div class="comment-time">${timeAgo(c.timestamp)}</div>
-                </div>
-            </div>
-        `).join('');
-        scroll.scrollTop = scroll.scrollHeight;
-    });
+function floatEmoji(emoji, e) {
+    const el = document.createElement("div");
+    el.className = "float-emoji";
+    el.textContent = emoji;
+    const x = e ? e.clientX : window.innerWidth / 2;
+    const y = e ? e.clientY : window.innerHeight / 2;
+    el.style.left = (x - 14) + "px";
+    el.style.top  = (y - 14) + "px";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1300);
 }
 
-function openLockedPost(id, index) {
-    currentOpenPostId = id;
-    currentPostLocked = true;
-    const post = staticPosts.find(p => p.id === id);
-    if (!post) return;
-
-    document.getElementById("modal-header").innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-            <span class="cat-tag">${post.category}</span>
-            <span onclick="hideModal()" style="font-size:24px;cursor:pointer;color:#64748b;">✕</span>
-        </div>
-        <h2 style="font-size:18px;line-height:1.4;margin-bottom:4px;">${escapeHtml(post.title)}</h2>
-        <p style="font-size:13px;color:#64748b;margin-top:6px;">${post.time}</p>
-        <hr style="border-color:#1e2937;margin:16px 0 12px;">
-        <h4 style="font-size:14px;color:#94a3b8;">Comments</h4>
-    `;
-    document.getElementById("comment-input-wrap").innerHTML = `
-        <div class="locked-notice">🔒 Comments are closed for older posts</div>
-    `;
-
-    const scroll = document.getElementById("comments-scroll");
-    const fakeComments = fakeCommentsForPost(index, 115 + index * 3);
-    scroll.innerHTML = fakeComments.map(c => `
-        <div class="comment">
-            ${letterAvatar(c.minerId)}
-            <div class="comment-body">
-                <div class="comment-name">${c.minerId}</div>
-                <div class="comment-text">${c.text}</div>
-                <div class="comment-time">${timeAgo(c.timestamp)}</div>
-            </div>
-        </div>
-    `).join('');
-    document.getElementById("modal").style.display = "flex";
+// ── EMOJI PICKER ──────────────────────────────────────────────
+function openPicker(postId) {
+    currentPickerPostId = postId;
+    const grid = document.getElementById("emojiGrid");
+    grid.innerHTML = ALL_EMOJIS.map(e => `
+        <div class="emoji-option" onclick="pickEmoji('${e}', event)">${e}</div>
+    `).join("");
+    document.getElementById("emojiPicker").classList.add("open");
+    document.getElementById("pickerOverlay").classList.add("open");
+}
+function closePicker() {
+    document.getElementById("emojiPicker").classList.remove("open");
+    document.getElementById("pickerOverlay").classList.remove("open");
+    currentPickerPostId = null;
+}
+function pickEmoji(emoji, e) {
+    if (!currentPickerPostId) return;
+    toggleReaction(currentPickerPostId, emoji, e);
+    closePicker();
 }
 
-function hideModal() {
-    document.getElementById("modal").style.display = "none";
-    if (currentOpenPostId && !currentPostLocked) {
-        db.ref("feedComments/" + currentOpenPostId).off();
-    }
-    currentOpenPostId = null;
-    currentPostLocked = false;
-}
-
-function postComment() {
-    const input = document.getElementById("commentInput");
-    if (!input) return;
-    const text = input.value.trim();
-    if (!text || !currentOpenPostId) return;
-    db.ref("feedComments/" + currentOpenPostId).push({
-        uid: uid,
-        minerId: userMinerId,
-        text: text,
-        timestamp: Date.now()
-    });
-    input.value = "";
-    toast("Comment posted!");
-}
-
-function postOwnFeed() {
-    const textarea = document.getElementById("ownPost");
-    const text = textarea.value.trim();
-    if (!text) return toast("Write something first!");
-    db.ref("feedComments/community-wall").push({
-        uid: uid,
-        minerId: userMinerId,
-        text: text,
-        timestamp: Date.now()
-    });
-    textarea.value = "";
-    toast("Posted to the community!");
-}
-
-function escapeHtml(str) {
-    return String(str||"")
+// ── HELPERS ───────────────────────────────────────────────────
+function escHtml(s) {
+    return String(s||"")
         .replace(/&/g,"&amp;").replace(/</g,"&lt;")
         .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
@@ -790,15 +664,41 @@ function toast(msg) {
     setTimeout(() => t.style.opacity = 0, 2500);
 }
 
+// ── UNREAD BADGE ──────────────────────────────────────────────
+function checkBadge() {
+    const lastSeen = parseInt(localStorage.getItem("lastSeenFeed") || "0");
+    db.ref("feedPosts").orderByChild("timestamp").startAt(lastSeen + 1).once("value", snap => {
+        const count = snap.numChildren();
+        if (count > 0) {
+            const badge = document.getElementById("feedsBadge");
+            badge.textContent = count + " new";
+            badge.style.display = "inline-block";
+        }
+    });
+}
+function markSeen() {
+    localStorage.setItem("lastSeenFeed", Date.now().toString());
+    document.getElementById("feedsBadge").style.display = "none";
+}
+
+// ── BOOT ──────────────────────────────────────────────────────
 db.ref("feedPosts").orderByChild("timestamp").on("value", snap => {
     livePosts = [];
-    snap.forEach(child => livePosts.push({ id: child.key, ...child.val() }));
+    snap.forEach(c => livePosts.push({ id: c.key, ...c.val() }));
     livePosts.reverse();
+
+    document.getElementById("pageLoader").classList.add("hidden");
     renderContent();
 });
 
-checkUnreadBadge();
-markFeedsAsSeen();
+// If no live posts arrive quickly, still hide loader and show static
+setTimeout(() => {
+    document.getElementById("pageLoader").classList.add("hidden");
+    if (livePosts.length === 0) renderContent();
+}, 2500);
+
+checkBadge();
+markSeen();
 </script>
 </body>
 </html>
