@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miner Power • CryptoJet</title>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+    :root {
+        --neon: #00f0ff;
+        --accent: #00ffcc;
+        --dark: #020617;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #020617;
+        color: #e2e8f0;
+        min-height: 100vh;
+        overflow-x: hidden;
+        background: radial-gradient(circle at 50% 30%, #1a2338 0%, #020617 70%);
+    }
+
+    /* HEADER */
+    .header {
+        padding: 30px 20px 20px;
+        text-align: center;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--neon);
+        text-shadow: 0 0 30px rgba(0, 240, 255, 0.6);
+        letter-spacing: 2px;
+    }
+
+    .container {
+        padding: 0 20px 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .miner-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 24px;
+    }
+
+    .miner-card {
+        background: rgba(15, 23, 42, 0.95);
+        border-radius: 24px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        transition: all 0.4s ease;
+        border: 1px solid rgba(0, 240, 255, 0.15);
+    }
+
+    .miner-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 30px 60px rgba(0, 240, 255, 0.25);
+        border-color: var(--neon);
+    }
+
+    /* Miner Image Container */
+    .miner-visual {
+        height: 180px;
+        background: linear-gradient(135deg, #1e2937, #0f172a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .miner-img {
+        width: 140px;
+        height: 140px;
+        object-fit: contain;
+        filter: drop-shadow(0 0 25px rgba(0, 240, 255, 0.7));
+        animation: floatMiner 3s ease-in-out infinite;
+    }
+
+    @keyframes floatMiner {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+
+    /* Electric Arc Overlay */
+    .electric-arc {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.15;
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(0, 240, 255, 0.6) 10px,
+            rgba(0, 240, 255, 0.6) 12px
+        );
+        animation: arcMove 1.5s linear infinite;
+    }
+
+    @keyframes arcMove {
+        0% { background-position: 0 0; }
+        100% { background-position: 100px 100px; }
+    }
+
+    .card-content {
+        padding: 24px;
+    }
+
+    .title {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        color: var(--accent);
+    }
+
+    /* Power Bar */
+    .stat {
+        margin-bottom: 20px;
+    }
+    .stat-label {
+        font-size: 13px;
+        color: #94a3b8;
+        margin-bottom: 6px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .power-bar {
+        height: 8px;
+        background: #1e2937;
+        border-radius: 9999px;
+        overflow: hidden;
+        position: relative;
+    }
+    .power-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #00f0ff, #00ffcc);
+        transition: width 1.2s ease;
+        box-shadow: 0 0 15px #00f0ff;
+    }
+
+    /* Heat Indicator */
+    .heat-bar {
+        height: 6px;
+        border-radius: 9999px;
+        margin-top: 6px;
+    }
+
+    /* Speed Dots */
+    .speed-container {
+        display: flex;
+        gap: 6px;
+        margin-top: 8px;
+    }
+    .speed-dot {
+        width: 10px;
+        height: 10px;
+        background: #00ffcc;
+        border-radius: 50%;
+        animation: speedPulse 1.2s infinite ease-in-out;
+    }
+    .speed-dot:nth-child(2) { animation-delay: 0.2s; }
+    .speed-dot:nth-child(3) { animation-delay: 0.4s; }
+    .speed-dot:nth-child(4) { animation-delay: 0.6s; }
+    .speed-dot:nth-child(5) { animation-delay: 0.8s; }
+
+    @keyframes speedPulse {
+        0%, 100% { transform: scale(0.8); opacity: 0.4; }
+        50% { transform: scale(1.4); opacity: 1; }
+    }
+
+    .desc {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #94a3b8;
+        margin-top: 16px;
+    }
+
+    /* Tier Labels */
+    .tier {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 240, 255, 0.15);
+        color: var(--neon);
+        font-size: 12px;
+        padding: 4px 12px;
+        border-radius: 9999px;
+        font-weight: 600;
+        border: 1px solid rgba(0, 240, 255, 0.3);
+    }
+</style>
+</head>
+<body>
+
+<div class="header">MINER POWER ⚡</div>
+
+<div class="container">
+    <div class="miner-grid">
+
+        <!-- S-244 -->
+        <div class="miner-card">
+            <div class="miner-visual">
+                <div class="electric-arc"></div>
+                <img src="purchase1.png" class="miner-img" alt="S-244">
+                <div class="tier">ENTRY</div>
+            </div>
+            <div class="card-content">
+                <div class="title">S-244</div>
+                
+                <div class="stat">
+                    <div class="stat-label">POWER <span>24%</span></div>
+                    <div class="power-bar"><div class="power-fill" style="width:24%"></div></div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">HEAT <span>LOW</span></div>
+                    <div class="heat-bar" style="background:linear-gradient(90deg,#38bdf8,#00ffcc);width:20%"></div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">SPEED</div>
+                    <div class="speed-container">
+                        <div class="speed-dot"></div>
+                        <div class="speed-dot"></div>
+                        <div class="speed-dot"></div>
+                    </div>
+                </div>
+
+                <div class="desc">Stable entry-level miner. Low power draw and reliable performance.</div>
+            </div>
+        </div>
+
+        <!-- S-500 -->
+        <div class="miner-card">
+            <div class="miner-visual">
+                <div class="electric-arc"></div>
+                <img src="purchase2.png" class="miner-img" alt="S-500">
+                <div class="tier">BALANCED</div>
+            </div>
+            <div class="card-content">
+                <div class="title">S-500</div>
+                
+                <div class="stat">
+                    <div class="stat-label">POWER <span>52%</span></div>
+                    <div class="power-bar"><div class="power-fill" style="width:52%"></div></div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">HEAT <span>MEDIUM</span></div>
+                    <div class="heat-bar" style="background:linear-gradient(90deg,#84cc16,#facc15);width:45%"></div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">SPEED</div>
+                    <div class="speed-container">
+                        <div class="speed-dot"></div>
+                        <div class="speed-dot"></div>
+                        <div class="speed-dot"></div>
+                        <div class="speed-dot"></div>
+                    </div>
+                </div>
+
+                <div class="desc">Balanced performance with improved efficiency and output.</div>
+            </div>
+        </div>
+
+        <!-- S-900 -->
+        <div class="miner-card">
+            <div class="miner-visual">
+                <div class="electric-arc"></div>
+                <img src="purchase3.png" class="miner-img" alt="S-900">
+                <div class="tier">HIGH</div>
+            </div>
+            <div class="card-content">
+                <div class="title">S-900</div>
+                
+                <div class="stat">
+                    <div class="stat-label">POWER <span>78%</span></div>
+                    <div class="power-bar"><div class="power-fill" style="width:78%"></div></div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">HEAT <span>HIGH</span></div>
+                    <div class="heat-bar" style="background:linear-gradient(90deg,#fb923c,#ef4444);width:70%"></div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">SPEED</div>
+                    <div class="speed-container">
+                        <div class="speed-dot"></div>
+                        <div class="speed-dot"></div>
+                        <div class="speed-dot"></div>
+                        <div class="speed-dot"></div>
+                        <div class="speed-dot"></div>
+                    </div>
+                </div>
+
+                <div class="desc">High-performance miner delivering strong consistent output.</div>
+            </div>
+        </div>
+
+        <!-- S-1200 -->
+        <div class="miner-card">
+            <div class="miner-visual">
+                <div class="electric-arc"></div>
+                <img src="purchase4.png" class="miner-img" alt="S-1200">
+                <div class="tier">ULTIMATE</div>
+            </div>
+            <div class="card-content">
+                <div class="title">S-1200</div>
+                
+                <div class="stat">
+                    <div class="stat-label">POWER <span>98%</span></div>
+                    <div class="power-bar"><div class="power-fill" style="width:98%"></div></div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">HEAT <span>EXTREME</span></div>
+                    <div class="heat-bar" style="background:linear-gradient(90deg,#a855f7,#ff00cc);width:95%"></div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">SPEED</div>
+                    <div class="speed-container">
+                        <div class="speed-dot"></div>
+                        <div class="speed-dot"></div>
+                        <div class="speed-dot"></div>
+                        <div class="speed-dot"></div>
+                        <div class="speed-dot"></div>
+                    </div>
+                </div>
+
+                <div class="desc">Ultimate mining beast. Maximum speed and extreme power output.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+// Random electric flash effect
+setInterval(() => {
+    const cards = document.querySelectorAll('.miner-card');
+    const randomCard = cards[Math.floor(Math.random() * cards.length)];
+    randomCard.style.boxShadow = '0 0 60px #00f0ff';
+    setTimeout(() => {
+        randomCard.style.boxShadow = '0 20px 40px rgba(0,0,0,0.6)';
+    }, 180);
+}, 2800);
+</script>
+
+</body>
+</html>
