@@ -4,87 +4,105 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CryptoJet Miner</title>
-
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
-
-    :root { --neon: #00f0ff; --accent: #00ffcc; }
-
+    :root { --neon:#00f0ff; --accent:#00ffcc; }
     * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-        font-family: 'Inter', system-ui, sans-serif;
-        background: #020617;
-        color: #e2e8f0;
-        min-height: 100vh;
-        overflow-x: hidden;
-    }
+    body { font-family:'Inter',system-ui,sans-serif; background:#020617; color:#e2e8f0; min-height:100vh; overflow-x:hidden; }
 
-    .header { padding: 30px 20px 20px; text-align: center; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: var(--neon); text-shadow: 0 0 30px rgba(0, 240, 255, 0.6); }
+    /* LOADER */
+    #loader { position:fixed; top:0; left:0; width:100%; height:100%; background:#020617; display:flex; align-items:center; justify-content:center; z-index:9999; flex-direction:column; }
+    .loader-logo { font-size:30px; font-weight:900; color:#00ffcc; margin-bottom:20px; animation:glow 1.5s infinite alternate; }
+    .loader-bar  { width:180px; height:4px; background:#111; border-radius:10px; overflow:hidden; }
+    .loader-fill { width:0%; height:100%; background:#00ffcc; animation:loadBar 1.5s ease forwards; }
+    @keyframes loadBar { to{ width:100%; } }
+    @keyframes glow { from{text-shadow:0 0 5px #00ffcc;} to{text-shadow:0 0 25px #00ffcc;} }
 
-    .balance-header {
-        text-align: center; margin: 10px 20px 30px; background: rgba(15,23,42,0.9);
-        border-radius: 20px; padding: 16px; box-shadow: 0 0 30px rgba(0,240,255,0.2);
-    }
-    .balance-label { font-size:13px; color:#94a3b8; }
+    .header { padding:30px 20px 20px; text-align:center; font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700; color:var(--neon); text-shadow:0 0 30px rgba(0,240,255,0.6); }
+
+    .balance-header { text-align:center; margin:10px 20px 30px; background:rgba(15,23,42,0.9); border-radius:20px; padding:16px; box-shadow:0 0 30px rgba(0,240,255,0.2); }
+    .balance-label  { font-size:13px; color:#94a3b8; }
     .balance-amount { font-size:32px; font-weight:700; color:#00ffcc; }
 
     .tabs { display:flex; justify-content:center; gap:12px; margin:0 20px 20px; }
-    .tabs button {
-        padding:12px 28px; border:none; border-radius:9999px; background:#111827;
-        color:#00f0ff; font-weight:600; font-size:15px; cursor:pointer;
-    }
+    .tabs button { padding:12px 28px; border:none; border-radius:9999px; background:#111827; color:#00f0ff; font-weight:600; font-size:15px; cursor:pointer; }
     .tabs button.active { background:#00ffcc; color:#000; box-shadow:0 0 20px #00ffcc; }
 
     .container { padding:0 20px 100px; }
 
+    /* ── MINER CARD ─────────────────────────────── */
     .miner-card {
-        background: linear-gradient(145deg, #0f172a, #1e2937);
-        border-radius: 24px; padding: 24px; margin-bottom: 24px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.6); border: 1px solid rgba(0,240,255,0.2);
+        background:linear-gradient(145deg,#0f172a,#1e2937);
+        border-radius:24px; padding:24px; margin-bottom:24px;
+        box-shadow:0 20px 40px rgba(0,0,0,0.6);
+        border:1px solid rgba(0,240,255,0.2);
     }
 
-    .miner-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
-    .miner-img { width: 80px; height: 80px; object-fit: contain; filter: drop-shadow(0 0 20px #00f0ff); }
-    .miner-name { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; color: #00ffcc; }
+    .miner-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
 
-    .stats-grid {
-        display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;
-    }
-    .stat-item {
-        background: rgba(2,6,23,0.6); border-radius: 16px; padding: 14px; text-align: center;
-    }
+    /* Progress ring around image */
+    .ring-wrap { position:relative; width:88px; height:88px; flex-shrink:0; }
+    .ring-svg { position:absolute; top:0; left:0; width:88px; height:88px; transform:rotate(-90deg); }
+    .ring-bg   { fill:none; stroke:#1e2937; stroke-width:5; }
+    .ring-fill { fill:none; stroke:#00ffcc; stroke-width:5; stroke-linecap:round;
+                 stroke-dasharray:251.2; stroke-dashoffset:251.2;
+                 transition:stroke-dashoffset 60s linear; }
+    .ring-fill.paused { stroke:#ef4444; }
+    .miner-img { width:72px; height:72px; object-fit:contain;
+                 filter:drop-shadow(0 0 14px #00f0ff);
+                 position:absolute; top:8px; left:8px; }
+
+    .miner-name { font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:700; color:#00ffcc; }
+    .miner-dates { color:#94a3b8; font-size:13px; margin-top:4px; line-height:1.6; }
+
+    .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+    .stat-item  { background:rgba(2,6,23,0.6); border-radius:16px; padding:14px; text-align:center; }
     .stat-label { font-size:12px; color:#94a3b8; margin-bottom:4px; }
     .stat-value { font-size:18px; font-weight:700; }
 
-    .live-info {
-        margin-top: 16px; padding: 14px; background: rgba(0,240,255,0.1);
-        border-radius: 12px; font-size: 15px; text-align: center; color: #00f0ff;
+    /* ── STATUS BOX ─────────────────────────────── */
+    .status-box {
+        border-radius:14px; padding:16px 18px; margin-top:4px;
+        display:flex; align-items:center; justify-content:space-between; gap:12px;
     }
+    .status-box.active   { background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.2); }
+    .status-box.paused   { background:rgba(239,68,68,0.08);  border:1px solid rgba(239,68,68,0.25); }
+    .status-box.inactive { background:rgba(100,116,139,0.1); border:1px solid rgba(100,116,139,0.2); }
 
-    .live-dot {
-        display: inline-block; width: 10px; height: 10px; background: #00ff88;
-        border-radius: 50%; animation: pulse 1.2s infinite;
-    }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .status-left { flex:1; }
 
-    .btn {
-        width:100%; padding:16px; border:none; border-radius:16px;
-        background:linear-gradient(90deg,#00f0ff,#00ffcc); color:#000;
-        font-weight:700; font-size:16px; cursor:pointer; margin-top:12px;
-        box-shadow:0 0 20px rgba(0,240,255,0.4);
+    .status-badge {
+        display:inline-flex; align-items:center; gap:6px;
+        font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
+        margin-bottom:6px;
     }
+    .badge-dot {
+        width:8px; height:8px; border-radius:50%;
+    }
+    .badge-dot.green { background:#00ff88; animation:pulse 1.2s infinite; }
+    .badge-dot.red   { background:#ef4444; animation:pulse 0.8s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
 
-    .nav-glass {
-        position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
-        width:90%; height:70px; display:flex; justify-content:space-around;
-        align-items:center; background:rgba(255,255,255,0.05);
-        backdrop-filter:blur(20px); border-radius:25px;
-        box-shadow:0 8px 30px rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08);
-        z-index:999;
-    }
-    .nav-item { text-align:center; color:#aaa; font-size:11px; }
+    .earned-row { font-size:13px; color:#94a3b8; margin-top:2px; }
+    .earned-val { font-size:22px; font-weight:700; color:#00ffcc; }
+    .earned-val.locked { color:#f59e0b; }
+
+    .time-remaining { font-size:13px; color:#64748b; text-align:right; }
+    .time-val { font-size:16px; font-weight:700; color:#e2e8f0; margin-top:2px; }
+
+    /* START BUTTON */
+    .btn { width:100%; padding:16px; border:none; border-radius:16px; background:linear-gradient(90deg,#00f0ff,#00ffcc); color:#000; font-weight:700; font-size:16px; cursor:pointer; margin-top:14px; box-shadow:0 0 20px rgba(0,240,255,0.4); }
+
+    /* PURCHASE CARD */
+    .shop-card { background:linear-gradient(145deg,#0f172a,#1e2937); border-radius:24px; padding:24px; margin-bottom:24px; box-shadow:0 20px 40px rgba(0,0,0,0.6); border:1px solid rgba(0,240,255,0.15); }
+    .shop-header { display:flex; align-items:center; gap:16px; margin-bottom:16px; }
+    .shop-img { width:72px; height:72px; object-fit:contain; filter:drop-shadow(0 0 14px #00f0ff); }
+    .shop-name { font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:700; color:#00ffcc; }
+
+    /* NAV */
+    .nav-glass { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width:90%; height:70px; display:flex; justify-content:space-around; align-items:center; background:rgba(255,255,255,0.05); backdrop-filter:blur(20px); border-radius:25px; box-shadow:0 8px 30px rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08); z-index:999; }
+    .nav-item { text-align:center; color:#aaa; font-size:11px; cursor:pointer; }
     .nav-item.active { color:#00ffcc; }
-
     .icon { width:26px; height:26px; margin-bottom:4px; position:relative; }
     .icon.home::before { content:""; position:absolute; width:18px; height:18px; background:#aaa; transform:rotate(45deg); top:4px; left:4px; border-radius:3px; }
     .nav-item.active .home::before { background:#00ffcc; }
@@ -92,28 +110,13 @@
     .nav-item.active .miner::before { color:#00ffcc; }
     .icon.me { background:#ffffff22; border-radius:50%; display:flex; align-items:center; justify-content:center; }
     .icon.me::before { content:"👤"; font-size:14px; }
-    .nav-item.active .me { background:#00ffcc33; }
-
-    #loader {
-        position:fixed; top:0; left:0; width:100%; height:100%;
-        background:#020617; display:flex; align-items:center;
-        justify-content:center; z-index:9999; flex-direction:column;
-        color:#22c55e; font-size:18px;
-    }
-    .loader-logo { font-size:30px; font-weight:900; color:#00ffcc; margin-bottom:20px; animation:glow 1.5s infinite alternate; }
-    .loader-bar { width:180px; height:4px; background:#111; border-radius:10px; overflow:hidden; }
-    .loader-fill { width:0%; height:100%; background:#00ffcc; animation:loadBar 2s ease forwards; }
-    @keyframes loadBar { to { width:100%; } }
-    @keyframes glow { from { text-shadow:0 0 5px #00ffcc; } to { text-shadow:0 0 25px #00ffcc; } }
 </style>
 </head>
 <body>
 
 <div id="loader">
-  <div class="loader-content">
-    <div class="loader-logo">CryptoJet</div>
-    <div class="loader-bar"><div class="loader-fill"></div></div>
-  </div>
+  <div class="loader-logo">CryptoJet</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
 </div>
 
 <div class="header">CryptoJet Miner</div>
@@ -129,17 +132,16 @@
 </div>
 
 <div id="runningTab" class="container"></div>
-<div id="shopTab" class="container" style="display:none;"></div>
+<div id="shopTab"    class="container" style="display:none;"></div>
 
 <div class="nav-glass">
   <div class="nav-item" onclick="nav('dashboard.html')"><div class="icon home"></div><span>Home</span></div>
-  <div class="nav-item active" onclick="nav('miner.html')"><div class="icon miner"></div><span>Miner</span></div>
+  <div class="nav-item active"><div class="icon miner"></div><span>Miner</span></div>
   <div class="nav-item" onclick="nav('me.html')"><div class="icon me"></div><span>Me</span></div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
@@ -147,306 +149,383 @@ const firebaseConfig = {
   databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "cj-miner"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-let uid = localStorage.getItem("uid");
+const uid = localStorage.getItem("uid");
 if (!uid) { alert("Session expired"); window.location.href = "signin.html"; }
 
 let userData = null;
 
-// UPDATED MINER PLANS WITH CYCLE HOURS
-const miners = {
-  S244:  { name:"S-244",  speed:0.000005787037037, price:10,  duration:30, daily:0.5,   cycleHours:48, img:"purchase1.png" },
-  S500:  { name:"S-500",  speed:0.000017361111111,  price:30,  duration:30, daily:1.5,   cycleHours:48, img:"purchase2.png" },
-  S900:  { name:"S-900",  speed:0.000023148148148,   price:50,  duration:35, daily:2,     cycleHours:24, img:"purchase3.png" },
-  S1200: { name:"S-1200", speed:0.000046296296296,   price:120, duration:45, daily:4,     cycleHours:24, img:"purchase4.png" }
+// ── MINER CONFIG ──────────────────────────────────────────────
+// cycleHours    = full cycle duration (when earning stops, user must restart)
+// creditHours   = when balance is actually credited
+// displayDaily  = what "Earned" shows at the 24hr mark for 48hr miners
+// totalEarn     = what gets credited to balance at creditHours
+const MINERS = {
+  S244:  { name:"S-244",  price:10,  daily:0.5, cycleHours:48, creditHours:48, img:"purchase1.png", duration:30 },
+  S500:  { name:"S-500",  price:30,  daily:1.5, cycleHours:48, creditHours:48, img:"purchase2.png", duration:30 },
+  S900:  { name:"S-900",  price:50,  daily:2,   cycleHours:24, creditHours:24, img:"purchase3.png", duration:35 },
+  S1200: { name:"S-1200", price:120, daily:4,   cycleHours:24, creditHours:24, img:"purchase4.png", duration:45 }
 };
 
+// ── HELPERS ───────────────────────────────────────────────────
+function fmtTime(ms) {
+  if (ms <= 0) return "00:00:00";
+  const h = Math.floor(ms/3600000);
+  const m = Math.floor((ms%3600000)/60000);
+  const s = Math.floor((ms%60000)/1000);
+  return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+}
+
+function fmtDate(ts) {
+  return new Date(ts).toLocaleDateString("en-NG");
+}
+
+// Compute what "Earned" should display right now — pure math, no stored state
+// Returns { displayEarned, pct, isComplete, phase }
+function computeEarned(id, minerData) {
+  const cfg     = MINERS[id];
+  const now     = Date.now();
+  const elapsed = now - minerData.start; // ms
+  const cycleMs = cfg.cycleHours * 3600000;
+  const dayMs   = 24 * 3600000;
+
+  if (elapsed >= cycleMs) {
+    // Cycle complete
+    const totalEarn = cfg.daily * (cfg.cycleHours / 24);
+    return { displayEarned: totalEarn, pct: 100, isComplete: true, phase: "done", timeLeft: 0 };
+  }
+
+  const pct     = (elapsed / cycleMs) * 100;
+  const timeLeft = cycleMs - elapsed;
+
+  if (cfg.cycleHours === 24) {
+    // S-900 / S-1200: linear from 0 → daily over 24hrs
+    const earned = (elapsed / dayMs) * cfg.daily;
+    return { displayEarned: Math.min(earned, cfg.daily), pct, isComplete: false, phase: "active", timeLeft };
+  } else {
+    // S-244 / S-500: 48hr cycle
+    if (elapsed < dayMs) {
+      // First 24hrs: linear 0 → daily
+      const earned = (elapsed / dayMs) * cfg.daily;
+      return { displayEarned: earned, pct, isComplete: false, phase: "first24", timeLeft };
+    } else {
+      // 24-48hrs: show daily (locked, not yet in balance), continue toward 2× daily
+      const extraElapsed = elapsed - dayMs;
+      const totalTarget  = cfg.daily * 2;
+      const earned       = cfg.daily + (extraElapsed / dayMs) * cfg.daily;
+      return { displayEarned: Math.min(earned, totalTarget), pct, isComplete: false, phase: "second24", timeLeft };
+    }
+  }
+}
+
+// ── TAB SWITCH ────────────────────────────────────────────────
 function showTab(tab) {
   document.getElementById("runningTab").style.display = tab === "running" ? "block" : "none";
-  document.getElementById("shopTab").style.display = tab === "shop" ? "block" : "none";
+  document.getElementById("shopTab").style.display    = tab === "shop"    ? "block" : "none";
   document.getElementById("runBtn").classList.toggle("active", tab === "running");
   document.getElementById("shopBtn").classList.toggle("active", tab === "shop");
 }
 
+// ── LOAD ──────────────────────────────────────────────────────
 async function loadPage() {
   const snap = await db.ref("users/" + uid).once("value");
   userData = snap.val() || {};
-
-  catchUpMining();
-
+  document.getElementById("liveBalance").textContent = "$" + Math.floor(userData.balance || 0) + ".00";
   renderRunning();
   renderShop();
-  updateLiveBalance();
 }
 
-// Catch-up offline mining
-function catchUpMining() {
-  if (!userData.miners) return;
-
-  const now = Date.now();
-  let totalToAdd = 0;
-
-  const unlocked = userData.minerUnlocked || {};
-
-  Object.keys(unlocked).forEach(id => {
-    const count = unlocked[id];
-    for (let i = 1; i <= count; i++) {
-      const key = id === "S244" ? `${id}_${i}` : id;
-      let minerData = userData.miners[key];
-      if (!minerData) continue;
-
-      const cycleDays = miners[id].cycleHours / 24;
-      const timeSinceStart = (now - minerData.start) / (1000 * 3600 * 24);
-      if (timeSinceStart >= cycleDays) continue;
-
-      const secondsPassed = (now - minerData.lastUpdate) / 1000;
-      const increase = secondsPassed * miners[id].speed;
-
-      if (increase > 0) {
-        minerData.earned = (minerData.earned || 0) + increase;
-        minerData.lastUpdate = now;
-
-        const floor = Math.floor(minerData.earned);
-        if (floor > (minerData.lastAdded || 0)) {
-          const added = floor - (minerData.lastAdded || 0);
-          totalToAdd += added;
-          db.ref("users/" + uid + "/miningRecords").push({
-            amount: added,
-            miner: miners[id].name + (id === "S244" ? ` #${i}` : ""),
-            timestamp: now
-          });
-          minerData.lastAdded = floor;
-        }
-      }
-    }
-  });
-
-  if (totalToAdd > 0) {
-    userData.balance = Math.floor((userData.balance || 0) + totalToAdd);
-  }
-}
-
-function updateLiveBalance() {
-  document.getElementById("liveBalance").textContent = "$" + Math.floor(userData.balance || 0) + ".00";
-}
-
-/* RUNNING TAB */
+// ── RENDER RUNNING TAB ────────────────────────────────────────
 function renderRunning() {
   const container = document.getElementById("runningTab");
   container.innerHTML = "";
 
-  const unlocked = userData.minerUnlocked || {};
-  const minersData = userData.miners || {};
+  const unlocked  = userData.minerUnlocked || {};
+  const minersMap = userData.miners || {};
 
+  let hasAny = false;
   Object.keys(unlocked).forEach(id => {
     const count = unlocked[id];
     for (let i = 1; i <= count; i++) {
-      const key = id === "S244" ? `${id}_${i}` : id;
-      let data = minersData[key] || { earned: 0, start: Date.now(), lastUpdate: Date.now(), lastAdded: 0 };
-
-      const now = Date.now();
-      const cycleDays = miners[id].cycleHours / 24;
-      const timeSinceStart = (now - data.start) / (1000 * 3600 * 24);
-      const isActive = timeSinceStart < cycleDays;
-
-      const expireDate = new Date(data.start + miners[id].duration * 24 * 60 * 60 * 1000);
-      const boughtDate = new Date(data.start);
+      hasAny = true;
+      const key      = id === "S244" ? `${id}_${i}` : id;
+      const cfg      = MINERS[id];
+      const mData    = minersMap[key];
+      const expireTs = mData ? mData.start + cfg.duration * 86400000 : null;
 
       const card = document.createElement("div");
       card.className = "miner-card";
-      card.id = `card-${key}`;
+      card.id = "card-" + key;
+
+      const boughtStr = mData ? fmtDate(mData.start)  : "—";
+      const expireStr = mData ? fmtDate(expireTs)       : "—";
 
       card.innerHTML = `
         <div class="miner-header">
-          <img src="${miners[id].img}" class="miner-img">
+          <div class="ring-wrap">
+            <svg class="ring-svg" viewBox="0 0 88 88">
+              <circle class="ring-bg"   cx="44" cy="44" r="40"/>
+              <circle class="ring-fill" cx="44" cy="44" r="40" id="ring-${key}"/>
+            </svg>
+            <img src="${cfg.img}" class="miner-img" alt="${cfg.name}">
+          </div>
           <div>
-            <div class="miner-name">${miners[id].name} #${i}</div>
-            <div style="color:#94a3b8;font-size:13px;">
-              Bought: ${boughtDate.toLocaleDateString('en-NG')}<br>
-              Expires: ${expireDate.toLocaleDateString('en-NG')}
+            <div class="miner-name">${cfg.name}${unlocked[id] > 1 ? ` #${i}` : ""}</div>
+            <div class="miner-dates">
+              Bought: ${boughtStr}<br>
+              Expires: ${expireStr}
             </div>
           </div>
         </div>
 
         <div class="stats-grid">
           <div class="stat-item">
-            <div class="stat-label">DAILY</div>
-            <div class="stat-value" style="color:#00ff88;">$${miners[id].daily}</div>
+            <div class="stat-label">DAILY INCOME</div>
+            <div class="stat-value" style="color:#00ff88;">$${cfg.daily}</div>
           </div>
           <div class="stat-item">
-            <div class="stat-label">DURATION LEFT</div>
-            <div class="stat-value">${Math.max(0, Math.ceil(miners[id].duration - timeSinceStart))} days</div>
+            <div class="stat-label">CYCLE</div>
+            <div class="stat-value">${cfg.cycleHours}h</div>
           </div>
         </div>
 
-        <div class="live-info">
-          <strong>PER SECOND:</strong> ${miners[id].speed}<br>
-          LIVE EARNING: <span id="liveEarn_${key}">${data.earned.toFixed(6)}</span>
-        </div>
-
-        ${isActive ? `
-        <div style="margin-top:16px;text-align:center;color:#00ff88;">
-          <span class="live-dot"></span> LIVE MINING (${miners[id].cycleHours}h)
-        </div>` : `
-        <button class="btn" onclick="startMiner('${id}', ${i})">Start Mining (${miners[id].cycleHours}h)</button>`}
+        <div id="statusbox-${key}"></div>
       `;
+
       container.appendChild(card);
+      refreshCard(id, key, mData);
     }
   });
 
-  if (container.children.length === 0) {
-    container.innerHTML = `<p style="text-align:center;color:#64748b;padding:60px;">No active miners yet.<br>Buy from Purchase tab.</p>`;
+  if (!hasAny) {
+    container.innerHTML = `<p style="text-align:center;color:#64748b;padding:60px 20px;">No active miners yet.<br>Buy one from the Purchase tab.</p>`;
   }
 }
-/* PURCHASE TAB - unchanged */
+
+// ── REFRESH A SINGLE CARD (called every second) ───────────────
+function refreshCard(id, key, mData) {
+  const box = document.getElementById("statusbox-" + key);
+  if (!box) return;
+
+  const cfg = MINERS[id];
+
+  // No cycle started yet
+  if (!mData || !mData.start) {
+    box.innerHTML = `
+      <div class="status-box inactive">
+        <div style="font-size:14px;color:#64748b;text-align:center;width:100%;">Miner ready — tap Start to begin</div>
+      </div>
+      <button class="btn" onclick="startMiner('${id}','${key}')">▶ Start Mining (${cfg.cycleHours}h)</button>`;
+    return;
+  }
+
+  const { displayEarned, pct, isComplete, phase, timeLeft } = computeEarned(id, mData);
+
+  // Update progress ring
+  const ring = document.getElementById("ring-" + key);
+  if (ring) {
+    const circumference = 2 * Math.PI * 40; // 251.2
+    const offset = circumference - (pct / 100) * circumference;
+    ring.style.strokeDasharray  = circumference;
+    ring.style.strokeDashoffset = offset;
+    ring.style.transition       = "stroke-dashoffset 1s linear";
+    if (isComplete) ring.classList.add("paused");
+    else            ring.classList.remove("paused");
+  }
+
+  const totalEarn  = cfg.daily * (cfg.cycleHours / 24);
+  const isLocked   = phase === "second24"; // shown but not yet credited for 48hr miners
+  const earnedStr  = "$" + displayEarned.toFixed(2);
+
+  if (isComplete) {
+    // Cycle done — check if we need to credit
+    checkAndCredit(id, key, mData);
+
+    box.innerHTML = `
+      <div class="status-box paused">
+        <div class="status-left">
+          <div class="status-badge" style="color:#ef4444;">
+            <span class="badge-dot red"></span> Earning Paused
+          </div>
+          <div class="earned-row">Cycle complete — earned:</div>
+          <div class="earned-val">$${totalEarn.toFixed(2)} ✓</div>
+        </div>
+      </div>
+      <button class="btn" onclick="startMiner('${id}','${key}')">🔄 Start New Cycle (${cfg.cycleHours}h)</button>`;
+  } else {
+    box.innerHTML = `
+      <div class="status-box active">
+        <div class="status-left">
+          <div class="status-badge" style="color:#00ff88;">
+            <span class="badge-dot green"></span> Actively Earning
+          </div>
+          <div class="earned-row">Earned this cycle${isLocked ? ' <span style="color:#f59e0b;font-size:11px;">(pending balance)</span>' : ''}:</div>
+          <div class="earned-val ${isLocked ? 'locked' : ''}">${earnedStr}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="time-remaining">Time left</div>
+          <div class="time-val">${fmtTime(timeLeft)}</div>
+        </div>
+      </div>`;
+  }
+}
+
+// ── CREDIT BALANCE AT CYCLE END ───────────────────────────────
+const _credited = {}; // prevent double-crediting in same session
+async function checkAndCredit(id, key, mData) {
+  if (_credited[key]) return;
+  if (mData.credited)  return; // already credited in Firebase
+
+  _credited[key] = true;
+  const cfg       = MINERS[id];
+  const totalEarn = cfg.daily * (cfg.cycleHours / 24);
+  const now       = Date.now();
+
+  // Mark as credited in Firebase
+  await db.ref(`users/${uid}/miners/${key}`).update({ credited: true });
+
+  // Add to balance
+  const snap    = await db.ref(`users/${uid}/balance`).once("value");
+  const balance = snap.val() || 0;
+  await db.ref(`users/${uid}/balance`).set(balance + totalEarn);
+
+  // Record in miningRecords
+  await db.ref(`users/${uid}/miningRecords`).push({
+    amount:    totalEarn,
+    miner:     cfg.name,
+    timestamp: now
+  });
+
+  // Update local
+  userData.balance = balance + totalEarn;
+  document.getElementById("liveBalance").textContent = "$" + Math.floor(userData.balance) + ".00";
+}
+
+// ── START MINER ───────────────────────────────────────────────
+async function startMiner(id, key) {
+  const now = Date.now();
+  await db.ref(`users/${uid}/miners/${key}`).set({
+    start:      now,
+    lastUpdate: now,
+    credited:   false
+  });
+  // Update local
+  if (!userData.miners) userData.miners = {};
+  userData.miners[key] = { start: now, lastUpdate: now, credited: false };
+  renderRunning();
+}
+
+// ── RENDER SHOP ───────────────────────────────────────────────
 function renderShop() {
   const container = document.getElementById("shopTab");
   container.innerHTML = "";
 
-  Object.keys(miners).forEach(id => {
-    const m = miners[id];
+  Object.keys(MINERS).forEach(id => {
+    const m     = MINERS[id];
     const owned = (userData.minerUnlocked && userData.minerUnlocked[id]) || 0;
 
+    let btnHTML = `<button class="btn" onclick="buyMiner('${id}',${m.price})">Buy for $${m.price}</button>`;
+    if (id === "S244" && owned >= 2) btnHTML = `<button class="btn" style="background:#334155;color:white;cursor:not-allowed;">Maximum 2 Purchased</button>`;
+    else if (id !== "S244" && owned >= 1) btnHTML = `<button class="btn" style="background:#334155;color:white;cursor:not-allowed;">Already Owned</button>`;
+
     const card = document.createElement("div");
-    card.className = "miner-card";
-
-    let buttonHTML = `<button class="btn" onclick="buyMiner('${id}', ${m.price})">Buy for $${m.price}</button>`;
-
-    if (id === "S244" && owned >= 2) buttonHTML = `<button class="btn" style="background:#334155;color:white;">Maximum 2 Purchased</button>`;
-    else if (owned >= 1 && id !== "S244") buttonHTML = `<button class="btn" style="background:#334155;color:white;">Already Owned</button>`;
-
+    card.className = "shop-card";
     card.innerHTML = `
-      <div class="miner-header">
-        <img src="${m.img}" class="miner-img">
-        <div><div class="miner-name">${m.name}</div></div>
+      <div class="shop-header">
+        <img src="${m.img}" class="shop-img" alt="${m.name}">
+        <div>
+          <div class="shop-name">${m.name}</div>
+          <div style="font-size:13px;color:#64748b;">${m.cycleHours}h cycle • ${m.duration} day plan</div>
+        </div>
       </div>
-
       <div class="stats-grid">
         <div class="stat-item"><div class="stat-label">PRICE</div><div class="stat-value">$${m.price}</div></div>
-        <div class="stat-item"><div class="stat-label">DAILY INCOME</div><div class="stat-value" style="color:#00ff88;">$${m.daily}</div></div>
-        <div class="stat-item"><div class="stat-label">PER SECOND</div><div class="stat-value">${m.speed.toExponential(2)}</div></div>
+        <div class="stat-item"><div class="stat-label">DAILY</div><div class="stat-value" style="color:#00ff88;">$${m.daily}</div></div>
+        <div class="stat-item"><div class="stat-label">PER CYCLE</div><div class="stat-value">$${m.daily * (m.cycleHours / 24)}</div></div>
         <div class="stat-item"><div class="stat-label">DURATION</div><div class="stat-value">${m.duration} days</div></div>
       </div>
-
-      <div style="margin-top:12px;">${buttonHTML}</div>
-    `;
+      <div style="margin-top:12px;">${btnHTML}</div>`;
     container.appendChild(card);
   });
 }
 
-/* BUY & START - UPDATED WITH REFERRAL POINTS & TEAM INCOME */
+// ── BUY MINER ─────────────────────────────────────────────────
 async function buyMiner(id, price) {
   const snap = await db.ref("users/" + uid).once("value");
   const data = snap.val() || {};
-  const availableBalance = (data.balance || 0) + (data.team || 0);
-  if (availableBalance < price) return alert("Not enough balance or team income");
+  const available = (data.balance || 0) + (data.team || 0);
+  if (available < price) return alert("Not enough balance");
 
   let unlocked = data.minerUnlocked || {};
-  let count = unlocked[id] || 0;
-
+  let count    = unlocked[id] || 0;
   if (id === "S244" && count >= 2) return alert("You can only buy S-244 twice");
   if (id !== "S244" && count >= 1) return alert("You already own this miner");
 
   const instanceKey = id === "S244" ? `${id}_${count + 1}` : id;
+  const deductFromTeam    = Math.min(price, data.team || 0);
+  const deductFromBalance = price - deductFromTeam;
 
-  // Deduct from team income first, then balance
-  let deductFromTeam = Math.min(price, data.team || 0);
-  let deductFromBalance = price - deductFromTeam;
-
-  // Calculate referral points for the referrer
-  let referralPoints = 0;
-  if (id === "S244") referralPoints = 100;
-  else if (id === "S500") referralPoints = 200;
-  else if (id === "S900") referralPoints = 300;
-  else if (id === "S1200") referralPoints = 400;
-
-  // Update buyer
-  db.ref("users/" + uid).update({
-    balance: Math.max(0, (data.balance || 0) - deductFromBalance),
-    team: Math.max(0, (data.team || 0) - deductFromTeam),
-    [`minerUnlocked/${id}`]: count + 1,
-    [`miners/${instanceKey}`]: { start: Date.now(), lastUpdate: Date.now(), earned: 0, lastAdded: 0 }
-  });
-
-  // Award points to referrer if any
-  const referrer = data.referredBy;
-  if (referrer && referralPoints > 0) {
-    db.ref("users/" + referrer).transaction(userData => {
-      if (!userData) return userData;
-      userData.pendingRewards = userData.pendingRewards || {};
-      userData.pendingRewards[id] = (userData.pendingRewards[id] || 0) + referralPoints;
-      return userData;
+  // Referral points
+  const refPoints = { S244:100, S500:200, S900:300, S1200:400 };
+  const referrer  = data.referredBy;
+  if (referrer && refPoints[id]) {
+    db.ref("users/" + referrer).transaction(u => {
+      if (!u) return u;
+      u.pendingRewards = u.pendingRewards || {};
+      u.pendingRewards[id] = (u.pendingRewards[id] || 0) + refPoints[id];
+      return u;
     });
   }
 
+  await db.ref("users/" + uid).update({
+    balance: Math.max(0, (data.balance || 0) - deductFromBalance),
+    team:    Math.max(0, (data.team    || 0) - deductFromTeam),
+    [`minerUnlocked/${id}`]:       count + 1,
+    [`miners/${instanceKey}`]:     { start: Date.now(), lastUpdate: Date.now(), credited: false }
+  });
+
   loadPage();
 }
 
-function startMiner(id, instance) {
-  const key = id === "S244" ? `${id}_${instance}` : id;
-  const now = Date.now();
-  db.ref("users/" + uid + "/miners/" + key).update({ start: now, lastUpdate: now, earned: 0, lastAdded: 0 });
-  loadPage();
-}
-
-/* REAL-TIME MINING - now uses per-miner cycleHours */
-function startMining() {
+// ── TICK — runs every second, updates display only ────────────
+function startTick() {
   setInterval(() => {
-    if (!userData) return;
-    const now = Date.now();
-    let totalToAdd = 0;
-
+    if (!userData || !userData.miners) return;
     const unlocked = userData.minerUnlocked || {};
     Object.keys(unlocked).forEach(id => {
       const count = unlocked[id];
       for (let i = 1; i <= count; i++) {
-        const key = id === "S244" ? `${id}_${i}` : id;
-        let minerData = userData.miners[key];
-        if (!minerData) return;
-
-        const cycleDays = miners[id].cycleHours / 24;
-        const timeSince = (now - minerData.start) / (1000 * 3600 * 24);
-        if (timeSince >= cycleDays) return;
-
-        minerData.earned = (minerData.earned || 0) + miners[id].speed;
-
-        const earnEl = document.getElementById(`liveEarn_${key}`);
-        if (earnEl) earnEl.textContent = minerData.earned.toFixed(6);
-
-        const floor = Math.floor(minerData.earned);
-        if (floor > (minerData.lastAdded || 0)) {
-          const added = floor - (minerData.lastAdded || 0);
-          totalToAdd += added;
-          db.ref("users/" + uid + "/miningRecords").push({
-            amount: added,
-            miner: miners[id].name + (id === "S244" ? ` #${i}` : ""),
-            timestamp: now
-          });
-          minerData.lastAdded = floor;
-        }
+        const key   = id === "S244" ? `${id}_${i}` : id;
+        const mData = userData.miners[key];
+        refreshCard(id, key, mData);
       }
     });
-
-    if (totalToAdd > 0) {
-      userData.balance = Math.floor((userData.balance || 0) + totalToAdd);
-      updateLiveBalance();
-    }
   }, 1000);
 }
 
-setInterval(() => {
-  if (userData) db.ref("users/" + uid).update({ miners: userData.miners, balance: userData.balance });
-}, 8000);
+// ── PERIODIC FIREBASE SYNC (every 5 mins, not every second) ──
+function startSync() {
+  setInterval(() => {
+    if (!userData || !userData.miners) return;
+    db.ref(`users/${uid}/lastSeen`).set(Date.now());
+  }, 300000);
+}
 
 function nav(page) { window.location.href = page; }
 
-window.addEventListener("load", () => {
-  loadPage();
-  startMining();
-  setTimeout(() => document.getElementById("loader").style.display = "none", 1200);
+window.addEventListener("load", async () => {
+  await loadPage();
+  startTick();
+  startSync();
+  setTimeout(() => document.getElementById("loader").style.display = "none", 1500);
+
+  // Handle URL param from minerpower.html
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("tab") === "purchase") {
+    showTab("shop");
+  }
 });
 </script>
 </body>
