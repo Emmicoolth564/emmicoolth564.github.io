@@ -3,166 +3,452 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CryptoJet Auth</title>
+<title>CryptoJet • Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+:root {
+  --neon: #00f0ff;
+  --accent: #00ffcc;
+  --bg: #020617;
+  --card: #0c1628;
+  --border: rgba(0,240,255,0.15);
+  --text: #e2e8f0;
+  --muted: #64748b;
+}
 
-    :root {
-        --neon: #00f0ff;
-        --accent: #00ffcc;
-    }
+* { margin:0; padding:0; box-sizing:border-box; }
 
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-        font-family: 'Inter', system-ui, sans-serif;
-        background: radial-gradient(circle at top, #020617, #000814);
-        color: white;
-        min-height: 100vh;
-        overflow-x: hidden;
-    }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(0,240,255,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(0,255,204,0.04) 0%, transparent 50%);
+}
 
-    .wrapper {
-        max-width: 420px;
-        margin: 0 auto;
-        padding: 40px 20px 100px;
-    }
+.page {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
-    .title {
-        text-align: center;
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 32px;
-        font-weight: 700;
-        margin-bottom: 8px;
-        color: var(--neon);
-    }
+/* ── LOGO ─────────────────────────────────── */
+.logo-wrap {
+  text-align: center;
+  margin-bottom: 36px;
+}
+.logo-icon {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, rgba(0,240,255,0.15), rgba(0,255,204,0.1));
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 14px;
+  box-shadow: 0 0 30px rgba(0,240,255,0.15);
+}
+.logo-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--neon);
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 20px rgba(0,240,255,0.35);
+}
+.logo-sub {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-weight: 400;
+}
 
-    .subtitle {
-        text-align: center;
-        color: #94a3b8;
-        margin-bottom: 50px;
-        line-height: 1.6;
-        font-size: 15px;
-    }
+/* ── MODE TOGGLE ──────────────────────────── */
+.mode-toggle {
+  display: flex;
+  background: var(--card);
+  border-radius: 14px;
+  padding: 5px;
+  margin-bottom: 28px;
+  border: 1px solid var(--border);
+}
+.mode-btn {
+  flex: 1;
+  padding: 11px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--muted);
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.mode-btn.active {
+  background: linear-gradient(135deg, rgba(0,240,255,0.15), rgba(0,255,204,0.1));
+  color: var(--neon);
+  border: 1px solid var(--border);
+}
 
-    /* MODERN INPUT */
-    .input-group {
-        margin-bottom: 24px;
-    }
+/* ── CARD ─────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 28px 24px;
+  margin-bottom: 16px;
+}
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.card-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
 
-    .input-group input {
-        width: 100%;
-        padding: 18px 24px;
-        border-radius: 16px;
-        border: 2px solid rgba(255,255,255,0.1);
-        background: rgba(255,255,255,0.06);
-        color: white;
-        font-size: 16px;
-        transition: all 0.3s ease;
-    }
+/* ── METHOD TABS ──────────────────────────── */
+.method-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.method-tab {
+  flex: 1;
+  padding: 11px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid rgba(255,255,255,0.07);
+  color: var(--muted);
+  background: rgba(255,255,255,0.03);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: 'DM Sans', sans-serif;
+}
+.method-tab.active {
+  background: rgba(0,240,255,0.1);
+  border-color: var(--neon);
+  color: var(--neon);
+}
 
-    .input-group input:focus {
-        border-color: var(--neon);
-        box-shadow: 0 0 0 4px rgba(0,240,255,0.15);
-        outline: none;
-    }
+/* ── INPUTS ───────────────────────────────── */
+.field { margin-bottom: 16px; }
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 7px;
+}
+.field input {
+  width: 100%;
+  padding: 15px 18px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+}
+.field input:focus {
+  border-color: var(--neon);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0,240,255,0.1);
+  background: rgba(0,240,255,0.03);
+}
+.field input::placeholder { color: #334155; }
 
-    /* BUTTON */
-    .btn {
-        width: 100%;
-        padding: 18px;
-        border-radius: 16px;
-        border: none;
-        background: linear-gradient(90deg, #00ffcc, #00bfff);
-        font-weight: 700;
-        font-size: 17px;
-        color: #000;
-        cursor: pointer;
-        transition: all 0.4s ease;
-        box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
-        margin-top: 10px;
-    }
+/* Phone prefix */
+.phone-wrap {
+  display: flex;
+  gap: 8px;
+}
+.phone-prefix {
+  padding: 15px 14px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  color: var(--muted);
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  width: 80px;
+  flex-shrink: 0;
+  text-align: center;
+}
+.phone-wrap input {
+  flex: 1;
+}
 
-    .btn:active {
-        transform: scale(0.97);
-        box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-    }
+/* ── MAIN BUTTON ──────────────────────────── */
+.main-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(90deg, #00ffcc, #00bfff);
+  color: #000;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 8px 25px rgba(0,240,255,0.25);
+  margin-top: 4px;
+}
+.main-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 30px rgba(0,240,255,0.35); }
+.main-btn:active { transform: scale(0.98); }
+.main-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-    /* REMEMBER */
-    .remember {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin: 20px 0;
-        font-size: 14px;
-    }
+/* ── DIVIDER ──────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0 16px;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.07);
+}
+.divider span { font-size: 12px; color: var(--muted); white-space: nowrap; }
 
-    /* SWITCH */
-    .switch {
-        text-align: center;
-        margin-top: 30px;
-        color: var(--neon);
-        cursor: pointer;
-        font-size: 15px;
-    }
+/* ── GOOGLE BTN ───────────────────────────── */
+.google-btn {
+  width: 100%;
+  padding: 15px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.2s;
+}
+.google-btn:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.2);
+}
+.google-btn:active { transform: scale(0.98); }
 
-    .footer-text {
-        text-align: center;
-        margin-top: 60px;
-        color: #64748b;
-        font-size: 13px;
-        line-height: 1.6;
-    }
+.google-logo {
+  width: 20px; height: 20px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath fill='%23EA4335' d='M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z'/%3E%3Cpath fill='%234285F4' d='M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z'/%3E%3Cpath fill='%23FBBC05' d='M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z'/%3E%3Cpath fill='%2334A853' d='M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z'/%3E%3C/svg%3E") no-repeat center/contain;
+  flex-shrink: 0;
+}
+
+/* ── VERIFICATION NOTICE ─────────────────── */
+.verify-notice {
+  background: rgba(0,255,204,0.08);
+  border: 1px solid rgba(0,255,204,0.2);
+  border-radius: 14px;
+  padding: 16px 18px;
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.6;
+  display: none;
+  margin-top: 12px;
+}
+.verify-notice strong { color: var(--accent); }
+.verify-notice .resend {
+  color: var(--neon);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* ── REMEMBER / SWITCH ───────────────────── */
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+.remember input[type=checkbox] { accent-color: var(--neon); width: 16px; height: 16px; cursor: pointer; }
+
+.switch-link {
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+.switch-link span {
+  color: var(--neon);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.footer {
+  text-align: center;
+  margin-top: auto;
+  padding-top: 32px;
+  font-size: 12px;
+  color: #334155;
+  line-height: 1.7;
+}
+
+/* ── TOAST ───────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 9999;
+  pointer-events: none;
+  white-space: nowrap;
+  font-family: 'DM Sans', sans-serif;
+}
+.toast.success { background: #00ffcc; color: #022c22; }
+.toast.error   { background: #ef4444; color: white; }
 </style>
 </head>
 <body>
 
-<div class="wrapper">
+<div class="page">
 
-    <div class="title" id="formTitle">Create Account</div>
-    <div class="subtitle">
-        Join CryptoJet and unlock automated mining earnings.<br>
-        Secure • Fast • Reliable
+  <!-- LOGO -->
+  <div class="logo-wrap">
+    <div class="logo-icon">⚡</div>
+    <div class="logo-name">CryptoJet</div>
+    <div class="logo-sub">Mine • Earn • Grow</div>
+  </div>
+
+  <!-- SIGN UP / SIGN IN TOGGLE -->
+  <div class="mode-toggle">
+    <div class="mode-btn active" id="modeSignUp" onclick="setMode('signup')">Create Account</div>
+    <div class="mode-btn"        id="modeSignIn" onclick="setMode('signin')">Sign In</div>
+  </div>
+
+  <!-- FORM CARD -->
+  <div class="card">
+    <div class="card-title" id="cardTitle">Join CryptoJet</div>
+    <div class="card-sub"   id="cardSub">Start earning passive income today</div>
+
+    <!-- METHOD TABS (email / phone) -->
+    <div class="method-tabs">
+      <div class="method-tab active" id="tabEmail" onclick="setMethod('email')">
+        <span>✉️</span> Email
+      </div>
+      <div class="method-tab" id="tabPhone" onclick="setMethod('phone')">
+        <span>📱</span> Phone
+      </div>
     </div>
 
-    <!-- NAME -->
-    <div class="input-group">
-        <input type="text" id="name" placeholder="Full Name">
+    <!-- NAME (signup only) -->
+    <div class="field" id="nameField">
+      <label>Full Name</label>
+      <input type="text" id="nameInput" placeholder="Your full name">
     </div>
 
-    <!-- EMAIL / PHONE -->
-    <div class="input-group">
-        <input type="text" id="email" placeholder="Email or Phone Number">
+    <!-- EMAIL FIELDS -->
+    <div id="emailFields">
+      <div class="field">
+        <label>Email Address</label>
+        <input type="email" id="emailInput" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="passwordInput" placeholder="Min 6 characters">
+      </div>
+      <div class="field" id="confirmField">
+        <label>Confirm Password</label>
+        <input type="password" id="confirmInput" placeholder="Repeat your password">
+      </div>
     </div>
 
-    <!-- PASSWORD -->
-    <div class="input-group">
-        <input type="password" id="password" placeholder="Password">
-    </div>
-
-    <!-- CONFIRM PASSWORD -->
-    <div class="input-group" id="confirmGroup">
-        <input type="password" id="confirm" placeholder="Confirm Password">
+    <!-- PHONE FIELDS -->
+    <div id="phoneFields" style="display:none">
+      <div class="field">
+        <label>Phone Number</label>
+        <div class="phone-wrap">
+          <div class="phone-prefix">+234</div>
+          <input type="tel" id="phoneInput" placeholder="08012345678">
+        </div>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="phonePasswordInput" placeholder="Min 6 characters">
+      </div>
+      <div class="field" id="phoneConfirmField">
+        <label>Confirm Password</label>
+        <input type="password" id="phoneConfirmInput" placeholder="Repeat your password">
+      </div>
     </div>
 
     <!-- REMEMBER ME -->
-    <div class="remember">
-        <input type="checkbox" id="remember" checked>
-        <label for="remember">Remember Me</label>
+    <label class="remember">
+      <input type="checkbox" id="rememberMe" checked>
+      Remember me on this device
+    </label>
+
+    <!-- MAIN BUTTON -->
+    <button class="main-btn" id="mainBtn" onclick="handleAuth()">Create Account</button>
+
+    <!-- EMAIL VERIFICATION NOTICE -->
+    <div class="verify-notice" id="verifyNotice">
+      📧 A verification link has been sent to <strong id="verifyEmail"></strong>.<br>
+      Please check your inbox (and spam) then come back to sign in.<br><br>
+      Didn't receive it? <span class="resend" onclick="resendVerification()">Resend email</span>
     </div>
 
-    <button class="btn" id="authBtn" onclick="handleAuth()">Sign Up</button>
+    <!-- DIVIDER -->
+    <div class="divider"><span>or continue with</span></div>
 
-    <div class="switch" id="switchText" onclick="toggleMode()">
-        Already have an account? Sign In
-    </div>
+    <!-- GOOGLE -->
+    <button class="google-btn" onclick="signInWithGoogle()">
+      <div class="google-logo"></div>
+      Continue with Google
+    </button>
+  </div>
 
-    <div class="footer-text">
-        By signing up, you agree to our Terms and Privacy Policy.<br>
-        Crypto investments involve risk.
-    </div>
+  <!-- SWITCH MODE -->
+  <div class="switch-link">
+    <span id="switchLinkText" onclick="toggleMode()">Already have an account? <span>Sign In</span></span>
+  </div>
 
+  <div class="footer">
+    By continuing you agree to our Terms and Privacy Policy.<br>
+    Crypto investments involve risk. Mine responsibly.
+  </div>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -171,131 +457,261 @@
 
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
-  authDomain: "cj-miner.firebaseapp.com",
+  apiKey:      "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
+  authDomain:  "cj-miner.firebaseapp.com",
   databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "cj-miner",
+  projectId:   "cj-miner"
 };
-
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-const db = firebase.database();
+const db   = firebase.database();
 
-let isSignUp = true;
+let isSignUp      = true;
+let authMethod    = "email"; // "email" | "phone"
+let lastUserCred  = null;   // stored for resend verification
 
-/* TOGGLE SIGN UP / SIGN IN */
-function toggleMode() {
-    isSignUp = !isSignUp;
+// ── MODE (signup / signin) ────────────────────────────────────
+function setMode(mode) {
+  isSignUp = mode === "signup";
+  document.getElementById("modeSignUp").classList.toggle("active", isSignUp);
+  document.getElementById("modeSignIn").classList.toggle("active", !isSignUp);
 
-    document.getElementById("formTitle").innerText = isSignUp ? "Create Account" : "Welcome Back";
-    document.getElementById("authBtn").innerText = isSignUp ? "Sign Up" : "Sign In";
-    document.getElementById("confirmGroup").style.display = isSignUp ? "block" : "none";
-    document.getElementById("switchText").innerText = isSignUp 
-        ? "Already have an account? Sign In" 
-        : "Don't have an account? Sign Up";
+  document.getElementById("nameField").style.display        = isSignUp ? "block"  : "none";
+  document.getElementById("confirmField").style.display     = isSignUp ? "block"  : "none";
+  document.getElementById("phoneConfirmField").style.display= isSignUp ? "block"  : "none";
+  document.getElementById("cardTitle").textContent          = isSignUp ? "Join CryptoJet" : "Welcome Back";
+  document.getElementById("cardSub").textContent            = isSignUp ? "Start earning passive income today" : "Sign in to continue mining";
+  document.getElementById("mainBtn").textContent            = isSignUp ? "Create Account" : "Sign In";
+  document.getElementById("switchLinkText").innerHTML       = isSignUp
+    ? 'Already have an account? <span onclick="setMode(\'signin\')">Sign In</span>'
+    : 'Don\'t have an account? <span onclick="setMode(\'signup\')">Sign Up</span>';
+  document.getElementById("verifyNotice").style.display = "none";
 }
 
-/* HANDLE AUTH */
-function handleAuth() {
-    const btn = document.getElementById("authBtn");
-    const originalText = btn.innerText;
-    btn.innerText = "Processing...";
+function toggleMode() { setMode(isSignUp ? "signin" : "signup"); }
 
-    const name = document.getElementById("name").value.trim();
-    let emailInput = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const confirm = document.getElementById("confirm").value.trim();
+// ── METHOD (email / phone) ────────────────────────────────────
+function setMethod(method) {
+  authMethod = method;
+  document.getElementById("tabEmail").classList.toggle("active", method === "email");
+  document.getElementById("tabPhone").classList.toggle("active", method === "phone");
+  document.getElementById("emailFields").style.display = method === "email" ? "block" : "none";
+  document.getElementById("phoneFields").style.display = method === "phone" ? "block" : "none";
+}
 
-    if (!emailInput || !password) {
-        alert("Please fill all required fields");
-        btn.innerText = originalText;
-        return;
-    }
+// ── HANDLE AUTH ───────────────────────────────────────────────
+async function handleAuth() {
+  const btn = document.getElementById("mainBtn");
+  btn.disabled    = true;
+  btn.textContent = "Please wait...";
 
-    let email = emailInput.includes("@") ? emailInput : emailInput + "@phone.crypto";
-
-    if (isSignUp) {
-        if (password !== confirm) {
-            alert("Passwords do not match");
-            btn.innerText = originalText;
-            return;
-        }
-
-        auth.createUserWithEmailAndPassword(email, password)
-        .then(async (userCred) => {
-            const uid = userCred.user.uid;
-            localStorage.setItem("uid", uid);
-
-            // Generate unique miner ID
-            let counterSnap = await db.ref("counter").once("value");
-            let counter = (counterSnap.val() || 1000) + 1;
-            db.ref("counter").set(counter);
-
-            const minerId = "CJ" + counter;
-
-            const userData = {
-                name: name || "Miner",
-                email: emailInput,
-                balance: 0,
-                level: "Novice Miner",
-                minerId: minerId,
-                points: 100,
-                referrals: 0,
-                createdAt: Date.now()
-            };
-
-            // Handle referral
-            const referrer = localStorage.getItem("referrer");
-            if (referrer && referrer !== uid) {
-                userData.referredBy = referrer;
-                db.ref("users/" + referrer + "/referrals").transaction(val => (val || 0) + 1);
-            }
-
-            await db.ref("users/" + uid).set(userData);
-            localStorage.removeItem("referrer");
-
-            alert("Account created successfully! 🚀\nYour Miner ID: " + minerId);
-            window.location.href = "dashboard.html";
-        })
-        .catch(err => {
-            alert(err.message);
-            btn.innerText = originalText;
-        });
-
+  try {
+    if (authMethod === "email") {
+      await handleEmailAuth();
     } else {
-        // SIGN IN
-        auth.signInWithEmailAndPassword(email, password)
-        .then(userCred => {
-            localStorage.setItem("uid", userCred.user.uid);
-
-            // Remember Me
-            if (document.getElementById("remember").checked) {
-                localStorage.setItem("rememberedEmail", emailInput);
-            } else {
-                localStorage.removeItem("rememberedEmail");
-            }
-
-            alert("Sign in successful! Welcome back 🚀");
-            window.location.href = "dashboard.html";
-        })
-        .catch(err => {
-            if (err.code === "auth/user-not-found" || err.code === "auth/wrong-password") {
-                alert("Incorrect email or password");
-            } else {
-                alert(err.message);
-            }
-            btn.innerText = originalText;
-        });
+      await handlePhoneAuth();
     }
+  } catch (err) {
+    showToast(friendlyError(err.code || err.message), "error");
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = isSignUp ? "Create Account" : "Sign In";
+  }
 }
 
-/* AUTO FILL REMEMBERED EMAIL */
-window.onload = () => {
-    const remembered = localStorage.getItem("rememberedEmail");
-    if (remembered) {
-        document.getElementById("email").value = remembered;
-        document.getElementById("remember").checked = true;
+// ── EMAIL AUTH ────────────────────────────────────────────────
+async function handleEmailAuth() {
+  const name     = document.getElementById("nameInput").value.trim();
+  const email    = document.getElementById("emailInput").value.trim();
+  const password = document.getElementById("passwordInput").value;
+  const confirm  = document.getElementById("confirmInput").value;
+
+  if (!email || !password) throw { message: "Please fill all fields" };
+
+  if (isSignUp) {
+    if (password.length < 6)    throw { message: "Password must be at least 6 characters" };
+    if (password !== confirm)   throw { message: "Passwords do not match" };
+
+    const cred = await auth.createUserWithEmailAndPassword(email, password);
+    lastUserCred = cred.user;
+
+    // Send verification email
+    await cred.user.sendEmailVerification();
+
+    // Create user profile in DB
+    await createUserProfile(cred.user.uid, name, email);
+
+    // Show verification notice
+    document.getElementById("verifyEmail").textContent = email;
+    document.getElementById("verifyNotice").style.display = "block";
+    showToast("Verification email sent! Check your inbox 📧", "success");
+
+    // Sign out so they must verify before accessing app
+    await auth.signOut();
+
+  } else {
+    const cred = await auth.signInWithEmailAndPassword(email, password);
+
+    // Check email verified
+    if (!cred.user.emailVerified) {
+      lastUserCred = cred.user;
+      await auth.signOut();
+      document.getElementById("verifyEmail").textContent = email;
+      document.getElementById("verifyNotice").style.display = "block";
+      throw { message: "Please verify your email first. Check your inbox." };
     }
+
+    localStorage.setItem("uid", cred.user.uid);
+    if (document.getElementById("rememberMe").checked) {
+      localStorage.setItem("rememberedEmail", email);
+    }
+    showToast("Welcome back! ✅", "success");
+    setTimeout(() => window.location.href = "dashboard.html", 800);
+  }
+}
+
+// ── PHONE AUTH (no OTP — uses email trick) ────────────────────
+async function handlePhoneAuth() {
+  const name     = document.getElementById("nameInput").value.trim();
+  const phone    = document.getElementById("phoneInput").value.trim().replace(/\s/g,"");
+  const password = document.getElementById("phonePasswordInput").value;
+  const confirm  = document.getElementById("phoneConfirmInput").value;
+
+  if (!phone || !password) throw { message: "Please fill all fields" };
+
+  // Convert phone to fake email for Firebase Auth
+  const fakeEmail = phone.replace(/[^0-9]/g,"") + "@phone.cryptojet";
+
+  if (isSignUp) {
+    if (password.length < 6)  throw { message: "Password must be at least 6 characters" };
+    if (password !== confirm) throw { message: "Passwords do not match" };
+
+    const cred = await auth.createUserWithEmailAndPassword(fakeEmail, password);
+    await createUserProfile(cred.user.uid, name, phone, true);
+    localStorage.setItem("uid", cred.user.uid);
+    showToast("Account created! Welcome 🚀", "success");
+    setTimeout(() => window.location.href = "dashboard.html", 800);
+
+  } else {
+    const cred = await auth.signInWithEmailAndPassword(fakeEmail, password);
+    localStorage.setItem("uid", cred.user.uid);
+    showToast("Welcome back! ✅", "success");
+    setTimeout(() => window.location.href = "dashboard.html", 800);
+  }
+}
+
+// ── GOOGLE SIGN IN ────────────────────────────────────────────
+async function signInWithGoogle() {
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    const cred     = await auth.signInWithPopup(provider);
+    const user     = cred.user;
+
+    // Check if user already exists in DB
+    const snap = await db.ref("users/" + user.uid).once("value");
+    if (!snap.exists()) {
+      // New Google user — create profile
+      await createUserProfile(user.uid, user.displayName || "Miner", user.email);
+    }
+
+    localStorage.setItem("uid", user.uid);
+    if (document.getElementById("rememberMe").checked) {
+      localStorage.setItem("rememberedEmail", user.email || "");
+    }
+    showToast("Signed in with Google ✅", "success");
+    setTimeout(() => window.location.href = "dashboard.html", 800);
+
+  } catch (err) {
+    if (err.code !== "auth/popup-closed-by-user") {
+      showToast(friendlyError(err.code || err.message), "error");
+    }
+  }
+}
+
+// ── CREATE USER PROFILE ───────────────────────────────────────
+async function createUserProfile(uid, name, emailOrPhone, isPhone = false) {
+  // Generate miner ID
+  const counterSnap = await db.ref("counter").once("value");
+  const counter     = (counterSnap.val() || 1000) + 1;
+  await db.ref("counter").set(counter);
+  const minerId = "CJ" + counter;
+
+  const userData = {
+    name:      name  || "Miner",
+    balance:   0,
+    team:      0,
+    level:     "Novice Miner",
+    minerId:   minerId,
+    points:    100,
+    referrals: 0,
+    createdAt: Date.now()
+  };
+
+  if (isPhone) userData.phone = emailOrPhone;
+  else         userData.email = emailOrPhone;
+
+  // Handle referral from URL or localStorage
+  const params   = new URLSearchParams(window.location.search);
+  const referrer = params.get("ref") || localStorage.getItem("referrer");
+  if (referrer && referrer !== uid) {
+    userData.referredBy = referrer;
+    db.ref("users/" + referrer + "/referrals").transaction(v => (v || 0) + 1);
+  }
+
+  await db.ref("users/" + uid).set(userData);
+  localStorage.removeItem("referrer");
+}
+
+// ── RESEND VERIFICATION ───────────────────────────────────────
+async function resendVerification() {
+  try {
+    const email    = document.getElementById("emailInput").value.trim();
+    const password = document.getElementById("passwordInput").value;
+    const cred     = await auth.signInWithEmailAndPassword(email, password);
+    await cred.user.sendEmailVerification();
+    await auth.signOut();
+    showToast("Verification email resent! 📧", "success");
+  } catch (err) {
+    showToast("Could not resend — try signing in again", "error");
+  }
+}
+
+// ── FRIENDLY ERRORS ───────────────────────────────────────────
+function friendlyError(code) {
+  const map = {
+    "auth/email-already-in-use":    "This email is already registered. Try signing in.",
+    "auth/user-not-found":          "No account found. Please sign up first.",
+    "auth/wrong-password":          "Incorrect password. Please try again.",
+    "auth/weak-password":           "Password is too weak. Use at least 6 characters.",
+    "auth/invalid-email":           "Please enter a valid email address.",
+    "auth/too-many-requests":       "Too many attempts. Please wait a moment.",
+    "auth/network-request-failed":  "Network error. Check your connection.",
+    "auth/popup-blocked":           "Popup was blocked. Allow popups and try again.",
+  };
+  return map[code] || "Something went wrong. Please try again.";
+}
+
+// ── TOAST ─────────────────────────────────────────────────────
+function showToast(msg, type = "success") {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className   = "toast " + type;
+  t.style.opacity = 1;
+  setTimeout(() => t.style.opacity = 0, 3500);
+}
+
+// ── AUTO-FILL ─────────────────────────────────────────────────
+window.onload = () => {
+  const remembered = localStorage.getItem("rememberedEmail");
+  if (remembered) {
+    document.getElementById("emailInput").value = remembered;
+    setMode("signin");
+  }
+
+  // Check if coming from referral link
+  const params = new URLSearchParams(window.location.search);
+  const ref    = params.get("ref");
+  if (ref) localStorage.setItem("referrer", ref);
 };
 </script>
 </body>
