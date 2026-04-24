@@ -3,251 +3,444 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crypto Jet.co</title>
+<title>About • CryptoJet</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-body{
-  margin:0;
-  font-family:'Segoe UI',sans-serif;
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family:'DM Sans',sans-serif;
   background:#000814;
   color:white;
   overflow-x:hidden;
+  min-height:100vh;
 }
 
-/* ================= BACKGROUND ANIMATION ================= */
-.bg{
+/* ── COLOUR-CHANGING BACKGROUND BUBBLES ────── */
+.bg {
   position:fixed;
-  width:100%;
-  height:100%;
+  width:100%; height:100%;
   overflow:hidden;
-  z-index:-1;
+  z-index:0;
+  pointer-events:none;
 }
 
-.circle{
+.bubble {
   position:absolute;
   border-radius:50%;
-  background:radial-gradient(circle,#00ffcc55,transparent);
-  animation:float 20s infinite linear;
+  filter:blur(60px);
+  opacity:0.55;
+  animation:floatBubble 20s infinite ease-in-out, colorShift 8s infinite alternate;
 }
 
-.circle:nth-child(1){width:400px;height:400px;top:10%;left:10%;}
-.circle:nth-child(2){width:300px;height:300px;top:60%;left:70%;}
-.circle:nth-child(3){width:500px;height:500px;top:40%;left:20%;}
-
-@keyframes float{
-  0%{transform:translateY(0) translateX(0);}
-  50%{transform:translateY(-100px) translateX(50px);}
-  100%{transform:translateY(0) translateX(0);}
+.bubble:nth-child(1) {
+  width:420px; height:420px;
+  top:5%; left:5%;
+  animation-delay:0s, 0s;
+  animation-duration:22s, 7s;
+}
+.bubble:nth-child(2) {
+  width:320px; height:320px;
+  top:55%; left:65%;
+  animation-delay:-8s, -3s;
+  animation-duration:18s, 9s;
+}
+.bubble:nth-child(3) {
+  width:500px; height:500px;
+  top:35%; left:25%;
+  animation-delay:-14s, -5s;
+  animation-duration:26s, 6s;
+}
+.bubble:nth-child(4) {
+  width:260px; height:260px;
+  top:75%; left:10%;
+  animation-delay:-5s, -2s;
+  animation-duration:20s, 11s;
+}
+.bubble:nth-child(5) {
+  width:200px; height:200px;
+  top:15%; left:75%;
+  animation-delay:-10s, -7s;
+  animation-duration:15s, 8s;
 }
 
-/* ================= HEADER ================= */
-.logo-container{
-  display:flex;
-  justify-content:center;
-  margin-top:30px;
+@keyframes floatBubble {
+  0%  { transform:translateY(0) translateX(0) scale(1); }
+  33% { transform:translateY(-80px) translateX(40px) scale(1.05); }
+  66% { transform:translateY(40px) translateX(-30px) scale(0.95); }
+  100%{ transform:translateY(0) translateX(0) scale(1); }
 }
 
-.logo-text{
-  font-size:55px;
-  font-weight:900;
-  fill:none;
-  stroke:#00ffcc;
-  stroke-width:2;
-  stroke-dasharray:600;
-  stroke-dashoffset:600;
-  animation:write 3s ease forwards, glow 2s infinite alternate;
+@keyframes colorShift {
+  0%  { background:radial-gradient(circle, #00ffcc66, transparent); }
+  20% { background:radial-gradient(circle, #00f0ff66, transparent); }
+  40% { background:radial-gradient(circle, #7c3aed55, transparent); }
+  60% { background:radial-gradient(circle, #f59e0b55, transparent); }
+  80% { background:radial-gradient(circle, #22c55e55, transparent); }
+  100%{ background:radial-gradient(circle, #ec489955, transparent); }
 }
 
-@keyframes write{
-  to{stroke-dashoffset:0;}
-}
-
-@keyframes glow{
-  from{text-shadow:0 0 10px #00ffcc;}
-  to{text-shadow:0 0 30px #00ffcc;}
-}
-
-.subtitle{
+/* ── HEADER ─────────────────────────────────── */
+.header {
+  position:relative; z-index:2;
+  padding:40px 20px 10px;
   text-align:center;
-  color:#aaa;
-  margin-top:5px;
 }
 
-/* ================= CARDS ================= */
-.container{
-  padding:20px;
+.back-btn {
+  position:absolute; top:24px; left:20px;
+  font-size:26px; color:#00ffcc; cursor:pointer;
+  background:rgba(0,255,204,0.1); width:44px; height:44px;
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  border:1px solid rgba(0,255,204,0.2); text-decoration:none;
 }
 
-.card{
-  background:rgba(15,23,42,0.6);
-  backdrop-filter:blur(15px);
-  border-radius:20px;
-  padding:20px;
-  margin-bottom:20px;
+.logo-wrap {
+  display:flex; justify-content:center; margin-bottom:6px;
+}
+.logo-svg { width:min(280px,70vw); }
+.logo-text {
+  font-size:55px; font-weight:900;
+  fill:none; stroke:#00ffcc; stroke-width:2;
+  stroke-dasharray:600; stroke-dashoffset:600;
+  animation:write 2.8s ease forwards;
+  font-family:'Space Grotesk',sans-serif;
+}
+@keyframes write { to{stroke-dashoffset:0;} }
+
+.plane-line {
+  fill:none; stroke:#00ffcc; stroke-width:2.5; stroke-linecap:round;
+  filter:drop-shadow(0 0 6px #00ffcc);
+  stroke-dasharray:6 8;
+  animation:moveLine 2s linear infinite;
+}
+.plane-head { fill:#00ffcc; filter:drop-shadow(0 0 6px #00ffcc); }
+@keyframes moveLine { from{stroke-dashoffset:0} to{stroke-dashoffset:-100} }
+
+.tagline {
+  font-size:14px; color:#64748b; letter-spacing:0.1em;
+  text-transform:uppercase; margin-top:4px;
+}
+
+/* ── HERO STRIP ──────────────────────────────── */
+.hero-strip {
+  position:relative; z-index:2;
+  margin:30px 20px 0;
+  background:linear-gradient(135deg,rgba(0,255,204,0.07),rgba(0,240,255,0.04));
   border:1px solid rgba(0,255,204,0.2);
-  box-shadow:0 0 40px rgba(0,255,204,0.08);
-  transform:translateY(60px) scale(0.95);
-  opacity:0;
-  transition:0.6s ease;
-  position:relative;
-  overflow:hidden;
+  border-radius:24px;
+  padding:28px 24px;
+  text-align:center;
+}
+.hero-strip h1 {
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(22px,5vw,34px); font-weight:700;
+  line-height:1.2; margin-bottom:12px;
+}
+.hero-strip p {
+  font-size:14px; color:#94a3b8; line-height:1.7; max-width:480px; margin:0 auto;
 }
 
-/* glow sweep */
-.card::before{
+/* ── STATS ROW ───────────────────────────────── */
+.stats-row {
+  position:relative; z-index:2;
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:10px; margin:16px 20px 0;
+}
+.stat-box {
+  background:rgba(15,23,42,0.7); backdrop-filter:blur(10px);
+  border:1px solid rgba(0,255,204,0.15); border-radius:18px;
+  padding:18px 10px; text-align:center;
+  transform:translateY(40px); opacity:0;
+  transition:0.5s ease;
+}
+.stat-box.show { transform:translateY(0); opacity:1; }
+.stat-val {
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(18px,4vw,24px); font-weight:700; color:#00ffcc;
+}
+.stat-lbl { font-size:11px; color:#64748b; margin-top:4px; text-transform:uppercase; letter-spacing:0.06em; }
+
+/* ── CONTENT CARDS ───────────────────────────── */
+.container {
+  position:relative; z-index:2;
+  padding:16px 20px 40px;
+}
+
+.card {
+  background:rgba(15,23,42,0.65);
+  backdrop-filter:blur(16px);
+  border-radius:22px; padding:24px 22px; margin-bottom:16px;
+  border:1px solid rgba(0,255,204,0.15);
+  box-shadow:0 0 30px rgba(0,255,204,0.05);
+  transform:translateY(50px) scale(0.96); opacity:0;
+  transition:0.55s ease; position:relative; overflow:hidden;
+}
+.card::before {
   content:"";
-  position:absolute;
-  width:200%;
-  height:100%;
-  background:linear-gradient(120deg,transparent,#00ffcc33,transparent);
+  position:absolute; width:200%; height:100%;
+  background:linear-gradient(120deg,transparent,rgba(0,255,204,0.08),transparent);
   transform:translateX(-100%);
 }
+.card:hover::before { animation:sweep 0.8s forwards; }
+@keyframes sweep { to{transform:translateX(100%);} }
 
-.card:hover::before{
-  animation:sweep 1s;
+.card.show { transform:translateY(0) scale(1); opacity:1; }
+.card:hover { box-shadow:0 0 50px rgba(0,255,204,0.15); }
+
+.card-tag {
+  display:inline-block;
+  font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em;
+  padding:3px 10px; border-radius:999px; margin-bottom:12px;
+  background:rgba(0,255,204,0.1); color:#00ffcc;
+  border:1px solid rgba(0,255,204,0.2);
 }
-
-@keyframes sweep{
-  to{transform:translateX(100%);}
+.card h2 {
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(16px,3vw,20px); font-weight:700;
+  color:#00ffcc; margin-bottom:10px;
 }
+.card p { color:#cbd5e1; line-height:1.75; font-size:14px; }
 
-.card.show{
-  transform:translateY(0) scale(1);
-  opacity:1;
+/* Two-col grid for some cards */
+.card-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:14px; margin-bottom:16px;
 }
+@media(max-width:400px){ .card-grid{ grid-template-columns:1fr; } }
 
-.card:hover{
-  transform:scale(1.03);
-  box-shadow:0 0 60px rgba(0,255,204,0.2);
+.card-mini {
+  background:rgba(15,23,42,0.65); backdrop-filter:blur(16px);
+  border-radius:18px; padding:18px 16px;
+  border:1px solid rgba(0,255,204,0.12);
+  transform:translateY(50px) scale(0.96); opacity:0; transition:0.55s ease;
 }
-
-.card h2{
-  color:#00ffcc;
-  margin-bottom:10px;
+.card-mini.show { transform:translateY(0) scale(1); opacity:1; }
+.card-mini h3 {
+  font-family:'Space Grotesk',sans-serif;
+  font-size:14px; font-weight:700; color:#00ffcc; margin-bottom:7px;
 }
+.card-mini p { font-size:13px; color:#94a3b8; line-height:1.6; }
 
-.card p{
-  color:#ccc;
-  line-height:1.6;
-  font-size:14px;
+/* Miners table inside card */
+.miners-table { width:100%; margin-top:8px; border-collapse:collapse; }
+.miners-table th {
+  font-size:11px; text-transform:uppercase; letter-spacing:0.07em;
+  color:#64748b; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.07);
+  text-align:left;
 }
-
-/* ================= NAV ================= */
-.nav{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  height:65px;
-  background:#020617;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
+.miners-table td {
+  font-size:13px; color:#cbd5e1; padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,0.04);
 }
+.miners-table td:last-child { color:#00ffcc; font-weight:700; text-align:right; }
+.miners-table tr:last-child td { border-bottom:none; }
 
-.nav-item{
-  text-align:center;
-  font-size:11px;
-  color:#aaa;
+/* Bullet list */
+.bullet-list { list-style:none; margin-top:8px; }
+.bullet-list li {
+  font-size:13px; color:#cbd5e1; line-height:1.7;
+  display:flex; gap:9px; align-items:flex-start; margin-bottom:5px;
 }
+.bullet-list li::before { content:'▸'; color:#00ffcc; font-size:10px; flex-shrink:0; margin-top:3px; }
 
-.nav-item img{
-  width:22px;
-  display:block;
-  margin:auto;
-  margin-bottom:4px;
-  filter:brightness(.6);
+/* Referral tiers */
+.tier-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:13px;
 }
-
-.nav-item.active img{
-  filter:brightness(1.5) drop-shadow(0 0 8px #00ffcc);
-}
-
-.nav-item.active{
-  color:#00ffcc;
+.tier-row:last-child { border-bottom:none; }
+.tier-lbl { color:#94a3b8; }
+.tier-val { font-weight:700; color:#00ffcc; }
+.tier-badge {
+  font-size:10px; font-weight:700; padding:2px 8px; border-radius:999px;
+  background:rgba(0,255,204,0.1); color:#00ffcc;
 }
 </style>
 </head>
-
 <body>
 
+<!-- COLOUR-CHANGING BACKGROUND -->
 <div class="bg">
-  <div class="circle"></div>
-  <div class="circle"></div>
-  <div class="circle"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
 </div>
 
 <!-- HEADER -->
-<div class="logo-container">
-<svg viewBox="0 0 600 120">
-<text x="10" y="80" class="logo-text">CryptoJet</text>
-</svg>
+<div class="header">
+  <a class="back-btn" onclick="history.back()">←</a>
+
+  <div class="logo-wrap">
+    <svg viewBox="0 0 500 120" class="logo-svg">
+      <text x="50%" y="70%" text-anchor="middle" class="logo-text">CryptoJet</text>
+      <path class="plane-line" d="M40 95 Q250 10 460 75"/>
+      <circle cx="460" cy="75" r="4" class="plane-head"/>
+    </svg>
+  </div>
+  <div class="tagline">Redefining Digital Earning</div>
 </div>
 
-<div class="subtitle">Redefining digital earning</div>
+<!-- HERO STRIP -->
+<div class="hero-strip">
+  <h1>We Built a Smarter<br>Way to Mine & Earn</h1>
+  <p>CryptoJet is a cloud-based crypto mining investment platform designed for everyday people. No hardware, no technical knowledge required — just deposit, activate your miner, and earn passively.</p>
+</div>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-box">
+    <div class="stat-val">$2.4M+</div>
+    <div class="stat-lbl">Paid Out</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-val">48K+</div>
+    <div class="stat-lbl">Miners</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-val">99.8%</div>
+    <div class="stat-lbl">Uptime</div>
+  </div>
+</div>
 
 <!-- CONTENT -->
 <div class="container">
 
-<div class="card"><h2>Who We Are</h2>
-<p>Crypto Jet.co is a refined digital platform transforming how users experience crypto mining by removing complexity and replacing it with clarity and control.</p>
-</div>
-
-<div class="card"><h2>Our Vision</h2>
-<p>We aim to unlock global access to digital earning by building systems that allow anyone to participate in the evolving financial ecosystem.</p>
-</div>
-
-<div class="card"><h2>Smarter Mining</h2>
-<p>Our system replicates high-performance mining in a structured environment, delivering a smooth and optimized earning experience.</p>
-</div>
-
-<div class="card"><h2>Performance</h2>
-<p>Every function is engineered for speed, clarity, and precision, ensuring users experience consistent and reliable growth.</p>
-</div>
-
-<div class="card"><h2>Trust</h2>
-<p>We prioritize system stability and user confidence, creating an environment where reliability is never compromised.</p>
-</div>
-
-<div class="card"><h2>Ecosystem</h2>
-<p>Crypto Jet.co is evolving into a scalable digital ecosystem that expands earning opportunities beyond traditional limits.</p>
-</div>
-
-<div class="card"><h2>Why Us</h2>
-<p>Designed for simplicity, built for performance, and structured for growth — Crypto Jet delivers a premium earning experience.</p>
-</div>
-
-<div class="card"><h2>Final Word</h2>
-<p>We are building more than a platform — we are shaping a new standard for digital earning.</p>
-</div>
-
-</div>
-
-<!-- NAV -->
-<div class="nav">
-  <div class="nav-item" onclick="location.href='dashboard.html'">
-    <img src="./home.png">Home
+  <!-- WHO WE ARE -->
+  <div class="card">
+    <div class="card-tag">About</div>
+    <h2>Who We Are</h2>
+    <p>CryptoJet is a Nigerian-based cloud mining platform launched in 2026 with one mission — make passive income from crypto accessible to everyone. We operate a managed mining infrastructure that handles everything on the backend so you earn daily without touching hardware or writing code.</p>
   </div>
-  <div class="nav-item" onclick="location.href='miner.html'">
-    <img src="./miner.png">Miner
+
+  <!-- MINING PLANS -->
+  <div class="card">
+    <div class="card-tag">Mining Plans</div>
+    <h2>Our 4 Miner Tiers</h2>
+    <p style="margin-bottom:14px;">Choose a plan that matches your goals. Each miner runs on a cycle and credits earnings to your balance automatically at the end of every cycle.</p>
+    <table class="miners-table">
+      <tr>
+        <th>Miner</th>
+        <th>Price</th>
+        <th>Cycle</th>
+        <th style="text-align:right">Daily</th>
+      </tr>
+      <tr><td>S-244</td><td>$10</td><td>48 hrs</td><td>$0.50</td></tr>
+      <tr><td>S-500</td><td>$30</td><td>48 hrs</td><td>$1.50</td></tr>
+      <tr><td>S-900</td><td>$50</td><td>24 hrs</td><td>$2.00</td></tr>
+      <tr><td>S-1200</td><td>$120</td><td>24 hrs</td><td>$4.00</td></tr>
+    </table>
   </div>
-  <div class="nav-item active">
-    <img src="./user.png">Me
+
+  <!-- HOW MINING WORKS -->
+  <div class="card">
+    <div class="card-tag">How It Works</div>
+    <h2>The Mining Process</h2>
+    <ul class="bullet-list">
+      <li>Recharge your CryptoJet balance via bank transfer or USDT (BEP20 / TRC20)</li>
+      <li>Purchase any miner tier from the Miner tab and tap Start</li>
+      <li>Your miner runs its full cycle — 24 hours for S-900/S-1200, 48 hours for S-244/S-500</li>
+      <li>At cycle end, your exact daily earnings are automatically credited to your balance</li>
+      <li>Restart the cycle as many times as you want — earnings compound over your plan duration</li>
+    </ul>
   </div>
+
+  <!-- MINI CARDS -->
+  <div class="card-grid">
+    <div class="card-mini">
+      <h3>⚡ Recharge</h3>
+      <p>Fund your account via Opay bank transfer or USDT. Deposits reflect in 3–20 minutes after verification.</p>
+    </div>
+    <div class="card-mini">
+      <h3>🏦 Withdraw</h3>
+      <p>Cash out to any Nigerian bank account or USDT wallet. Processed within 48 hours Mon–Fri. 10% fee applies.</p>
+    </div>
+    <div class="card-mini">
+      <h3>🔐 Security</h3>
+      <p>Withdrawal password protection, Firebase Auth, and admin-verified transactions keep your balance safe.</p>
+    </div>
+    <div class="card-mini">
+      <h3>📲 Access</h3>
+      <p>Fully mobile-first web app. No download needed — runs in any browser on any device, anywhere.</p>
+    </div>
+  </div>
+
+  <!-- REFERRAL -->
+  <div class="card">
+    <div class="card-tag">Referral System</div>
+    <h2>Earn From Your Team</h2>
+    <p style="margin-bottom:14px;">When people you refer complete mining cycles, a percentage goes straight to your Team Income balance — 3 levels deep.</p>
+    <div class="tier-row">
+      <span class="tier-lbl">Level 1 — Direct referrals</span>
+      <span class="tier-val">10%</span>
+    </div>
+    <div class="tier-row">
+      <span class="tier-lbl">Level 2 — Their referrals</span>
+      <span class="tier-val">4%</span>
+    </div>
+    <div class="tier-row">
+      <span class="tier-lbl">Level 3 — Next level</span>
+      <span class="tier-val">2%</span>
+    </div>
+    <p style="margin-top:14px;font-size:13px;color:#64748b;">Team income is separate from your main balance and can be used to purchase miners or withdrawn directly.</p>
+  </div>
+
+  <!-- TASKS & REWARDS -->
+  <div class="card">
+    <div class="card-tag">Rewards</div>
+    <h2>Tasks & Points System</h2>
+    <ul class="bullet-list">
+      <li>Earn points daily by checking in once every 24 hours</li>
+      <li>Complete social tasks (follow our Telegram, WhatsApp, and social channels) for bonus points</li>
+      <li>Points contribute to your Miner Trust Score — higher score means priority withdrawal processing</li>
+      <li>Sharing your withdrawal proof in the community feed boosts your Trust Score further</li>
+    </ul>
+  </div>
+
+  <!-- TRUST & SAFETY -->
+  <div class="card">
+    <div class="card-tag">Trust & Safety</div>
+    <h2>Why You Can Trust CryptoJet</h2>
+    <ul class="bullet-list">
+      <li>All transactions are processed manually by the CryptoJet financial team — no automated fraud</li>
+      <li>USDT withdrawals are auto-sent from a verified BEP20 wallet — tamper-proof</li>
+      <li>Every recharge requires receipt verification before balance is credited</li>
+      <li>Withdrawal password required on every cashout — protecting against unauthorized access</li>
+      <li>All transaction records are permanent and visible in your Transaction History</li>
+    </ul>
+  </div>
+
+  <!-- VISION -->
+  <div class="card">
+    <div class="card-tag">Our Vision</div>
+    <h2>Where We're Going</h2>
+    <p>CryptoJet is building toward becoming a full digital earning ecosystem — expanding beyond mining into USDT-native features, multi-currency support, and a deeper rewards infrastructure. We are early, and our early miners will benefit the most as the platform scales.</p>
+  </div>
+
+  <!-- FINAL WORD -->
+  <div class="card" style="text-align:center; border-color:rgba(0,255,204,0.3); background:linear-gradient(135deg,rgba(0,255,204,0.06),rgba(0,240,255,0.04));">
+    <div style="font-size:32px; margin-bottom:14px;">⚡</div>
+    <h2 style="font-size:20px;">Built Different.</h2>
+    <p>We are not building just a platform — we are setting a new standard for what digital passive income should look like in Nigeria and beyond.</p>
+    <div style="margin-top:20px;">
+      <a href="signin.html" style="display:inline-block;padding:13px 32px;background:linear-gradient(90deg,#00ffcc,#00bfff);color:#000;border-radius:50px;font-weight:700;font-size:15px;text-decoration:none;">Start Mining →</a>
+    </div>
+  </div>
+
 </div>
 
 <script>
-/* SCROLL ANIMATION */
-const cards = document.querySelectorAll('.card');
-
-window.addEventListener('scroll', () => {
-  cards.forEach(card => {
-    let rect = card.getBoundingClientRect();
-    if(rect.top < window.innerHeight - 100){
-      card.classList.add('show');
-    }
+// Animate on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add("show");
   });
-});
-</script>
+}, { threshold: 0.1 });
 
+document.querySelectorAll(".card, .card-mini, .stat-box").forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
