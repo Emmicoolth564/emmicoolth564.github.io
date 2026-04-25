@@ -4,96 +4,117 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Recharge • CryptoJet</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Inter',sans-serif; background:#020617; color:#e2e8f0; min-height:100vh; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { max-width:100vw; overflow-x:hidden; }
+body { font-family:'DM Sans',sans-serif; background:#020617; color:#e2e8f0; min-height:100vh; }
 
-    .header { padding:20px 16px; display:flex; align-items:center; background:rgba(2,6,23,0.95); backdrop-filter:blur(12px); border-bottom:1px solid rgba(34,197,94,0.15); }
-    .back { font-size:28px; color:#22c55e; cursor:pointer; }
-    .header h3 { flex:1; text-align:center; font-size:20px; font-weight:600; }
+.header { padding:18px 16px; display:flex; align-items:center; background:rgba(2,6,23,0.97); backdrop-filter:blur(12px); border-bottom:1px solid rgba(34,197,94,0.15); position:sticky; top:0; z-index:100; }
+.back { font-size:26px; color:#22c55e; cursor:pointer; padding-right:8px; }
+.header h3 { flex:1; text-align:center; font-size:18px; font-weight:700; }
 
-    .tabs { display:flex; background:#0f172a; border-radius:9999px; padding:6px; margin:20px 16px 16px; }
-    .tab { flex:1; padding:14px; text-align:center; font-weight:600; border-radius:9999px; cursor:pointer; color:#94a3b8; transition:all 0.2s; }
-    .tab.active { background:#22c55e; color:#022c22; box-shadow:0 4px 15px rgba(34,197,94,0.4); }
+/* TABS */
+.tabs { display:flex; background:#0f172a; border-radius:9999px; padding:5px; margin:16px 16px 14px; gap:4px; }
+.tab { flex:1; padding:12px 8px; text-align:center; font-weight:600; font-size:13px; border-radius:9999px; cursor:pointer; color:#94a3b8; transition:all 0.2s; display:flex; align-items:center; justify-content:center; gap:6px; }
+.tab.active { background:#22c55e; color:#022c22; box-shadow:0 4px 15px rgba(34,197,94,0.3); }
 
-    .content-wrapper { padding:0 16px 40px; }
-    .card { background:#0f172a; border-radius:24px; padding:26px 22px; box-shadow:0 10px 30px rgba(0,0,0,0.4); margin-bottom:16px; }
+/* USDT ICON — tether symbol */
+.usdt-icon { width:16px; height:16px; background:linear-gradient(135deg,#26a17b,#1a8a65); border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:9px; font-weight:900; color:#fff; flex-shrink:0; }
 
-    input, select, textarea { width:100%; padding:15px 18px; margin-top:10px; background:#1e2937; border:2px solid transparent; border-radius:14px; color:white; font-size:15px; font-family:'Inter',sans-serif; transition:border-color 0.2s; }
-    input:focus, select:focus, textarea:focus { border-color:#22c55e; outline:none; box-shadow:0 0 0 3px rgba(34,197,94,0.15); }
+.content-wrapper { padding:0 14px 50px; }
+.card { background:#0f172a; border-radius:20px; padding:22px 18px; box-shadow:0 8px 24px rgba(0,0,0,0.3); margin-bottom:14px; }
 
-    .button { width:100%; padding:16px; background:#22c55e; color:#022c22; font-weight:700; font-size:16px; border:none; border-radius:16px; cursor:pointer; box-shadow:0 6px 20px rgba(34,197,94,0.3); transition:all 0.2s; margin-top:16px; }
-    .button:active { transform:scale(0.98); }
+input, select, textarea {
+    width:100%; padding:14px 16px; margin-top:10px;
+    background:#1e2937; border:2px solid transparent; border-radius:13px;
+    color:white; font-size:15px; font-family:'DM Sans',sans-serif;
+    transition:border-color 0.2s; -webkit-appearance:none;
+}
+input:focus, select:focus, textarea:focus { border-color:#22c55e; outline:none; box-shadow:0 0 0 3px rgba(34,197,94,0.12); }
 
-    .ngn-rate { font-size:14px; color:#94a3b8; text-align:center; margin-top:10px; font-weight:500; }
+.button { width:100%; padding:15px; background:#22c55e; color:#022c22; font-weight:700; font-size:15px; border:none; border-radius:14px; cursor:pointer; box-shadow:0 6px 18px rgba(34,197,94,0.25); transition:all 0.2s; margin-top:14px; font-family:'DM Sans',sans-serif; }
+.button:active { transform:scale(0.98); }
+.button.cancel-btn { background:transparent; color:#64748b; border:1px solid #1e2937; box-shadow:none; margin-top:8px; }
 
-    .bank-details-card { background:linear-gradient(135deg,#0f2318,#0c1f30); border:1px solid rgba(34,197,94,0.2); border-radius:20px; padding:22px; margin-bottom:18px; position:relative; }
-    .timer { position:absolute; top:16px; right:16px; background:#ef4444; color:white; font-size:12px; font-weight:700; padding:5px 12px; border-radius:999px; animation:blink 1s infinite; }
-    @keyframes blink { 50%{ opacity:0.5; } }
+.ngn-rate { font-size:13px; color:#64748b; text-align:center; margin-top:8px; font-weight:500; }
 
-    .bank-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
-    .bank-row:last-child { border-bottom:none; }
-    .bank-row-label { font-size:12px; color:#64748b; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; }
-    .bank-row-value { font-size:15px; font-weight:700; color:#e2e8f0; display:flex; align-items:center; gap:8px; }
-    .bank-row-value.ref { color:#f59e0b; font-size:16px; }
+.bank-details-card { background:linear-gradient(135deg,#0f2318,#0c1f30); border:1px solid rgba(34,197,94,0.2); border-radius:18px; padding:20px; margin-bottom:14px; position:relative; overflow:hidden; }
+.timer { position:absolute; top:14px; right:14px; background:#ef4444; color:white; font-size:12px; font-weight:700; padding:4px 10px; border-radius:999px; animation:blink 1s infinite; }
+@keyframes blink { 50%{ opacity:0.5; } }
 
-    .copy-btn { background:#1e3a2a; color:#22c55e; border:1px solid rgba(34,197,94,0.3); padding:5px 10px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; transition:all 0.15s; }
-    .copy-btn:active { transform:scale(0.95); }
+.bank-row { display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(255,255,255,0.05); gap:8px; }
+.bank-row:last-child { border-bottom:none; }
+.bank-row-label { font-size:11px; color:#64748b; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; flex-shrink:0; }
+.bank-row-value { font-size:14px; font-weight:700; color:#e2e8f0; display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+.bank-row-value.ref { color:#f59e0b; }
 
-    .amount-to-pay { text-align:center; padding:14px; background:rgba(34,197,94,0.08); border-radius:14px; margin:16px 0 0; border:1px solid rgba(34,197,94,0.15); }
-    .amount-to-pay .pay-label { font-size:12px; color:#64748b; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px; }
-    .amount-to-pay .pay-amount { font-size:28px; font-weight:700; color:#22c55e; }
-    .amount-to-pay .pay-sub { font-size:12px; color:#64748b; margin-top:2px; }
+.copy-btn { background:#1e3a2a; color:#22c55e; border:1px solid rgba(34,197,94,0.3); padding:5px 10px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; transition:all 0.15s; font-family:'DM Sans',sans-serif; flex-shrink:0; }
+.copy-btn:active { transform:scale(0.95); }
 
-    .instructions-box { background:#0c1a2e; border:1px solid rgba(245,158,11,0.25); border-left:3px solid #f59e0b; border-radius:14px; padding:16px 18px; margin-bottom:18px; }
-    .inst-title { font-size:13px; font-weight:700; color:#f59e0b; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
-    .instructions-box ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
-    .instructions-box li { font-size:13px; color:#94a3b8; line-height:1.5; display:flex; gap:8px; align-items:flex-start; }
-    .num { background:rgba(245,158,11,0.15); color:#f59e0b; font-size:10px; font-weight:800; min-width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.amount-to-pay { text-align:center; padding:14px; background:rgba(34,197,94,0.08); border-radius:13px; margin-top:14px; border:1px solid rgba(34,197,94,0.15); }
+.pay-label  { font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px; }
+.pay-amount { font-size:26px; font-weight:700; color:#22c55e; }
+.pay-sub    { font-size:12px; color:#64748b; margin-top:2px; }
 
-    .upload-area { border:2px dashed #334155; border-radius:16px; padding:28px 20px; text-align:center; cursor:pointer; margin-top:14px; transition:border-color 0.2s; }
-    .upload-area:hover { border-color:#22c55e; }
-    .upload-area .upload-icon { font-size:28px; margin-bottom:8px; }
-    .upload-area .upload-text { font-size:14px; color:#64748b; }
-    .preview-img { max-width:100%; max-height:200px; border-radius:14px; margin-top:14px; display:none; }
+/* INSTRUCTIONS — no more inline strong wrapping issues */
+.instructions-box { background:#0c1a2e; border:1px solid rgba(245,158,11,0.2); border-left:3px solid #f59e0b; border-radius:14px; padding:16px; margin-bottom:14px; }
+.inst-title { font-size:13px; font-weight:700; color:#f59e0b; margin-bottom:12px; display:flex; align-items:center; gap:6px; }
+.inst-list { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.inst-item { display:flex; gap:10px; align-items:flex-start; }
+.num { background:rgba(245,158,11,0.15); color:#f59e0b; font-size:10px; font-weight:800; min-width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+.inst-text { font-size:13px; color:#94a3b8; line-height:1.6; flex:1; word-break:break-word; }
+.inst-text .hi { color:#f59e0b; font-weight:700; }
+.inst-text .hi-g { color:#22c55e; font-weight:700; }
 
-    .network-select { display:flex; flex-direction:column; gap:12px; margin-bottom:4px; }
-    .network-card { border-radius:18px; padding:18px 20px; cursor:pointer; border:2px solid #1e2937; transition:all 0.2s; background:#0c1628; position:relative; }
-    .network-card.selected { border-color:#22c55e; background:rgba(34,197,94,0.06); }
-    .network-card .net-header { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
-    .net-logo { width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; flex-shrink:0; }
-    .net-logo.bep { background:linear-gradient(135deg,#f0b90b,#f8d06b); color:#000; }
-    .net-logo.trc { background:linear-gradient(135deg,#ef4444,#f97316); color:#fff; }
-    .net-name { font-size:16px; font-weight:700; }
-    .net-sub  { font-size:12px; color:#64748b; }
-    .net-badge { position:absolute; top:14px; right:14px; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:700; }
-    .net-badge.fast  { background:rgba(34,197,94,0.15);  color:#22c55e; }
-    .net-badge.cheap { background:rgba(245,158,11,0.15); color:#f59e0b; }
-    .net-benefits { display:flex; flex-direction:column; gap:5px; margin-bottom:10px; }
-    .net-benefit { font-size:12px; color:#94a3b8; display:flex; gap:7px; align-items:center; }
-    .net-benefit::before { content:'✓'; color:#22c55e; font-weight:700; flex-shrink:0; }
-    .net-fee { background:#1e2937; border-radius:10px; padding:8px 12px; font-size:12px; color:#64748b; display:flex; justify-content:space-between; }
-    .net-fee strong { color:#e2e8f0; }
+.upload-area { border:2px dashed #334155; border-radius:14px; padding:24px 16px; text-align:center; cursor:pointer; margin-top:12px; transition:border-color 0.2s; }
+.upload-area:hover { border-color:#22c55e; }
+.upload-icon  { font-size:26px; margin-bottom:6px; }
+.upload-text  { font-size:13px; color:#64748b; }
+.preview-img  { max-width:100%; max-height:180px; border-radius:12px; margin-top:12px; display:none; object-fit:contain; }
 
-    .wallet-box { background:#0c1628; border:1px solid rgba(34,197,94,0.2); border-radius:14px; padding:14px 16px; margin-top:14px; }
-    .wallet-label { font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
-    .wallet-addr { font-size:12px; color:#22c55e; font-family:monospace; word-break:break-all; line-height:1.6; margin-bottom:10px; }
+.network-select { display:flex; flex-direction:column; gap:12px; margin-bottom:4px; }
+.network-card { border-radius:16px; padding:16px; cursor:pointer; border:2px solid #1e2937; transition:all 0.2s; background:#0c1628; position:relative; }
+.network-card.selected { border-color:#22c55e; background:rgba(34,197,94,0.05); }
+.net-header { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.net-logo { width:40px; height:40px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px; flex-shrink:0; }
+.net-logo.bep { background:linear-gradient(135deg,#f0b90b,#f8d06b); color:#000; }
+.net-logo.trc { background:linear-gradient(135deg,#ef4444,#f97316); color:#fff; }
+.net-name { font-size:15px; font-weight:700; }
+.net-sub  { font-size:12px; color:#64748b; margin-top:2px; }
+.net-badge { position:absolute; top:12px; right:12px; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:700; }
+.net-badge.fast  { background:rgba(34,197,94,0.15);  color:#22c55e; }
+.net-badge.cheap { background:rgba(245,158,11,0.15); color:#f59e0b; }
+.net-benefits { display:flex; flex-direction:column; gap:5px; margin-bottom:10px; }
+.net-benefit { font-size:12px; color:#94a3b8; display:flex; gap:7px; align-items:flex-start; }
+.net-benefit::before { content:'✓'; color:#22c55e; font-weight:700; flex-shrink:0; }
+.net-fee { background:#1e2937; border-radius:9px; padding:8px 12px; font-size:12px; color:#64748b; display:flex; justify-content:space-between; }
+.net-fee strong { color:#e2e8f0; }
 
-    .txhash-section { margin-top:14px; }
-    .txhash-label { font-size:13px; font-weight:600; color:#e2e8f0; margin-bottom:4px; display:flex; justify-content:space-between; align-items:center; }
-    .txhash-hint { font-size:11px; color:#475569; font-weight:400; }
+.wallet-box { background:#0c1628; border:1px solid rgba(34,197,94,0.2); border-radius:13px; padding:14px; margin-top:12px; }
+.wallet-label { font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; font-weight:600; }
+.wallet-addr { font-size:11px; color:#22c55e; font-family:monospace; word-break:break-all; line-height:1.7; margin-bottom:10px; }
 
-    .loader { position:fixed; inset:0; background:rgba(2,6,23,0.95); display:none; align-items:center; justify-content:center; z-index:99999; flex-direction:column; color:#22c55e; font-size:16px; gap:20px; }
-    .spinner { width:72px; height:72px; border:7px solid rgba(34,197,94,0.15); border-top:7px solid #22c55e; border-radius:50%; animation:spin 1s linear infinite; }
-    @keyframes spin { to{ transform:rotate(360deg); } }
+.txhash-label { font-size:13px; font-weight:600; color:#e2e8f0; margin-top:14px; margin-bottom:2px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; }
+.txhash-hint { font-size:11px; color:#475569; font-weight:400; }
 
-    .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#22c55e; color:#022c22; padding:13px 26px; border-radius:999px; font-weight:700; font-size:14px; box-shadow:0 8px 25px rgba(34,197,94,0.4); opacity:0; transition:all 0.3s; z-index:100000; white-space:nowrap; pointer-events:none; }
+/* PENDING BLOCK */
+.pending-block { background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.25); border-radius:16px; padding:20px; text-align:center; margin-bottom:14px; }
+.pending-icon  { font-size:32px; margin-bottom:10px; }
+.pending-title { font-size:16px; font-weight:700; color:#f59e0b; margin-bottom:6px; }
+.pending-desc  { font-size:13px; color:#94a3b8; line-height:1.6; }
 
-    .verified-box { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); border-radius:14px; padding:16px; text-align:center; margin-top:14px; }
-    .verified-box .v-icon { font-size:32px; margin-bottom:6px; }
-    .verified-box .v-text { font-size:15px; font-weight:700; color:#22c55e; }
-    .verified-box .v-sub { font-size:13px; color:#64748b; margin-top:4px; }
+.loader { position:fixed; inset:0; background:rgba(2,6,23,0.96); display:none; align-items:center; justify-content:center; z-index:99999; flex-direction:column; color:#22c55e; gap:18px; }
+.spinner { width:60px; height:60px; border:6px solid rgba(34,197,94,0.15); border-top:6px solid #22c55e; border-radius:50%; animation:spin 0.9s linear infinite; }
+@keyframes spin { to{ transform:rotate(360deg); } }
+.loader-text { font-size:14px; font-weight:600; color:#94a3b8; }
+
+.toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%); background:#22c55e; color:#022c22; padding:12px 24px; border-radius:999px; font-weight:700; font-size:13px; box-shadow:0 8px 24px rgba(34,197,94,0.35); opacity:0; transition:all 0.3s; z-index:100000; pointer-events:none; max-width:90vw; text-align:center; white-space:nowrap; }
+
+.verified-box { background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.25); border-radius:14px; padding:20px; text-align:center; margin-top:14px; }
+.v-icon { font-size:32px; margin-bottom:8px; }
+.v-text { font-size:15px; font-weight:700; color:#22c55e; }
+.v-sub  { font-size:13px; color:#64748b; margin-top:4px; }
 </style>
 </head>
 <body>
@@ -105,16 +126,17 @@
 
 <div class="tabs">
     <div class="tab active" id="tab-bank" onclick="switchTab('bank')">🏦 Bank Transfer</div>
-    <div class="tab"        id="tab-usdt" onclick="switchTab('usdt')">💎 USDT</div>
+    <div class="tab" id="tab-usdt" onclick="switchTab('usdt')">
+        <span class="usdt-icon">₮</span> USDT
+    </div>
 </div>
 
 <div id="content" class="content-wrapper"></div>
 
 <div class="loader" id="loader">
     <div class="spinner"></div>
-    <div id="loader-text">Processing your request...</div>
+    <div class="loader-text" id="loader-text">Processing...</div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -132,33 +154,57 @@ const db = firebase.database();
 const uid = localStorage.getItem("uid");
 if (!uid) window.location.href = "signin.html";
 
-// ── FUNCTION URLs ─────────────────────────────────────────────
 const URL_APPROVE_RECHARGE = "https://approverecharge-t34xxkwqvq-ew.a.run.app";
 const URL_REJECT_RECHARGE  = "https://rejectrecharge-t34xxkwqvq-ew.a.run.app";
 const URL_VERIFY_USDT      = "https://verifyusdt-t34xxkwqvq-ew.a.run.app";
-
 const SECRET         = "cryptojet_secret_2024";
 const BOT_TOKEN      = "8688577357:AAHt9nAPIESkZiDZFDGRmyaJmzxogrpY3PY";
 const ADMIN_CHAT_ID  = 8632260150;
 const REFERENCE_CODE = "CJ14FRW";
-
 const WALLETS = {
     bep20: "0xb166ce9d4f636bc5e5281e9a4be9e1f8d8efca08",
     trc20: "TZHhMiV4r9ucL6UXN7QR9rvyv2KB5DZWVZ"
 };
 
+// ── STATE — persisted across refreshes ────────────────────────
 let proofBase64       = null;
-let currentStep       = 1;
-let selectedAmountUSD = 0;
-let selectedNetwork   = null;
+let currentStep       = parseInt(localStorage.getItem("cj_r_step") || "1");
+let selectedAmountUSD = parseFloat(localStorage.getItem("cj_r_amount") || "0");
+let selectedNetwork   = localStorage.getItem("cj_r_network") || null;
 let timerInterval     = null;
-let currentTab        = "bank";
+let currentTab        = localStorage.getItem("cj_r_tab") || "bank";
 
+function saveState() {
+    localStorage.setItem("cj_r_step",    currentStep);
+    localStorage.setItem("cj_r_amount",  selectedAmountUSD);
+    localStorage.setItem("cj_r_network", selectedNetwork || "");
+    localStorage.setItem("cj_r_tab",     currentTab);
+}
+
+function clearState() {
+    localStorage.removeItem("cj_r_step");
+    localStorage.removeItem("cj_r_amount");
+    localStorage.removeItem("cj_r_network");
+    localStorage.removeItem("cj_r_tab");
+    currentStep = 1; selectedAmountUSD = 0; selectedNetwork = null;
+}
+
+// ── CHECK FOR EXISTING PENDING RECHARGE ───────────────────────
+async function hasPendingRecharge() {
+    const snap = await db.ref("userTransactions/" + uid).once("value");
+    const txs  = snap.val() || {};
+    return Object.values(txs).some(t => t.type === "recharge" && t.status === "pending");
+}
+
+// ── TAB SWITCH ────────────────────────────────────────────────
 function switchTab(tab) {
     currentTab = tab;
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
     document.getElementById("tab-" + tab).classList.add("active");
-    currentStep = 1; proofBase64 = null; selectedNetwork = null;
+    // Reset step only if changing tabs
+    currentStep = 1; selectedAmountUSD = 0; selectedNetwork = null;
+    proofBase64 = null;
+    clearState();
     renderTab(tab);
 }
 
@@ -170,15 +216,32 @@ function renderTab(tab) {
 // ════════════════════════════════════════════════════════════════
 // BANK TAB
 // ════════════════════════════════════════════════════════════════
-function renderBank() {
+async function renderBank() {
     const c = document.getElementById("content");
+
+    // STEP 1 — amount entry, but first check pending
     if (currentStep === 1) {
+        const pending = await hasPendingRecharge();
+        if (pending) {
+            c.innerHTML = `
+            <div class="pending-block">
+                <div class="pending-icon">⏳</div>
+                <div class="pending-title">Deposit Pending</div>
+                <div class="pending-desc">You already have a pending deposit order being reviewed.<br>Please wait for it to be settled before placing a new one.</div>
+            </div>
+            <div class="card" style="text-align:center;padding:20px;">
+                <p style="font-size:13px;color:#64748b;margin-bottom:16px;">Track your deposit in Transaction History</p>
+                <button onclick="window.location.href='transactions.html'" class="button">View Transactions →</button>
+            </div>`;
+            return;
+        }
+
         c.innerHTML = `
         <div class="card">
-            <h3 style="font-size:19px;font-weight:700;margin-bottom:6px;">Bank Deposit</h3>
-            <p style="font-size:13px;color:#64748b;margin-bottom:20px;">Enter the amount you want to recharge in USD</p>
-            <input id="usdAmount" type="number" placeholder="Amount in USD (e.g. 50)">
-            <div id="ngnPreview" class="ngn-rate">You will pay: ₦0.00</div>
+            <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">Bank Deposit</h3>
+            <p style="font-size:13px;color:#64748b;margin-bottom:16px;">Enter the amount you want to recharge in USD</p>
+            <input id="usdAmount" type="number" inputmode="decimal" placeholder="Amount in USD (e.g. 50)" value="${selectedAmountUSD > 0 ? selectedAmountUSD : ''}">
+            <div id="ngnPreview" class="ngn-rate">${selectedAmountUSD > 0 ? 'You will pay: ₦' + (selectedAmountUSD * 1500).toLocaleString("en-US") : 'You will pay: ₦0.00'}</div>
             <button onclick="confirmBankAmount()" class="button">Continue →</button>
         </div>`;
         document.getElementById("usdAmount").addEventListener("input", e => {
@@ -186,91 +249,119 @@ function renderBank() {
             document.getElementById("ngnPreview").textContent =
                 usd > 0 ? `You will pay: ₦${(usd * 1500).toLocaleString("en-US")}` : "You will pay: ₦0.00";
         });
-    } else {
-        const ngn = (selectedAmountUSD * 1500).toLocaleString("en-US");
-        c.innerHTML = `
-        <div class="instructions-box">
-            <div class="inst-title">⚠️ Important Instructions</div>
-            <ul>
-                <li><span class="num">1</span>Always add your reference code <strong style="color:#f59e0b">${REFERENCE_CODE}</strong> as the transfer description/narration</li>
-                <li><span class="num">2</span>Transfer the exact naira amount shown — do not round up or down</li>
-                <li><span class="num">3</span>Always upload a clear screenshot of your payment receipt before submitting</li>
-                <li><span class="num">4</span>Do not send from a third-party wallet — use your personal bank app only</li>
-                <li><span class="num">5</span>Recharge typically reflects within 3–20 minutes after proof is verified</li>
-                <li><span class="num">6</span>Contact support immediately if balance is not updated after 30 minutes</li>
-            </ul>
-        </div>
-
-        <div class="bank-details-card">
-            <div class="timer" id="countdown">30:00</div>
-            <div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;font-weight:700;">Transfer To</div>
-            <div class="bank-row">
-                <div class="bank-row-label">Bank</div>
-                <div class="bank-row-value">Opay</div>
-            </div>
-            <div class="bank-row">
-                <div class="bank-row-label">Account Name</div>
-                <div class="bank-row-value">Tomiwa Tosin Adeniyi</div>
-            </div>
-            <div class="bank-row">
-                <div class="bank-row-label">Account Number</div>
-                <div class="bank-row-value">
-                    <span id="accNum">8115667110</span>
-                    <button class="copy-btn" onclick="copyText('8115667110','Account number')">Copy</button>
-                </div>
-            </div>
-            <div class="bank-row">
-                <div class="bank-row-label">Reference Code</div>
-                <div class="bank-row-value ref">
-                    <span>${REFERENCE_CODE}</span>
-                    <button class="copy-btn" onclick="copyText('${REFERENCE_CODE}','Reference code')" style="border-color:rgba(245,158,11,0.3);color:#f59e0b;background:rgba(245,158,11,0.08)">Copy</button>
-                </div>
-            </div>
-            <div class="amount-to-pay">
-                <div class="pay-label">Amount to Transfer</div>
-                <div class="pay-amount">₦${ngn}</div>
-                <div class="pay-sub">= $${selectedAmountUSD} USD at ₦1,500/dollar</div>
-            </div>
-        </div>
-
-        <div class="card" style="padding:20px;">
-            <div style="font-size:15px;font-weight:600;margin-bottom:4px;">Upload Receipt</div>
-            <div style="font-size:13px;color:#64748b;margin-bottom:2px;">Attach a clear screenshot of your bank transfer</div>
-            <div class="upload-area" onclick="document.getElementById('proofFile').click()">
-                <input type="file" id="proofFile" accept="image/*" style="display:none" onchange="handleFile(this,'bankPreview')">
-                <div class="upload-icon">📸</div>
-                <div class="upload-text">Tap to upload receipt</div>
-            </div>
-            <img id="bankPreview" class="preview-img" alt="Receipt">
-            <button onclick="submitBank()" class="button">I Have Paid • Submit</button>
-        </div>`;
-        startCountdown();
+        return;
     }
+
+    // STEP 2 — payment screen
+    const ngn = (selectedAmountUSD * 1500).toLocaleString("en-US");
+    c.innerHTML = `
+    <div class="instructions-box">
+        <div class="inst-title">⚠️ Important Instructions</div>
+        <ul class="inst-list">
+            <li class="inst-item"><span class="num">1</span><span class="inst-text">Always add your reference code <span class="hi">${REFERENCE_CODE}</span> as the transfer description/narration</span></li>
+            <li class="inst-item"><span class="num">2</span><span class="inst-text">Transfer the <span class="hi-g">exact naira amount</span> shown — do not round up or down</span></li>
+            <li class="inst-item"><span class="num">3</span><span class="inst-text">Always upload a clear screenshot of your payment receipt before submitting</span></li>
+            <li class="inst-item"><span class="num">4</span><span class="inst-text">Do not send from a third-party wallet — use your personal bank app only</span></li>
+            <li class="inst-item"><span class="num">5</span><span class="inst-text">Recharge typically reflects within 3–20 minutes after proof is verified</span></li>
+            <li class="inst-item"><span class="num">6</span><span class="inst-text">Contact support immediately if balance is not updated after 30 minutes</span></li>
+        </ul>
+    </div>
+
+    <div class="bank-details-card">
+        <div class="timer" id="countdown">30:00</div>
+        <div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;font-weight:700;">Transfer To</div>
+        <div class="bank-row">
+            <div class="bank-row-label">Bank</div>
+            <div class="bank-row-value">Opay</div>
+        </div>
+        <div class="bank-row">
+            <div class="bank-row-label">Account Name</div>
+            <div class="bank-row-value">Tomiwa Tosin Adeniyi</div>
+        </div>
+        <div class="bank-row">
+            <div class="bank-row-label">Account No.</div>
+            <div class="bank-row-value">
+                8115667110
+                <button class="copy-btn" onclick="copyText('8115667110','Account number')">Copy</button>
+            </div>
+        </div>
+        <div class="bank-row">
+            <div class="bank-row-label">Ref Code</div>
+            <div class="bank-row-value ref">
+                ${REFERENCE_CODE}
+                <button class="copy-btn" onclick="copyText('${REFERENCE_CODE}','Reference code')" style="border-color:rgba(245,158,11,0.3);color:#f59e0b;background:rgba(245,158,11,0.08)">Copy</button>
+            </div>
+        </div>
+        <div class="amount-to-pay">
+            <div class="pay-label">Amount to Transfer</div>
+            <div class="pay-amount">₦${ngn}</div>
+            <div class="pay-sub">= $${selectedAmountUSD} USD at ₦1,500/dollar</div>
+        </div>
+    </div>
+
+    <div class="card" style="padding:18px;">
+        <div style="font-size:15px;font-weight:700;margin-bottom:4px;">Upload Receipt</div>
+        <div style="font-size:12px;color:#64748b;margin-bottom:10px;">Attach a clear screenshot of your bank transfer</div>
+        <div class="upload-area" onclick="document.getElementById('proofFile').click()">
+            <input type="file" id="proofFile" accept="image/*" style="display:none" onchange="handleFile(this,'bankPreview')">
+            <div class="upload-icon">📸</div>
+            <div class="upload-text">Tap to upload receipt</div>
+        </div>
+        <img id="bankPreview" class="preview-img" alt="Receipt">
+        <button onclick="submitBank()" class="button">I Have Paid • Submit</button>
+        <button onclick="cancelPayment()" class="button cancel-btn">Cancel Payment</button>
+    </div>`;
+    startCountdown();
 }
 
 function confirmBankAmount() {
     const amount = parseFloat(document.getElementById("usdAmount").value);
     if (!amount || amount <= 0) return toast("Please enter a valid amount");
+    if (amount < 5) return toast("Minimum deposit is $5");
     selectedAmountUSD = amount;
     currentStep = 2;
+    saveState();
+    renderBank();
+}
+
+function cancelPayment() {
+    if (!confirm("Cancel this payment? Your saved progress will be cleared.")) return;
+    clearState();
+    proofBase64 = null;
+    if (timerInterval) clearInterval(timerInterval);
     renderBank();
 }
 
 function startCountdown() {
     if (timerInterval) clearInterval(timerInterval);
     let secs = 30 * 60;
+    const savedEnd = parseInt(localStorage.getItem("cj_r_timer_end") || "0");
+    if (savedEnd > 0) {
+        secs = Math.max(0, Math.floor((savedEnd - Date.now()) / 1000));
+    } else {
+        localStorage.setItem("cj_r_timer_end", Date.now() + 30 * 60 * 1000);
+    }
     timerInterval = setInterval(() => {
         secs--;
-        if (secs <= 0) { clearInterval(timerInterval); const el = document.getElementById("countdown"); if(el) el.textContent = "EXPIRED"; return; }
-        const m = Math.floor(secs/60), s = secs % 60;
+        if (secs <= 0) {
+            clearInterval(timerInterval);
+            const el = document.getElementById("countdown");
+            if (el) el.textContent = "EXPIRED";
+            localStorage.removeItem("cj_r_timer_end");
+            return;
+        }
         const el = document.getElementById("countdown");
-        if (el) el.textContent = `${m}:${String(s).padStart(2,"0")}`;
+        if (el) el.textContent = `${Math.floor(secs/60)}:${String(secs%60).padStart(2,"0")}`;
     }, 1000);
 }
 
 async function submitBank() {
     if (!proofBase64) return toast("Please upload your payment receipt first");
     showLoader("Submitting your request...");
+
+    // Double-check for pending before submitting
+    const pending = await hasPendingRecharge();
+    if (pending) { hideLoader(); return toast("You already have a pending deposit — wait for it to settle"); }
 
     const txData = { uid, type:"recharge", method:"bank", amount:selectedAmountUSD, nairaEquivalent:selectedAmountUSD*1500, status:"pending", date:Date.now(), referenceCode:REFERENCE_CODE };
     const txRef  = db.ref("transactions").push();
@@ -281,17 +372,7 @@ async function submitBank() {
     const rejectUrl  = `${URL_REJECT_RECHARGE}?txId=${txRef.key}&secret=${SECRET}`;
     const minerId    = await getMinerId();
 
-    const caption =
-`🏦 Bank Recharge Request
-──────────────────
-👤 User: ${uid}
-🆔 Miner ID: ${minerId}
-💰 Amount: $${selectedAmountUSD}
-💵 Naira: ₦${(selectedAmountUSD*1500).toLocaleString()}
-🔑 Ref: ${REFERENCE_CODE}
-📅 Time: ${new Date().toLocaleString()}
-🗝 Tx ID: ${txRef.key}`;
-
+    const caption = `🏦 Bank Recharge Request\n──────────────────\n👤 User: ${uid}\n🆔 Miner ID: ${minerId}\n💰 Amount: $${selectedAmountUSD}\n💵 Naira: ₦${(selectedAmountUSD*1500).toLocaleString()}\n🔑 Ref: ${REFERENCE_CODE}\n📅 Time: ${new Date().toLocaleString()}\n🗝 Tx ID: ${txRef.key}`;
     const byteCharacters = atob(proofBase64.split(",")[1]);
     const bytes = new Uint8Array([...byteCharacters].map(c => c.charCodeAt(0)));
     const blob  = new Blob([bytes], { type:"image/jpeg" });
@@ -307,22 +388,26 @@ async function submitBank() {
 
     hideLoader();
     toast("✅ Receipt submitted! Processing in 3–20 mins");
-    proofBase64 = null; currentStep = 1;
+    clearState();
+    localStorage.removeItem("cj_r_timer_end");
+    proofBase64 = null;
+    if (timerInterval) clearInterval(timerInterval);
     setTimeout(() => renderBank(), 2000);
 }
 
 // ════════════════════════════════════════════════════════════════
 // USDT TAB
 // ════════════════════════════════════════════════════════════════
-function renderUSDT() {
+async function renderUSDT() {
     const c = document.getElementById("content");
+
     if (currentStep === 1) {
         c.innerHTML = `
         <div class="card">
-            <h3 style="font-size:19px;font-weight:700;margin-bottom:6px;">USDT Deposit</h3>
-            <p style="font-size:13px;color:#64748b;margin-bottom:20px;">Choose your preferred payment network</p>
+            <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">USDT Deposit</h3>
+            <p style="font-size:13px;color:#64748b;margin-bottom:16px;">Choose your preferred payment network</p>
             <div class="network-select">
-                <div class="network-card" id="card-bep20" onclick="selectNetwork('bep20')">
+                <div class="network-card ${selectedNetwork==='bep20'?'selected':''}" id="card-bep20" onclick="selectNetwork('bep20')">
                     <div class="net-badge cheap">BSC</div>
                     <div class="net-header">
                         <div class="net-logo bep">BNB</div>
@@ -335,7 +420,7 @@ function renderUSDT() {
                     </div>
                     <div class="net-fee"><span>Network Fee</span><strong>~$0.05 – $0.20</strong></div>
                 </div>
-                <div class="network-card" id="card-trc20" onclick="selectNetwork('trc20')">
+                <div class="network-card ${selectedNetwork==='trc20'?'selected':''}" id="card-trc20" onclick="selectNetwork('trc20')">
                     <div class="net-badge fast">TRON</div>
                     <div class="net-header">
                         <div class="net-logo trc">TRX</div>
@@ -355,46 +440,48 @@ function renderUSDT() {
         const wallet = WALLETS[net];
         const label  = net === "bep20" ? "BEP20 (BSC)" : "TRC20 (TRON)";
         const color  = net === "bep20" ? "#f0b90b" : "#ef4444";
+        const logoClass = net === "bep20" ? "bep" : "trc";
+        const logoText  = net === "bep20" ? "BNB" : "TRX";
 
         c.innerHTML = `
         <div class="instructions-box">
             <div class="inst-title">⚠️ ${label} Deposit Instructions</div>
-            <ul>
-                <li><span class="num">1</span>Send <strong>USDT only</strong> on the <strong style="color:${color}">${label}</strong> network — wrong network causes permanent loss</li>
-                <li><span class="num">2</span>Copy the wallet address carefully and double-check before sending</li>
-                <li><span class="num">3</span>After sending, paste your <strong>Transaction Hash (TX ID)</strong> below — this is how we verify automatically</li>
-                <li><span class="num">4</span>Do not close this page until you have submitted your TX hash</li>
-                <li><span class="num">5</span>Minimum deposit: <strong>$5 USDT</strong></li>
-                <li><span class="num">6</span>Balance auto-credits within 1–5 minutes after blockchain confirmation</li>
+            <ul class="inst-list">
+                <li class="inst-item"><span class="num">1</span><span class="inst-text">Send <span class="hi-g">USDT only</span> on the <span class="hi" style="color:${color}">${label}</span> network — wrong network means permanent loss</span></li>
+                <li class="inst-item"><span class="num">2</span><span class="inst-text">Copy the wallet address carefully and double-check before sending</span></li>
+                <li class="inst-item"><span class="num">3</span><span class="inst-text">After sending, paste your <span class="hi-g">Transaction Hash (TX ID)</span> below — this is how we verify automatically</span></li>
+                <li class="inst-item"><span class="num">4</span><span class="inst-text">Do not close this page until you have submitted your TX hash</span></li>
+                <li class="inst-item"><span class="num">5</span><span class="inst-text">Minimum deposit: <span class="hi-g">$5 USDT</span></span></li>
+                <li class="inst-item"><span class="num">6</span><span class="inst-text">Balance auto-credits within 1–5 minutes after blockchain confirmation</span></li>
             </ul>
         </div>
 
-        <div class="card" style="padding:20px;">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-                <div class="net-logo ${net}" style="width:36px;height:36px;border-radius:10px;font-size:11px">${net==="bep20"?"BNB":"TRX"}</div>
+        <div class="card" style="padding:18px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                <div class="net-logo ${logoClass}" style="width:36px;height:36px;border-radius:10px;font-size:11px">${logoText}</div>
                 <div>
-                    <div style="font-size:15px;font-weight:700;">${label} Wallet Address</div>
-                    <div style="font-size:12px;color:#64748b;">USDT only • ${label}</div>
+                    <div style="font-size:14px;font-weight:700;">${label} Wallet Address</div>
+                    <div style="font-size:11px;color:#64748b;">USDT only • ${label}</div>
                 </div>
             </div>
             <div class="wallet-box">
                 <div class="wallet-label">Wallet Address</div>
                 <div class="wallet-addr">${wallet}</div>
-                <button class="copy-btn" style="width:100%;padding:9px;text-align:center;border-radius:10px;" onclick="copyText('${wallet}','Wallet address')">📋 Copy Wallet Address</button>
+                <button class="copy-btn" style="width:100%;padding:9px;text-align:center;border-radius:10px;font-size:13px;" onclick="copyText('${wallet}','Wallet address')">📋 Copy Wallet Address</button>
             </div>
 
-            <input id="usdAmountUSDT" type="number" placeholder="Amount sent in USD (e.g. 100)" style="margin-top:16px;">
+            <input id="usdAmountUSDT" type="number" inputmode="decimal" placeholder="Amount sent in USD (e.g. 100)" style="margin-top:14px;">
 
-            <div class="txhash-section">
+            <div style="margin-top:14px;">
                 <div class="txhash-label">
-                    Transaction Hash (TX ID)
+                    <span>Transaction Hash (TX ID)</span>
                     <span class="txhash-hint">Required for auto-verification</span>
                 </div>
                 <input id="txHash" type="text" placeholder="Paste your TX hash here">
-                <div style="font-size:11px;color:#475569;margin-top:6px;">Find this in your wallet app under transaction history after sending</div>
+                <div style="font-size:11px;color:#475569;margin-top:5px;">Find this in your wallet app under transaction history after sending</div>
             </div>
 
-            <div style="font-size:14px;font-weight:600;margin-top:16px;margin-bottom:2px;">Screenshot (optional but recommended)</div>
+            <div style="font-size:13px;font-weight:600;margin-top:14px;margin-bottom:2px;">Screenshot (optional but recommended)</div>
             <div class="upload-area" onclick="document.getElementById('proofUSDT').click()">
                 <input type="file" id="proofUSDT" accept="image/*" style="display:none" onchange="handleFile(this,'usdtPreview')">
                 <div class="upload-icon">📸</div>
@@ -403,27 +490,29 @@ function renderUSDT() {
             <img id="usdtPreview" class="preview-img" alt="Receipt">
 
             <button onclick="submitUSDT()" class="button">Verify & Submit</button>
-            <button onclick="goBackUSDT()" style="width:100%;padding:13px;margin-top:8px;background:transparent;color:#64748b;border:1px solid #1e2937;border-radius:14px;cursor:pointer;font-size:14px;font-family:'Inter',sans-serif;">← Change Network</button>
+            <button onclick="goBackUSDT()" class="button cancel-btn">← Change Network</button>
         </div>`;
     }
 }
 
 function selectNetwork(net) {
     selectedNetwork = net;
+    currentStep = 2;
+    saveState();
     document.querySelectorAll(".network-card").forEach(c => c.classList.remove("selected"));
-    document.getElementById("card-" + net).classList.add("selected");
-    setTimeout(() => { currentStep = 2; renderUSDT(); }, 300);
+    const el = document.getElementById("card-" + net);
+    if (el) el.classList.add("selected");
+    setTimeout(() => renderUSDT(), 200);
 }
 
 function goBackUSDT() {
-    currentStep = 1; selectedNetwork = null; proofBase64 = null;
-    renderUSDT();
+    currentStep = 1; selectedNetwork = null;
+    proofBase64 = null; saveState(); renderUSDT();
 }
 
 async function submitUSDT() {
     const amount = parseFloat(document.getElementById("usdAmountUSDT").value);
     const txHash = document.getElementById("txHash").value.trim();
-
     if (!amount || amount < 5) return toast("Minimum deposit is $5 USDT");
     if (!txHash)               return toast("Please paste your Transaction Hash");
 
@@ -439,40 +528,37 @@ async function submitUSDT() {
     await db.ref("usedTxHashes/" + sanitizeTxKey(txHash)).set({ uid, txId: txRef.key, date: Date.now() });
 
     try {
-        const verifyUrl = `${URL_VERIFY_USDT}?txId=${txRef.key}&secret=${SECRET}`;
-        const resp      = await fetch(verifyUrl);
-        const result    = await resp.text();
+        const resp   = await fetch(`${URL_VERIFY_USDT}?txId=${txRef.key}&secret=${SECRET}`);
+        const result = await resp.text();
         hideLoader();
         if (result.includes("APPROVED")) {
             showVerified(amount);
         } else {
             toast("Transaction submitted — verifying on blockchain...");
-            proofBase64 = null; currentStep = 1; selectedNetwork = null;
+            proofBase64 = null; clearState();
             setTimeout(() => renderUSDT(), 2500);
         }
     } catch(e) {
         hideLoader();
         toast("Submitted — verification in progress");
-        currentStep = 1; selectedNetwork = null;
+        proofBase64 = null; clearState();
         setTimeout(() => renderUSDT(), 2500);
     }
 }
 
 function showVerified(amount) {
     document.getElementById("content").innerHTML = `
-    <div class="card" style="text-align:center;padding:40px 24px;">
+    <div class="card" style="text-align:center;padding:36px 20px;">
         <div class="verified-box">
             <div class="v-icon">✅</div>
             <div class="v-text">Payment Verified!</div>
             <div class="v-sub">$${amount} USDT has been added to your balance</div>
         </div>
-        <button onclick="currentStep=1;selectedNetwork=null;renderUSDT()" class="button" style="margin-top:20px;">Make Another Deposit</button>
+        <button onclick="clearState();currentStep=1;selectedNetwork=null;renderUSDT()" class="button" style="margin-top:18px;">Make Another Deposit</button>
     </div>`;
 }
 
-function sanitizeTxKey(hash) {
-    return hash.replace(/[.#$/\[\]]/g,"_").substring(0,100);
-}
+function sanitizeTxKey(hash) { return hash.replace(/[.#$/\[\]]/g,"_").substring(0,100); }
 
 function handleFile(input, previewId) {
     const file = input.files[0];
@@ -494,9 +580,7 @@ function showLoader(msg) {
     document.getElementById("loader-text").textContent = msg || "Processing...";
     document.getElementById("loader").style.display = "flex";
 }
-function hideLoader() {
-    document.getElementById("loader").style.display = "none";
-}
+function hideLoader() { document.getElementById("loader").style.display = "none"; }
 
 async function getMinerId() {
     return new Promise(resolve => {
@@ -507,10 +591,17 @@ async function getMinerId() {
 function toast(msg) {
     const t = document.getElementById("toast");
     t.textContent = msg; t.style.opacity = 1;
-    setTimeout(() => t.style.opacity = 0, 3000);
+    setTimeout(() => t.style.opacity = 0, 3200);
 }
 
-window.onload = () => renderTab("bank");
+window.onload = () => {
+    // Restore tab
+    if (currentTab === "usdt") {
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        document.getElementById("tab-usdt").classList.add("active");
+    }
+    renderTab(currentTab);
+};
 </script>
 </body>
 </html>

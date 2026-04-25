@@ -4,74 +4,90 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Withdraw • CryptoJet</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Inter',sans-serif; background:#020617; color:#e2e8f0; min-height:100vh; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { max-width:100vw; overflow-x:hidden; }
+body { font-family:'DM Sans',sans-serif; background:#020617; color:#e2e8f0; min-height:100vh; }
 
-    .header { padding:20px 16px; display:flex; align-items:center; background:rgba(2,6,23,0.95); backdrop-filter:blur(12px); border-bottom:1px solid rgba(34,197,94,0.15); }
-    .back { font-size:28px; color:#22c55e; cursor:pointer; }
-    .header h3 { flex:1; text-align:center; font-size:20px; font-weight:600; }
+.header { padding:18px 16px; display:flex; align-items:center; background:rgba(2,6,23,0.97); backdrop-filter:blur(12px); border-bottom:1px solid rgba(34,197,94,0.15); position:sticky; top:0; z-index:100; }
+.back { font-size:26px; color:#22c55e; cursor:pointer; padding-right:8px; }
+.header h3 { flex:1; text-align:center; font-size:18px; font-weight:700; }
 
-    .balance-box { background:#0f172a; margin:16px; padding:24px; border-radius:24px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.4); }
-    .balance-label { font-size:13px; color:#64748b; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; }
-    .balance-amount { font-size:36px; font-weight:700; color:#22c55e; margin-top:6px; }
+.balance-box { background:#0f172a; margin:14px 14px 0; padding:20px; border-radius:20px; text-align:center; box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+.balance-label  { font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; }
+.balance-amount { font-size:32px; font-weight:700; color:#22c55e; margin-top:5px; }
 
-    .tabs { display:flex; background:#0f172a; border-radius:9999px; padding:6px; margin:0 16px 16px; }
-    .tab { flex:1; padding:14px; text-align:center; font-weight:600; border-radius:9999px; cursor:pointer; color:#94a3b8; transition:all 0.2s; }
-    .tab.active { background:#22c55e; color:#022c22; box-shadow:0 4px 15px rgba(34,197,94,0.4); }
+.tabs { display:flex; background:#0f172a; border-radius:9999px; padding:5px; margin:14px 14px 12px; gap:4px; }
+.tab { flex:1; padding:12px 8px; text-align:center; font-weight:600; font-size:13px; border-radius:9999px; cursor:pointer; color:#94a3b8; transition:all 0.2s; display:flex; align-items:center; justify-content:center; gap:6px; }
+.tab.active { background:#22c55e; color:#022c22; box-shadow:0 4px 15px rgba(34,197,94,0.3); }
 
-    .content-wrapper { padding:0 16px 40px; }
-    .card { background:#0f172a; border-radius:24px; padding:24px 22px; box-shadow:0 10px 30px rgba(0,0,0,0.4); margin-bottom:16px; }
+.usdt-icon { width:16px; height:16px; background:linear-gradient(135deg,#26a17b,#1a8a65); border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:9px; font-weight:900; color:#fff; flex-shrink:0; }
 
-    input { width:100%; padding:15px 18px; margin-top:10px; background:#1e2937; border:2px solid transparent; border-radius:14px; color:white; font-size:15px; font-family:'Inter',sans-serif; transition:border-color 0.2s; }
-    input:focus { border-color:#22c55e; outline:none; box-shadow:0 0 0 3px rgba(34,197,94,0.15); }
+.content-wrapper { padding:0 14px 50px; }
+.card { background:#0f172a; border-radius:20px; padding:20px 18px; box-shadow:0 8px 24px rgba(0,0,0,0.3); margin-bottom:14px; }
 
-    .button { width:100%; padding:16px; background:#22c55e; color:#022c22; font-weight:700; font-size:16px; border:none; border-radius:16px; cursor:pointer; box-shadow:0 6px 20px rgba(34,197,94,0.3); transition:all 0.2s; margin-top:16px; }
-    .button:active { transform:scale(0.98); }
+input {
+    width:100%; padding:14px 16px; margin-top:10px;
+    background:#1e2937; border:2px solid transparent; border-radius:13px;
+    color:white; font-size:15px; font-family:'DM Sans',sans-serif;
+    transition:border-color 0.2s; -webkit-appearance:none;
+}
+input:focus { border-color:#22c55e; outline:none; box-shadow:0 0 0 3px rgba(34,197,94,0.12); }
 
-    .saved-bank { background:#1e2937; border-radius:16px; padding:18px; margin-bottom:20px; }
-    .saved-bank .bank-name { color:#22c55e; font-weight:700; font-size:17px; margin-bottom:8px; }
+.button { width:100%; padding:15px; background:#22c55e; color:#022c22; font-weight:700; font-size:15px; border:none; border-radius:14px; cursor:pointer; box-shadow:0 6px 18px rgba(34,197,94,0.25); transition:all 0.2s; margin-top:14px; font-family:'DM Sans',sans-serif; }
+.button:active { transform:scale(0.98); }
 
-    .fee-box { background:rgba(34,197,94,0.07); border:1px solid rgba(34,197,94,0.15); border-radius:14px; padding:14px 16px; margin-top:12px; }
-    .fee-row { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:#64748b; margin-bottom:6px; }
-    .fee-row:last-child { margin-bottom:0; padding-top:6px; border-top:1px solid rgba(255,255,255,0.05); }
-    .fee-row strong { color:#e2e8f0; }
-    .fee-row.receive strong { color:#22c55e; font-size:15px; }
+.saved-bank { background:#1e2937; border-radius:14px; padding:16px; margin-bottom:14px; }
+.saved-bank .bank-name { color:#22c55e; font-weight:700; font-size:16px; margin-bottom:6px; }
+.saved-bank p { font-size:13px; color:#94a3b8; margin-bottom:3px; }
+.saved-bank p strong { color:#e2e8f0; }
 
-    .instructions-box { background:#0c1a2e; border:1px solid rgba(245,158,11,0.25); border-left:3px solid #f59e0b; border-radius:14px; padding:16px 18px; margin-bottom:16px; }
-    .inst-title { font-size:13px; font-weight:700; color:#f59e0b; margin-bottom:10px; }
-    .instructions-box ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
-    .instructions-box li { font-size:13px; color:#94a3b8; line-height:1.55; display:flex; gap:8px; align-items:flex-start; }
-    .num { background:rgba(245,158,11,0.15); color:#f59e0b; font-size:10px; font-weight:800; min-width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.fee-box { background:rgba(34,197,94,0.07); border:1px solid rgba(34,197,94,0.15); border-radius:13px; padding:13px 15px; margin-top:10px; }
+.fee-row { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:#64748b; margin-bottom:6px; }
+.fee-row:last-child { margin-bottom:0; padding-top:6px; border-top:1px solid rgba(255,255,255,0.05); }
+.fee-row strong { color:#e2e8f0; }
+.fee-row.receive strong { color:#22c55e; font-size:15px; }
 
-    .weekend-notice { text-align:center; color:#f87171; font-size:15px; padding:20px; background:#1e2937; border-radius:16px; margin:16px; }
+/* INSTRUCTIONS — clean no-wrap-issue layout */
+.instructions-box { background:#0c1a2e; border:1px solid rgba(245,158,11,0.2); border-left:3px solid #f59e0b; border-radius:14px; padding:16px; margin-bottom:14px; }
+.inst-title { font-size:13px; font-weight:700; color:#f59e0b; margin-bottom:12px; display:flex; align-items:center; gap:6px; }
+.inst-list { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.inst-item { display:flex; gap:10px; align-items:flex-start; }
+.num { background:rgba(245,158,11,0.15); color:#f59e0b; font-size:10px; font-weight:800; min-width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+.inst-text { font-size:13px; color:#94a3b8; line-height:1.6; flex:1; word-break:break-word; }
+.inst-text .hi  { color:#f59e0b; font-weight:700; }
+.inst-text .hi-g{ color:#22c55e; font-weight:700; }
+.inst-text .hi-b{ color:#f0b90b; font-weight:700; }
 
-    .password-modal { position:fixed; inset:0; background:rgba(2,6,23,0.9); display:none; align-items:center; justify-content:center; z-index:10000; }
-    .password-box { background:#0f172a; width:90%; max-width:380px; border-radius:24px; padding:28px; text-align:center; }
+.weekend-notice { text-align:center; color:#f87171; font-size:14px; padding:20px; background:#1e2937; border-radius:16px; margin:14px; line-height:1.6; }
 
-    .usdt-card { background:linear-gradient(135deg,#0a1e2e,#0f172a); border:1px solid rgba(240,185,11,0.25); border-radius:20px; padding:22px; margin-bottom:16px; }
-    .usdt-header { display:flex; align-items:center; gap:14px; margin-bottom:16px; }
-    .bep-logo { width:46px; height:46px; border-radius:13px; background:linear-gradient(135deg,#f0b90b,#f8d06b); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; color:#000; flex-shrink:0; }
-    .usdt-benefits { display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
-    .usdt-benefit { font-size:13px; color:#94a3b8; display:flex; gap:8px; }
-    .usdt-benefit::before { content:'✓'; color:#22c55e; font-weight:700; flex-shrink:0; }
-    .net-fee-row { background:#1e2937; border-radius:10px; padding:9px 14px; font-size:13px; color:#64748b; display:flex; justify-content:space-between; }
-    .net-fee-row strong { color:#e2e8f0; }
+.community-bonus { background:linear-gradient(135deg,rgba(168,85,247,0.06),rgba(59,130,246,0.06)); border:1px solid rgba(168,85,247,0.18); border-radius:14px; padding:14px 15px; margin-bottom:14px; display:flex; gap:12px; align-items:flex-start; }
+.bonus-icon { font-size:20px; flex-shrink:0; margin-top:2px; }
+.bonus-text { font-size:13px; color:#94a3b8; line-height:1.55; }
+.bonus-text strong { color:#c084fc; }
 
-    .community-bonus { background:linear-gradient(135deg,rgba(168,85,247,0.08),rgba(59,130,246,0.08)); border:1px solid rgba(168,85,247,0.2); border-radius:14px; padding:14px 16px; margin-bottom:16px; display:flex; gap:12px; align-items:flex-start; }
-    .bonus-icon { font-size:22px; flex-shrink:0; margin-top:2px; }
-    .bonus-text { font-size:13px; color:#94a3b8; line-height:1.55; }
-    .bonus-text strong { color:#c084fc; }
+.usdt-card { background:linear-gradient(135deg,#0a1e2e,#0f172a); border:1px solid rgba(240,185,11,0.2); border-radius:18px; padding:20px; margin-bottom:14px; }
+.usdt-header { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+.bep-logo { width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg,#f0b90b,#f8d06b); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px; color:#000; flex-shrink:0; }
+.usdt-benefits { display:flex; flex-direction:column; gap:6px; margin-bottom:12px; }
+.usdt-benefit { font-size:13px; color:#94a3b8; display:flex; gap:8px; align-items:flex-start; }
+.usdt-benefit::before { content:'✓'; color:#22c55e; font-weight:700; flex-shrink:0; }
+.net-fee-row { background:#1e2937; border-radius:9px; padding:9px 13px; font-size:12px; color:#64748b; display:flex; justify-content:space-between; }
+.net-fee-row strong { color:#e2e8f0; }
 
-    .wallet-label { font-size:13px; font-weight:600; color:#e2e8f0; margin-top:16px; margin-bottom:2px; }
-    .wallet-hint  { font-size:11px; color:#475569; margin-bottom:2px; }
+.wallet-label { font-size:13px; font-weight:600; color:#e2e8f0; margin-top:14px; margin-bottom:2px; }
+.wallet-hint  { font-size:11px; color:#475569; margin-bottom:2px; }
 
-    .loader { position:fixed; inset:0; background:rgba(2,6,23,0.95); display:none; align-items:center; justify-content:center; z-index:99999; }
-    .spinner { width:64px; height:64px; border:6px solid rgba(34,197,94,0.15); border-top:6px solid #22c55e; border-radius:50%; animation:spin 0.9s linear infinite; }
-    @keyframes spin { to{ transform:rotate(360deg); } }
+.password-modal { position:fixed; inset:0; background:rgba(2,6,23,0.92); display:none; align-items:center; justify-content:center; z-index:10000; padding:20px; }
+.password-box { background:#0f172a; width:100%; max-width:360px; border-radius:22px; padding:26px; text-align:center; border:1px solid rgba(34,197,94,0.2); }
+.password-box h3 { margin-bottom:18px; font-size:17px; }
 
-    .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#22c55e; color:#022c22; padding:13px 26px; border-radius:999px; font-weight:700; font-size:14px; box-shadow:0 8px 25px rgba(34,197,94,0.4); opacity:0; transition:all 0.3s; z-index:100000; white-space:nowrap; pointer-events:none; }
+.loader { position:fixed; inset:0; background:rgba(2,6,23,0.96); display:none; align-items:center; justify-content:center; z-index:99999; }
+.spinner { width:56px; height:56px; border:5px solid rgba(34,197,94,0.15); border-top:5px solid #22c55e; border-radius:50%; animation:spin 0.9s linear infinite; }
+@keyframes spin { to{ transform:rotate(360deg); } }
+
+.toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%); background:#22c55e; color:#022c22; padding:12px 24px; border-radius:999px; font-weight:700; font-size:13px; box-shadow:0 8px 24px rgba(34,197,94,0.35); opacity:0; transition:all 0.3s; z-index:100000; pointer-events:none; max-width:90vw; text-align:center; white-space:nowrap; }
 </style>
 </head>
 <body>
@@ -88,7 +104,9 @@
 
 <div class="tabs">
     <div class="tab active" id="tab-bank" onclick="switchTab('bank')">🏦 Bank Transfer</div>
-    <div class="tab"        id="tab-usdt" onclick="switchTab('usdt')">💎 USDT</div>
+    <div class="tab" id="tab-usdt" onclick="switchTab('usdt')">
+        <span class="usdt-icon">₮</span> USDT
+    </div>
 </div>
 
 <div id="content" class="content-wrapper"></div>
@@ -97,10 +115,10 @@
 
 <div class="password-modal" id="passwordModal">
     <div class="password-box">
-        <h3 style="margin-bottom:20px;">Enter Withdrawal Password</h3>
-        <input id="withdrawPass" type="password" placeholder="Withdrawal Password" style="margin-bottom:20px;">
-        <button onclick="verifyPassword()" class="button" style="margin-bottom:12px;">Confirm</button>
-        <button onclick="hidePasswordModal()" style="background:#334155;color:white;width:100%;padding:14px;border-radius:16px;border:none;cursor:pointer;">Cancel</button>
+        <h3>Enter Withdrawal Password</h3>
+        <input id="withdrawPass" type="password" placeholder="Withdrawal Password" style="margin-bottom:16px;">
+        <button onclick="verifyPassword()" class="button">Confirm</button>
+        <button onclick="hidePasswordModal()" style="background:#334155;color:white;width:100%;padding:13px;border-radius:14px;border:none;cursor:pointer;font-size:14px;margin-top:8px;font-family:'DM Sans',sans-serif;">Cancel</button>
     </div>
 </div>
 
@@ -121,11 +139,9 @@ const db = firebase.database();
 const uid = localStorage.getItem("uid");
 if (!uid) { alert("Please sign in first"); window.location.href = "signin.html"; }
 
-// ── FUNCTION URLs ─────────────────────────────────────────────
 const URL_APPROVE_WITHDRAW = "https://approvewithdraw-t34xxkwqvq-ew.a.run.app";
 const URL_REJECT_WITHDRAW  = "https://rejectwithdraw-t34xxkwqvq-ew.a.run.app";
 const URL_APPROVE_USDT     = "https://approveusdtwithdraw-t34xxkwqvq-ew.a.run.app";
-
 const SECRET        = "cryptojet_secret_2024";
 const BOT_TOKEN     = "8688577357:AAHt9nAPIESkZiDZFDGRmyaJmzxogrpY3PY";
 const ADMIN_CHAT_ID = 8632260150;
@@ -165,7 +181,7 @@ function renderBank() {
     const c   = document.getElementById("content");
     const day = new Date().getDay();
     if (day === 0 || day === 6) {
-        c.innerHTML = `<div class="weekend-notice"><strong>⏸ Withdrawals are only processed Monday – Friday.</strong><br>Please come back on a weekday.</div>`;
+        c.innerHTML = `<div class="weekend-notice">⏸ <strong>Withdrawals are processed Monday – Friday only.</strong><br>Come back on a weekday.</div>`;
         return;
     }
     c.innerHTML = `
@@ -175,25 +191,25 @@ function renderBank() {
     </div>
     <div class="instructions-box">
         <div class="inst-title">⚠️ Bank Withdrawal Rules</div>
-        <ul>
-            <li><span class="num">1</span>Withdrawals are processed within <strong>48 hours</strong> of request — plan accordingly</li>
-            <li><span class="num">2</span>Share your withdrawal proof in the community feed to boost your Miner Trust Score and get priority processing on future withdrawals</li>
-            <li><span class="num">3</span>Ensure your saved bank details are correct before submitting — wrong account numbers cannot be reversed</li>
-            <li><span class="num">4</span>A <strong>10% processing fee</strong> is deducted — the amount shown is exactly what lands in your account</li>
-            <li><span class="num">5</span>Minimum withdrawal amount is <strong>$10</strong> — requests below this will be declined automatically</li>
-            <li><span class="num">6</span>Do not submit duplicate withdrawal requests — it delays processing for everyone and may result in a temporary hold on your account</li>
+        <ul class="inst-list">
+            <li class="inst-item"><span class="num">1</span><span class="inst-text">Withdrawals are processed within <span class="hi-g">48 hours</span> of request — plan accordingly</span></li>
+            <li class="inst-item"><span class="num">2</span><span class="inst-text">Share your withdrawal proof in the community feed to boost your Trust Score and get priority on future withdrawals</span></li>
+            <li class="inst-item"><span class="num">3</span><span class="inst-text">Ensure your saved bank details are correct — wrong account numbers cannot be reversed</span></li>
+            <li class="inst-item"><span class="num">4</span><span class="inst-text">A <span class="hi">10% processing fee</span> is deducted — the amount shown is exactly what lands in your account</span></li>
+            <li class="inst-item"><span class="num">5</span><span class="inst-text">Minimum withdrawal is <span class="hi-g">$10</span> — requests below this will be declined automatically</span></li>
+            <li class="inst-item"><span class="num">6</span><span class="inst-text">Do not submit duplicate withdrawal requests — it delays processing and may cause a temporary hold</span></li>
         </ul>
     </div>
     <div class="card">
-        <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">Bank Withdrawal</h3>
+        <h3 style="font-size:17px;font-weight:700;margin-bottom:14px;">Bank Withdrawal</h3>
         ${savedBank ? `
         <div class="saved-bank">
             <div class="bank-name">${savedBank.bank}</div>
-            <p style="font-size:14px;color:#94a3b8;margin-bottom:4px;"><strong style="color:#e2e8f0">Name:</strong> ${savedBank.name}</p>
-            <p style="font-size:14px;color:#94a3b8;"><strong style="color:#e2e8f0">Account:</strong> ${savedBank.number}</p>
-            <button onclick="window.location.href='bank.html'" style="margin-top:14px;background:#334155;color:white;width:100%;padding:11px;border-radius:12px;border:none;cursor:pointer;font-size:14px;">Edit Bank Details</button>
-        </div>` : `<p style="color:#f87171;text-align:center;padding:20px;font-size:14px;">No bank account saved.<br><a href="bank.html" style="color:#22c55e">Go to Bank Settings →</a></p>`}
-        <input id="bankAmount" type="number" placeholder="Enter withdrawal amount in USD">
+            <p><strong>Name:</strong> ${savedBank.name}</p>
+            <p><strong>Account:</strong> ${savedBank.number}</p>
+            <button onclick="window.location.href='bank.html'" style="margin-top:12px;background:#334155;color:white;width:100%;padding:11px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;">Edit Bank Details</button>
+        </div>` : `<p style="color:#f87171;text-align:center;padding:16px;font-size:13px;">No bank account saved.<br><a href="bank.html" style="color:#22c55e">Go to Bank Settings →</a></p>`}
+        <input id="bankAmount" type="number" inputmode="decimal" placeholder="Enter withdrawal amount in USD">
         <div id="bankFeeBox" style="display:none" class="fee-box">
             <div class="fee-row"><span>Amount requested</span><strong id="feeReq">$0</strong></div>
             <div class="fee-row"><span>Processing fee (10%)</span><strong id="feeCharge" style="color:#f87171">-$0</strong></div>
@@ -220,7 +236,7 @@ function startBankWithdraw() {
     if (!amount || amount < 10)  return toast("Minimum withdrawal is $10");
     if (amount > currentBalance) return toast("Insufficient balance");
     if (!savedBank)              return toast("Please set your bank details first");
-    if (!withdrawalPassword) { toast("Please set a withdrawal password first"); setTimeout(() => window.location.href = "bank.html", 1800); return; }
+    if (!withdrawalPassword)     { toast("Please set a withdrawal password first"); setTimeout(() => window.location.href = "bank.html", 1800); return; }
     pendingAmount = amount;
     window._withdrawType = "bank";
     document.getElementById("passwordModal").style.display = "flex";
@@ -235,24 +251,24 @@ function renderUSDT() {
     c.innerHTML = `
     <div class="community-bonus">
         <div class="bonus-icon">🏅</div>
-        <div class="bonus-text"><strong>Earn priority status!</strong> Miners who post their USDT withdrawal proof in the community feed consistently get their next withdrawal processed first. Build your trust score — it pays off.</div>
+        <div class="bonus-text"><strong>Earn priority status!</strong> Miners who post their USDT withdrawal proof in the community feed consistently get their next withdrawal processed first.</div>
     </div>
     <div class="instructions-box">
         <div class="inst-title">⚠️ USDT BEP20 Withdrawal Rules</div>
-        <ul>
-            <li><span class="num">1</span>USDT is sent automatically on the <strong style="color:#f0b90b">BEP20 (BSC)</strong> network — arrives within minutes of approval</li>
-            <li><span class="num">2</span>Double-check your wallet address — wrong addresses result in permanent loss of funds with no recovery possible</li>
-            <li><span class="num">3</span>Your wallet <strong>must support BEP20</strong> — compatible with MetaMask, Trust Wallet, Binance and most major wallets</li>
-            <li><span class="num">4</span>A <strong>10% processing fee</strong> is deducted — the amount shown is exactly what arrives in your wallet</li>
-            <li><span class="num">5</span>Minimum withdrawal is <strong>$10 USDT</strong></li>
-            <li><span class="num">6</span>Share your withdrawal proof in the community to boost your Miner Trust Score and unlock priority processing</li>
+        <ul class="inst-list">
+            <li class="inst-item"><span class="num">1</span><span class="inst-text">USDT is sent automatically on the <span class="hi-b">BEP20 (BSC)</span> network — arrives within minutes of approval</span></li>
+            <li class="inst-item"><span class="num">2</span><span class="inst-text">Double-check your wallet address — wrong addresses result in <span class="hi">permanent loss</span> with no recovery possible</span></li>
+            <li class="inst-item"><span class="num">3</span><span class="inst-text">Your wallet must support <span class="hi-b">BEP20</span> — compatible with MetaMask, Trust Wallet, Binance and most major wallets</span></li>
+            <li class="inst-item"><span class="num">4</span><span class="inst-text">A <span class="hi">10% processing fee</span> is deducted — the amount shown is exactly what arrives in your wallet</span></li>
+            <li class="inst-item"><span class="num">5</span><span class="inst-text">Minimum withdrawal is <span class="hi-g">$10 USDT</span></span></li>
+            <li class="inst-item"><span class="num">6</span><span class="inst-text">Share your withdrawal proof in the community to boost your Miner Trust Score and unlock priority processing</span></li>
         </ul>
     </div>
     <div class="usdt-card">
         <div class="usdt-header">
             <div class="bep-logo">BNB</div>
             <div>
-                <div style="font-size:16px;font-weight:700;">BEP20 (BSC) Network</div>
+                <div style="font-size:15px;font-weight:700;">BEP20 (BSC) Network</div>
                 <div style="font-size:12px;color:#64748b;">Binance Smart Chain • USDT</div>
             </div>
         </div>
@@ -268,7 +284,7 @@ function renderUSDT() {
         <div class="wallet-label">Your BEP20 Wallet Address</div>
         <div class="wallet-hint">Must be a BSC (BEP20) compatible address starting with 0x</div>
         <input id="usdtAddress" type="text" placeholder="0x... paste your BEP20 wallet address">
-        <input id="usdtAmount" type="number" placeholder="Amount to withdraw in USD" style="margin-top:14px;">
+        <input id="usdtAmount" type="number" inputmode="decimal" placeholder="Amount to withdraw in USD" style="margin-top:12px;">
         <div id="usdtFeeBox" style="display:none" class="fee-box">
             <div class="fee-row"><span>Amount requested</span><strong id="uFeeReq">$0</strong></div>
             <div class="fee-row"><span>Processing fee (10%)</span><strong id="uFeeCharge" style="color:#f87171">-$0</strong></div>
@@ -332,24 +348,13 @@ async function proceedBankWithdraw() {
 
     await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ chat_id:ADMIN_CHAT_ID, text:
-`🏦 Bank Withdrawal Request
-──────────────────
-👤 User: ${uid}
-🆔 Miner ID: ${minerId}
-💰 Amount: $${pendingAmount.toFixed(2)}
-📉 Fee (10%): $${charge.toFixed(2)}
-✅ To Send: $${finalAmount.toFixed(2)}
-🏦 Bank: ${savedBank.bank}
-📋 Account: ${savedBank.number}
-👤 Name: ${savedBank.name}
-🔑 Tx ID: ${txRef.key}`,
-        reply_markup:{ inline_keyboard:[[
-            { text:"✅ Approve", url:approveUrl },
-            { text:"❌ Reject",  url:rejectUrl  }
-        ]]}})
+        body: JSON.stringify({ chat_id:ADMIN_CHAT_ID,
+            text:`🏦 Bank Withdrawal Request\n──────────────────\n👤 User: ${uid}\n🆔 Miner ID: ${minerId}\n💰 Amount: $${pendingAmount.toFixed(2)}\n📉 Fee (10%): $${charge.toFixed(2)}\n✅ To Send: $${finalAmount.toFixed(2)}\n🏦 Bank: ${savedBank.bank}\n📋 Account: ${savedBank.number}\n👤 Name: ${savedBank.name}\n🔑 Tx ID: ${txRef.key}`,
+            reply_markup:{ inline_keyboard:[[
+                { text:"✅ Approve", url:approveUrl },
+                { text:"❌ Reject",  url:rejectUrl  }
+            ]]}})
     });
-
     document.getElementById("loader").style.display = "none";
     toast("Withdrawal submitted • Processing within 48 hours");
     setTimeout(() => renderCurrentTab(), 2000);
@@ -372,23 +377,13 @@ async function proceedUSDTWithdraw() {
 
     await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ chat_id:ADMIN_CHAT_ID, text:
-`💎 USDT Withdrawal Request
-──────────────────
-👤 User: ${uid}
-🆔 Miner ID: ${minerId}
-💰 Amount: $${pendingAmount.toFixed(2)}
-📉 Fee (10%): $${charge.toFixed(2)}
-✅ To Send: $${finalAmount.toFixed(2)} USDT
-🌐 Network: BEP20 (BSC)
-📋 Address: ${address}
-🔑 Tx ID: ${txRef.key}`,
-        reply_markup:{ inline_keyboard:[[
-            { text:"✅ Approve & Send USDT", url:approveUrl },
-            { text:"❌ Reject",              url:rejectUrl  }
-        ]]}})
+        body: JSON.stringify({ chat_id:ADMIN_CHAT_ID,
+            text:`💎 USDT Withdrawal Request\n──────────────────\n👤 User: ${uid}\n🆔 Miner ID: ${minerId}\n💰 Amount: $${pendingAmount.toFixed(2)}\n📉 Fee (10%): $${charge.toFixed(2)}\n✅ To Send: $${finalAmount.toFixed(2)} USDT\n🌐 Network: BEP20 (BSC)\n📋 Address: ${address}\n🔑 Tx ID: ${txRef.key}`,
+            reply_markup:{ inline_keyboard:[[
+                { text:"✅ Approve & Send USDT", url:approveUrl },
+                { text:"❌ Reject",              url:rejectUrl  }
+            ]]}})
     });
-
     document.getElementById("loader").style.display = "none";
     toast("USDT withdrawal submitted • Sent automatically on approval");
     window._usdtAddress = null;
@@ -404,7 +399,7 @@ async function getMinerId() {
 function toast(msg) {
     const t = document.getElementById("toast");
     t.textContent = msg; t.style.opacity = 1;
-    setTimeout(() => t.style.opacity = 0, 3000);
+    setTimeout(() => t.style.opacity = 0, 3200);
 }
 </script>
 </body>
