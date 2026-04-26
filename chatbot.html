@@ -11,172 +11,77 @@
   --s1:#0c1628; --s2:#111f35; --border:rgba(0,255,204,0.12);
   --text:#e2e8f0; --muted:#64748b;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-html,body { height:100%; overflow:hidden; max-width:100vw; }
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;max-width:100vw;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;height:100%;}
 
-body {
-  font-family:'DM Sans',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  display:flex;
-  flex-direction:column;
-  height:100%;
-}
+.header{padding:14px 16px;background:rgba(2,6,23,0.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.back-btn{font-size:22px;color:var(--green);cursor:pointer;background:rgba(0,255,204,0.08);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,255,204,0.15);flex-shrink:0;}
+.bot-avatar-wrap{position:relative;flex-shrink:0;}
+.bot-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00ffcc,#00f0ff);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 16px rgba(0,255,204,0.35);}
+.online-dot{position:absolute;bottom:1px;right:1px;width:10px;height:10px;background:#22c55e;border-radius:50%;border:2px solid var(--bg);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.header-info{flex:1;}
+.bot-name{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--green);}
+.bot-status{font-size:12px;color:#22c55e;margin-top:1px;}
 
-/* HEADER */
-.header {
-  padding:14px 16px;
-  background:rgba(2,6,23,0.97);
-  backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);
-  display:flex; align-items:center; gap:12px;
-  flex-shrink:0;
-}
-.back-btn {
-  font-size:22px; color:var(--green); cursor:pointer;
-  background:rgba(0,255,204,0.08); width:38px; height:38px;
-  border-radius:50%; display:flex; align-items:center; justify-content:center;
-  border:1px solid rgba(0,255,204,0.15); flex-shrink:0;
-}
-.bot-avatar-wrap {
-  position:relative; flex-shrink:0;
-}
-.bot-avatar {
-  width:44px; height:44px; border-radius:50%;
-  background:linear-gradient(135deg,#00ffcc,#00f0ff);
-  display:flex; align-items:center; justify-content:center;
-  font-size:20px; box-shadow:0 0 16px rgba(0,255,204,0.35);
-}
-.online-dot {
-  position:absolute; bottom:1px; right:1px;
-  width:10px; height:10px; background:#22c55e; border-radius:50%;
-  border:2px solid var(--bg); animation:pulse 2s infinite;
-}
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-.header-info { flex:1; }
-.bot-name { font-family:'Syne',sans-serif; font-size:17px; font-weight:800; color:var(--green); }
-.bot-status { font-size:12px; color:#22c55e; margin-top:1px; }
+.chat-area{flex:1;overflow-y:auto;padding:16px 14px 12px;display:flex;flex-direction:column;gap:2px;scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#1e2937 transparent;}
+.chat-area::-webkit-scrollbar{width:3px;}
+.chat-area::-webkit-scrollbar-thumb{background:#1e2937;border-radius:4px;}
 
-/* CHAT AREA */
-.chat-area {
-  flex:1;
-  overflow-y:auto;
-  padding:16px 14px 12px;
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-  scroll-behavior:smooth;
-  scrollbar-width:thin;
-  scrollbar-color:#1e2937 transparent;
-}
-.chat-area::-webkit-scrollbar { width:3px; }
-.chat-area::-webkit-scrollbar-thumb { background:#1e2937; border-radius:4px; }
+.msg-row{display:flex;gap:8px;align-items:flex-end;margin-bottom:8px;}
+.msg-row.user{flex-direction:row-reverse;}
+.row-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#00ffcc,#00f0ff);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-bottom:2px;}
+.msg-wrap{display:flex;flex-direction:column;max-width:84%;}
+.user .msg-wrap{align-items:flex-end;}
+.bubble{padding:12px 16px;border-radius:18px;line-height:1.65;font-size:14px;word-break:break-word;}
+.bubble.bot{background:var(--s1);border:1px solid var(--border);border-bottom-left-radius:4px;color:var(--text);box-shadow:0 4px 16px rgba(0,0,0,0.3);}
+.bubble.user{background:linear-gradient(135deg,#00ffcc,#00bfff);color:#020617;border-bottom-right-radius:4px;font-weight:500;}
+.bubble.bot b{color:var(--green);font-weight:700;}
+.bubble.bot .bl{color:var(--blue);font-weight:700;}
+.bubble.bot .gd{color:#22c55e;font-weight:700;}
+.bubble.bot .am{color:#f59e0b;font-weight:700;}
+.bubble.bot .rd{color:#f87171;font-weight:700;}
+.bubble.bot p{margin-bottom:7px;}
+.bubble.bot p:last-child{margin-bottom:0;}
+.bubble.bot ul{padding-left:18px;margin:6px 0 2px;}
+.bubble.bot ul li{margin-bottom:5px;color:#cbd5e1;font-size:13.5px;line-height:1.55;}
+.bubble.bot ol{padding-left:18px;margin:6px 0 2px;}
+.bubble.bot ol li{margin-bottom:6px;color:#cbd5e1;font-size:13.5px;line-height:1.55;}
+.bubble.bot .step-box{background:var(--s2);border-radius:12px;padding:14px;margin:8px 0 4px;border:1px solid rgba(0,255,204,0.1);}
+.bubble.bot .step-title{font-size:13px;font-weight:700;color:var(--green);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.bubble.bot .step-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:7px;font-size:13px;color:#cbd5e1;line-height:1.5;}
+.bubble.bot .step-num{background:rgba(0,255,204,0.15);color:var(--green);font-size:10px;font-weight:800;min-width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.bubble.bot .page-tag{display:inline-block;background:rgba(0,240,255,0.1);border:1px solid rgba(0,240,255,0.25);color:var(--blue);padding:2px 8px;border-radius:6px;font-size:12px;font-weight:700;margin:0 2px;}
+.bubble.bot .miner-grid{display:flex;flex-direction:column;gap:6px;margin:8px 0 4px;}
+.bubble.bot .mc{display:flex;justify-content:space-between;align-items:center;padding:10px 13px;background:var(--s2);border-radius:10px;border:1px solid rgba(0,255,204,0.1);}
+.bubble.bot .mc-name{font-weight:700;color:var(--green);font-size:13px;}
+.bubble.bot .mc-info{font-size:11px;color:var(--muted);margin-top:2px;}
+.bubble.bot .mc-price{color:#22c55e;font-weight:700;font-size:13px;}
+.bubble.bot .tip-box{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:10px;padding:10px 13px;margin:8px 0 4px;font-size:13px;color:#fcd34d;line-height:1.55;}
+.bubble.bot .warn-box{background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:10px 13px;margin:8px 0 4px;font-size:13px;color:#f87171;line-height:1.55;}
+.msg-time{font-size:11px;color:#334155;margin-top:3px;padding:0 2px;}
 
-/* MESSAGES */
-.msg-row { display:flex; gap:8px; align-items:flex-end; margin-bottom:8px; }
-.msg-row.user { flex-direction:row-reverse; }
+.typing-row{display:flex;gap:8px;align-items:flex-end;margin-bottom:8px;}
+.typing-bubble{background:var(--s1);border:1px solid var(--border);padding:12px 16px;border-radius:18px;border-bottom-left-radius:4px;display:flex;align-items:center;gap:5px;}
+.dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:bounce 1.2s infinite;opacity:0.7;}
+.dot:nth-child(2){animation-delay:.18s;}
+.dot:nth-child(3){animation-delay:.36s;}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px);opacity:1}}
 
-.row-avatar {
-  width:28px; height:28px; border-radius:50%;
-  background:linear-gradient(135deg,#00ffcc,#00f0ff);
-  display:flex; align-items:center; justify-content:center;
-  font-size:13px; flex-shrink:0; margin-bottom:2px;
-}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding-left:36px;margin-bottom:8px;}
+.chip{padding:7px 14px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid rgba(0,255,204,0.2);background:rgba(0,255,204,0.06);color:var(--green);transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+.chip:active{transform:scale(0.96);}
 
-.msg-wrap { display:flex; flex-direction:column; max-width:80%; }
-.user .msg-wrap { align-items:flex-end; }
+.support-wrap{padding-left:36px;margin-bottom:8px;}
+.support-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;border:none;cursor:pointer;background:linear-gradient(90deg,#00ffcc,#00bfff);color:#020617;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;}
 
-.bubble {
-  padding:12px 16px; border-radius:18px;
-  line-height:1.65; font-size:14px; word-break:break-word;
-  white-space:pre-wrap;
-}
-.bubble.bot {
-  background:var(--s1); border:1px solid var(--border);
-  border-bottom-left-radius:4px; color:var(--text);
-  box-shadow:0 4px 16px rgba(0,0,0,0.3);
-}
-.bubble.user {
-  background:linear-gradient(135deg,#00ffcc,#00bfff);
-  color:#020617; border-bottom-right-radius:4px; font-weight:500;
-}
-.bubble.bot strong { color:var(--green); }
-.bubble.bot .hi { color:var(--green); font-weight:700; }
-.bubble.bot .hi-b { color:var(--blue); font-weight:700; }
-.bubble.bot .warn { color:#f59e0b; font-weight:700; }
-.bubble.bot ul { padding-left:16px; margin:6px 0; }
-.bubble.bot ul li { margin-bottom:4px; color:#cbd5e1; font-size:13px; }
-.bubble.bot .miner-row {
-  display:flex; justify-content:space-between; align-items:center;
-  padding:9px 12px; background:var(--s2); border-radius:10px; margin:4px 0;
-  border:1px solid rgba(0,255,204,0.1);
-}
-.bubble.bot .miner-label { font-weight:700; color:var(--green); font-size:13px; }
-.bubble.bot .miner-meta  { font-size:12px; color:var(--muted); margin-top:2px; }
-.bubble.bot .miner-price { color:#22c55e; font-weight:700; font-size:13px; }
-
-.msg-time { font-size:11px; color:#334155; margin-top:3px; padding:0 2px; }
-
-/* TYPING */
-.typing-row { display:flex; gap:8px; align-items:flex-end; margin-bottom:8px; }
-.typing-bubble {
-  background:var(--s1); border:1px solid var(--border);
-  padding:12px 16px; border-radius:18px; border-bottom-left-radius:4px;
-  display:flex; align-items:center; gap:5px;
-}
-.dot { width:6px; height:6px; background:var(--green); border-radius:50%; animation:bounce 1.2s infinite; opacity:0.7; }
-.dot:nth-child(2){ animation-delay:.18s; }
-.dot:nth-child(3){ animation-delay:.36s; }
-@keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-6px); opacity:1} }
-
-/* SUGGESTIONS */
-.chips {
-  display:flex; flex-wrap:wrap; gap:6px;
-  padding-left:36px; margin-bottom:8px;
-}
-.chip {
-  padding:7px 14px; border-radius:999px; font-size:12px; font-weight:600;
-  cursor:pointer; border:1.5px solid rgba(0,255,204,0.2);
-  background:rgba(0,255,204,0.06); color:var(--green);
-  transition:all 0.2s; font-family:'DM Sans',sans-serif;
-}
-.chip:active { transform:scale(0.96); background:rgba(0,255,204,0.12); }
-
-/* SUPPORT BUTTON */
-.support-wrap { padding-left:36px; margin-bottom:8px; }
-.support-btn {
-  display:inline-flex; align-items:center; gap:8px;
-  padding:12px 20px; border-radius:12px; border:none; cursor:pointer;
-  background:linear-gradient(90deg,#00ffcc,#00bfff); color:#020617;
-  font-family:'DM Sans',sans-serif; font-weight:700; font-size:14px;
-}
-
-/* INPUT AREA */
-.input-wrap {
-  padding:12px 14px;
-  background:rgba(2,6,23,0.97); backdrop-filter:blur(16px);
-  border-top:1px solid var(--border);
-  display:flex; gap:10px; align-items:center; flex-shrink:0;
-}
-.chat-input {
-  flex:1; padding:12px 16px; border-radius:999px;
-  border:1.5px solid rgba(0,255,204,0.18);
-  background:var(--s1); color:var(--text);
-  font-size:14px; font-family:'DM Sans',sans-serif;
-  outline:none; transition:border-color 0.2s;
-  -webkit-appearance:none;
-}
-.chat-input:focus { border-color:rgba(0,255,204,0.45); }
-.chat-input::placeholder { color:#334155; }
-.send-btn {
-  width:46px; height:46px; border-radius:50%; flex-shrink:0; border:none;
-  background:linear-gradient(135deg,#00ffcc,#00bfff); cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  font-size:18px; box-shadow:0 0 16px rgba(0,255,204,0.3);
-  transition:transform 0.15s;
-}
-.send-btn:active { transform:scale(0.92); }
-.send-btn:disabled { opacity:0.5; cursor:not-allowed; }
+.input-wrap{padding:12px 14px;background:rgba(2,6,23,0.97);backdrop-filter:blur(16px);border-top:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-shrink:0;}
+.chat-input{flex:1;padding:12px 16px;border-radius:999px;border:1.5px solid rgba(0,255,204,0.18);background:var(--s1);color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;-webkit-appearance:none;}
+.chat-input:focus{border-color:rgba(0,255,204,0.45);}
+.chat-input::placeholder{color:#334155;}
+.send-btn{width:46px;height:46px;border-radius:50%;flex-shrink:0;border:none;background:linear-gradient(135deg,#00ffcc,#00bfff);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 16px rgba(0,255,204,0.3);transition:transform 0.15s;}
+.send-btn:active{transform:scale(0.92);}
 </style>
 </head>
 <body>
@@ -189,7 +94,7 @@ body {
   </div>
   <div class="header-info">
     <div class="bot-name">CryptoJet AI</div>
-    <div class="bot-status">Always Online • AI Powered</div>
+    <div class="bot-status">Always Online • Smart Assistant</div>
   </div>
 </div>
 
@@ -197,240 +102,404 @@ body {
 
 <div class="input-wrap">
   <input class="chat-input" id="msgInput" placeholder="Ask me anything about CryptoJet..." autocomplete="off">
-  <button class="send-btn" id="sendBtn" onclick="send()">➤</button>
+  <button class="send-btn" onclick="send()">➤</button>
 </div>
 
 <script>
-// ── FULL CRYPTOJET KNOWLEDGE BASE (no sensitive data) ─────────
-const SYSTEM_PROMPT = `You are CryptoJet AI, the friendly and knowledgeable support assistant for CryptoJet — a Nigerian cloud-based crypto mining investment platform. You help users understand how the platform works, solve problems, and guide them through every feature.
+// ═══════════════════════════════════════════════════════════════
+//  PAGE REFERENCE HELPER
+// ═══════════════════════════════════════════════════════════════
+function pg(name) { return `<span class="page-tag">📍 ${name}</span>`; }
 
-== PLATFORM OVERVIEW ==
-CryptoJet is a web-based passive income platform where users buy cloud miners, activate them, and earn daily income automatically. It is mobile-first, built for Nigerian users, and supports both bank transfers and USDT crypto payments.
+// ═══════════════════════════════════════════════════════════════
+//  KNOWLEDGE BASE
+// ═══════════════════════════════════════════════════════════════
+const KB = [
 
-== HOW MINING WORKS ==
-- Users buy a miner (one-time purchase per miner type, except S-244 which can be bought twice)
-- After buying, they tap "Start Mining" to begin a cycle
-- S-244 and S-500: 48-hour cycles. Earnings show in real-time on screen but only credit to balance at end of 48 hours.
-- S-900 and S-1200: 24-hour cycles. Earnings credit at end of 24 hours.
-- For 48hr miners: after first 24hrs the earned amount shows as "pending balance" (not yet credited). At 48hrs the full cycle amount credits to balance.
-- When a cycle ends, the miner shows "Earning Paused" in red. User must tap "Start New Cycle" to continue earning.
-- A miner plan has a total duration (30-45 days) during which users can run multiple cycles.
+// ───────── GREETINGS & VIBES ──────────────────────────────────
+{
+  tags:["hi","hello","hey","morning","afternoon","evening","night","howdy","what's up","sup","yo","hiya","good day","greetings","wassup","wazzup","namaste","salaam"],
+  chips:["How does mining work?","How do I recharge?","What miners are available?","How do I withdraw?"],
+  mood:"greeting",
+  answer:()=>`Hey hey! 👋 Welcome to <b>CryptoJet AI</b> — your 24/7 smart assistant!\n\nI know <b>everything</b> about this platform — miners, recharges, withdrawals, team income, referrals, and more. I can even show you step-by-step guides and point you to exact pages.\n\nWhat can I help you with today? 😊`
+},
+{
+  tags:["how are you","how r u","you good","you okay","how do you do","what about you","you alright","you fine"],
+  chips:["How does mining work?","How do I recharge?","How do I withdraw?"],
+  answer:()=>`I'm doing absolutely great — always charged up and ready to help! ⚡\n\nThanks for asking! 😄 How are <b>you</b> doing? And more importantly — how can I help you earn more on CryptoJet today?`
+},
+{
+  tags:["thank","thanks","thank you","appreciate","helpful","great bot","good bot","nice bot","amazing","love you","you rock","well done","great help"],
+  chips:["How does mining work?","How do I withdraw?","How do I refer friends?"],
+  answer:()=>`Aww, you're very welcome! 😊 That made my day!\n\nIf there's anything else you want to know or need help with, I'm always right here. Keep mining and keep earning! 💰⚡`
+},
+{
+  tags:["bye","goodbye","see you","later","cya","take care","peace","ttyl","gotta go","leaving"],
+  chips:[],
+  answer:()=>`Goodbye! 👋 It was great chatting with you.\n\nCome back anytime — I'm always here 24/7. <b>Happy mining and happy earning!</b> 🚀💰`
+},
+{
+  tags:["okay","ok","alright","got it","understood","sure","noted","cool","nice","great","perfect","awesome"],
+  chips:["What else can you help with?","How do I withdraw?","How do I recharge?"],
+  answer:()=>`Great! 😊 Let me know whenever you need help — whether it's mining, recharging, withdrawals, or anything else about CryptoJet. I'm all yours! ⚡`
+},
+{
+  tags:["who are you","what are you","are you a bot","are you ai","are you human","what is your name","your name","who made you","who built you","are you real"],
+  chips:["How does mining work?","How do I get started?","What miners are available?"],
+  answer:()=>`I'm <b>CryptoJet AI</b> — a smart assistant built specifically for this platform! 🤖⚡\n\nI was trained with <b>complete knowledge</b> of CryptoJet — every feature, every page, every rule. I can give you step-by-step guides, refer you to exact pages, and answer almost any question about the platform.\n\nI'm not a replacement for human support, but I'm available 24/7 and I'm pretty good at what I do! 😄 What would you like to know?`
+},
+{
+  tags:["help","help me","i need help","what can you do","what do you know","capabilities","what can you answer","what topics"],
+  chips:["How does mining work?","How do I recharge?","How do I withdraw?","Referral & team income"],
+  answer:()=>`I can help you with <b>everything on CryptoJet</b>! Here's what I know:\n\n<ul><li>⛏️ <b>Mining</b> — how it works, cycles, earnings, restarting</li><li>💰 <b>Recharging</b> — bank transfer & USDT step-by-step</li><li>💸 <b>Withdrawals</b> — bank & USDT, fees, days, requirements</li><li>👥 <b>Team income & referrals</b> — how to invite & earn</li><li>📊 <b>Miners</b> — all 4 plans with prices & earnings</li><li>🔐 <b>Account</b> — sign in, password, verification</li><li>📋 <b>Pages & navigation</b> — I'll point you to exact pages</li><li>🏅 <b>Tasks, points & trust score</b></li><li>❓ <b>Troubleshooting</b> — balance issues, miner paused, etc.</li></ul>\nJust ask in plain language — I'll understand! 😊`
+},
 
-== THE 4 MINER PLANS ==
-1. S-244: $10, earns $0.50/day, 48-hour cycle, can buy maximum 2 of these, plan lasts 30 days
-2. S-500: $30, earns $1.50/day, 48-hour cycle, own 1 only, plan lasts 30 days
-3. S-900: $50, earns $2.00/day, 24-hour cycle, own 1 only, plan lasts 35 days
-4. S-1200: $120, earns $4.00/day, 24-hour cycle, own 1 only, plan lasts 45 days
+// ───────── GETTING STARTED ────────────────────────────────────
+{
+  tags:["how to start","get started","new here","just joined","first time","what to do","first step","how to begin","where do i start","step by step","beginning","new user","just registered","just signed up","what now"],
+  chips:["How do I recharge?","Which miner should I buy?","How does mining work?"],
+  answer:()=>`Welcome to CryptoJet! 🎉 Here's your complete <b>getting started guide</b>:\n\n<div class="step-box"><div class="step-title">🚀 5 Steps to Your First Earnings</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me → Recharge")} and add funds to your balance via bank transfer or USDT</span></div><div class="step-item"><span class="step-num">2</span><span>Go to ${pg("Miner → Purchase")} and buy a miner that fits your budget</span></div><div class="step-item"><span class="step-num">3</span><span>Go to ${pg("Miner → Running")} and tap <b>Start Mining</b></span></div><div class="step-item"><span class="step-num">4</span><span>Watch your earnings grow on screen! At cycle end, tap <b>Start New Cycle</b></span></div><div class="step-item"><span class="step-num">5</span><span>When ready, go to ${pg("Me → Withdraw")} to cash out (Mon–Fri, minimum $10)</span></div></div>\n<div class="tip-box">💡 <b>Bonus moves:</b> Go to ${pg("Me → Invite")} to refer friends and earn team income. Check ${pg("Tasks")} daily for easy bonus points!</div>`
+},
 
-All miners pay for themselves within 25-30 days of consistent use.
+// ───────── HOW MINING WORKS ───────────────────────────────────
+{
+  tags:["how mining","how does mining","mining work","what is mining","how to mine","how do i mine","start mining","mining process","miner work","explain mining","how earn","how do i earn"],
+  chips:["Which miner should I buy?","How do I recharge?","When do earnings credit?"],
+  answer:()=>`Mining on CryptoJet is <b>100% automatic</b> — no hardware, no technical knowledge needed!\n\n<div class="step-box"><div class="step-title">⛏️ How It Works</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Miner → Purchase")} and buy any miner</span></div><div class="step-item"><span class="step-num">2</span><span>Go to ${pg("Miner → Running")} and tap <b>Start Mining</b></span></div><div class="step-item"><span class="step-num">3</span><span>Your miner runs automatically — a live counter shows earnings in real time</span></div><div class="step-item"><span class="step-num">4</span><span>At cycle end, your earnings are <b>credited to your main balance</b></span></div><div class="step-item"><span class="step-num">5</span><span>Tap <b>Start New Cycle</b> to keep earning — repeat as many times as you want within your plan duration</span></div></div>\n<b>S-900 & S-1200</b> run 24-hour cycles. <b>S-244 & S-500</b> run 48-hour cycles. That's the only difference! 🚀`
+},
 
-== BUYING A MINER ==
-- Funds are deducted from balance (main balance first, then team income)
-- After purchase the miner appears on the Running tab
-- User must tap Start to begin earning
+// ───────── CYCLE DETAILS ─────────────────────────────────────
+{
+  tags:["48 hour","48hr","24 hour","24hr","cycle","pending balance","when credited","when earn","earnings credited","how long cycle","cycle time","cycle end","earning paused","how long does it take to earn","how long mining"],
+  chips:["What miners are available?","Why isn't my balance updating?","How do I restart my miner?"],
+  answer:()=>`Great question! Here's exactly how cycles work:\n\n<b>S-900 & S-1200 → 24-hour cycles:</b>\n<ul><li>Mine for 24 hours straight</li><li>Earnings credited to your balance at the end of 24 hours</li></ul>\n<b>S-244 & S-500 → 48-hour cycles:</b>\n<ul><li>After 24 hrs: shows your daily amount as <span class="am">pending balance</span> — visible but not credited yet</li><li>After full 48 hrs: full amount credits to your balance</li></ul>\n\nWhen a cycle ends, the miner shows <span class="rd">Earning Paused</span> in red with a <b>Start New Cycle</b> button.\n\n<div class="tip-box">💡 Each miner plan has a total duration (30–45 days). You can run unlimited cycles within that period!</div>`
+},
 
-== RECHARGING (DEPOSITING) ==
-Two methods:
-1. Bank Transfer (Opay): User enters USD amount, sees naira equivalent at ₦1,500/dollar, transfers to the Opay account, uploads receipt screenshot, admin reviews and approves. Usually takes 3-20 minutes.
-2. USDT: Supports BEP20 (Binance Smart Chain) and TRC20 (TRON) networks. User sends USDT, pastes their Transaction Hash (TX ID), system verifies on blockchain automatically. BEP20 auto-approves. TRC20 also supported.
-- Minimum deposit: $5 USDT
-- There can only be ONE pending deposit at a time — must wait for current one to be settled
-- Reference code must be included in bank transfer narration
+// ───────── MINERS LIST ───────────────────────────────────────
+{
+  tags:["miners","miner plan","miner price","how much miner","cost","buy miner","which miner","available miner","miner package","plans","s-244","s-500","s-900","s-1200","s244","s500","s900","s1200","miner list","all miner","miner options","show miners"],
+  chips:["Which miner is best for me?","How do I recharge to buy?","How does the cycle work?"],
+  answer:()=>`Here are all <b>4 CryptoJet miners</b>:\n\n<div class="miner-grid"><div class="mc"><div><div class="mc-name">S-244</div><div class="mc-info">$0.50/day · 48hr cycle · 30-day plan · Can buy ×2</div></div><div class="mc-price">$10</div></div><div class="mc"><div><div class="mc-name">S-500</div><div class="mc-info">$1.50/day · 48hr cycle · 30-day plan</div></div><div class="mc-price">$30</div></div><div class="mc"><div><div class="mc-name">S-900</div><div class="mc-info">$2.00/day · 24hr cycle · 35-day plan</div></div><div class="mc-price">$50</div></div><div class="mc"><div><div class="mc-name">S-1200</div><div class="mc-info">$4.00/day · 24hr cycle · 45-day plan</div></div><div class="mc-price">$120</div></div></div>\nAll miners pay back within <b>25–30 days</b> of consistent use. 💰\n\nYou can buy miners from ${pg("Miner → Purchase tab")}.`
+},
 
-== WITHDRAWALS ==
-Two methods:
-1. Bank Transfer: User must have bank details saved and withdrawal password set. Available Monday-Friday only. 10% fee deducted. Processing within 48 hours.
-2. USDT BEP20: User provides BEP20 wallet address (must start with 0x). Sent automatically upon admin approval. 10% fee deducted.
-- Minimum withdrawal: $10
-- Withdrawal password required for all withdrawals
-- Bank details must be saved first (in Bank Settings/Me page)
-- Sharing withdrawal proof in community feed boosts "Miner Trust Score" for priority processing
+// ───────── BEST MINER ────────────────────────────────────────
+{
+  tags:["which miner best","recommend","best miner","suggest miner","what should i buy","which should i get","good investment","worth it","miner recommend","cheapest miner","profitable miner","which one","most profitable"],
+  chips:["How do I recharge?","How does mining work?","What are the exact earnings?"],
+  answer:()=>`Here's my honest recommendation based on your budget:\n\n<ul><li>💡 <b>Just testing the waters?</b> → <b>S-244 ($10)</b> — lowest risk, see how everything works. You can even buy 2 of them!</li><li>🎯 <b>Mid-budget?</b> → <b>S-900 ($50)</b> is the community favourite — $2/day on a 24hr cycle. Clean and consistent.</li><li>💎 <b>Serious earner?</b> → <b>S-1200 ($120)</b> earns $4/day — pays itself back in 30 days, then it's pure profit for 15 more days.</li><li>🔁 <b>Smart combo:</b> Buy <b>2 × S-244</b> (only miner you can buy twice) for $20 total = $1/day combined.</li></ul>\n<div class="tip-box">💡 Start where you're comfortable. Once you see your first earnings hit your balance, scaling up feels natural!</div>\n\nGo to ${pg("Miner → Purchase tab")} to buy.`
+},
 
-== TEAM INCOME (PASSIVE REFERRAL EARNINGS) ==
-- Users earn when people they referred complete mining cycles
-- Level 1 (direct referrals): earn 10% of their mining cycle earnings
-- Level 2 (referral's referrals): earn 4% of their mining cycle earnings
-- Level 3: earn 2% of their mining cycle earnings
-- These earnings go to "Team Income" balance, NOT main balance
-- Team income can be used to buy miners OR withdrawn like normal balance
-- View records on Team Income page
+// ───────── RECHARGE (BANK) ───────────────────────────────────
+{
+  tags:["recharge","top up","fund","deposit","add money","add balance","how to pay","how to fund","pay","add credit","load balance","pay in","how to deposit","bank transfer","opay","how to recharge"],
+  chips:["How long does approval take?","Can I deposit with USDT?","What's the exchange rate?"],
+  answer:()=>`There are <b>2 ways to recharge</b>. Here's the full guide for bank transfer:\n\n<div class="step-box"><div class="step-title">🏦 Bank Transfer (Opay) — Step by Step</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me → Recharge")} and tap the <b>Bank Transfer tab</b></span></div><div class="step-item"><span class="step-num">2</span><span>Enter your USD amount — the naira equivalent shows automatically (<b>₦1,500 per dollar</b>)</span></div><div class="step-item"><span class="step-num">3</span><span>Transfer the exact naira amount to the <b>Opay account shown</b></span></div><div class="step-item"><span class="step-num">4</span><span>Include the <span class="am">reference code</span> in your transfer narration — this is required!</span></div><div class="step-item"><span class="step-num">5</span><span>Take a clear screenshot of your receipt and upload it on the page</span></div><div class="step-item"><span class="step-num">6</span><span>Tap <b>Submit</b> — admin reviews and approves within <b>3–20 minutes</b> ✅</span></div></div>\n<div class="warn-box">⚠️ <b>Important:</b> Only ONE pending deposit allowed at a time. Wait for your current one to be settled before placing another.</div>`
+},
 
-== REFERRAL SYSTEM ==
-- Each user has a unique referral link (from Invite page)
-- Share with friends to earn team income when they mine
-- Referrals are tracked and shown in account
+// ───────── RECHARGE (USDT) ───────────────────────────────────
+{
+  tags:["usdt deposit","crypto deposit","bep20 deposit","trc20 deposit","usdt recharge","deposit usdt","pay usdt","usdt top up","send usdt","usdt transfer"],
+  chips:["What's the minimum USDT deposit?","How long does USDT take?","What networks are supported?"],
+  answer:()=>`Here's how to deposit USDT:\n\n<div class="step-box"><div class="step-title">💎 USDT Deposit — Step by Step</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me → Recharge")} and tap the <b>USDT tab</b></span></div><div class="step-item"><span class="step-num">2</span><span>Choose your network: <b>BEP20 (BSC)</b> or <b>TRC20 (TRON)</b></span></div><div class="step-item"><span class="step-num">3</span><span>Copy the wallet address shown — double-check before sending!</span></div><div class="step-item"><span class="step-num">4</span><span>Send USDT from your wallet (MetaMask, Trust Wallet, Binance, etc.)</span></div><div class="step-item"><span class="step-num">5</span><span>Come back and paste your <b>Transaction Hash (TX ID)</b> in the field</span></div><div class="step-item"><span class="step-num">6</span><span>Tap <b>Verify & Submit</b> — blockchain confirms automatically in 1–5 minutes ✅</span></div></div>\n<b>Minimum:</b> <span class="gd">$5 USDT</span>\n<div class="warn-box">⚠️ Always send on the correct network. BEP20 to a BEP20 address, TRC20 to TRC20. Wrong network = funds lost permanently.</div>`
+},
 
-== TASKS & POINTS ==
-- Daily check-in: earn 1 point per day, resets each 24 hours
-- Social tasks (Telegram, WhatsApp, Facebook, Twitter, Instagram): earn 2 points each
-- Points contribute to Miner Trust Score
-- Trust Score affects withdrawal priority
+// ───────── RECHARGE APPROVAL TIME ────────────────────────────
+{
+  tags:["how long recharge","recharge time","approval time","how long approve","pending recharge","recharge pending","not approved","waiting recharge","recharge status","3 20 minutes","recharge not credited"],
+  chips:["What if it's taking too long?","How do I check my transactions?","How do I contact support?"],
+  answer:()=>`Recharge approvals usually take <b>3–20 minutes</b> after you submit your receipt.\n\n<b>If it's taking longer, check these:</b>\n<ul><li>✅ Did you upload a <b>clear, readable screenshot</b> of your receipt?</li><li>✅ Did you include the <span class="am">reference code</span> in the bank transfer narration?</li><li>✅ Did you transfer the <b>exact naira amount</b> shown — no rounding?</li><li>✅ Check ${pg("Me → Transaction History")} — is it still showing "Pending"?</li></ul>\n<b>If it's been over 30 minutes</b> and still pending, please tap the <b>Contact Support</b> button below and share your receipt with the team. 🙋`
+},
 
-== SIGN IN / ACCOUNT ==
-- Sign up with Email (requires email verification for new accounts), Phone number, or Google
-- Existing/old users are not required to re-verify email when signing in
-- Phone users use +country code + number (20 country codes supported)
-- Forgot Password: email users get reset link, phone users must add a recovery email first
-- Miner ID format: CJ followed by a number (e.g. CJ1234) — given at account creation
+// ───────── WITHDRAWAL (BANK) ──────────────────────────────────
+{
+  tags:["withdraw","withdrawal","cash out","get money","take out","payout","how do i get paid","how to withdraw","request withdrawal","withdraw money","how do i withdraw","bank withdrawal"],
+  chips:["What's the fee?","What days can I withdraw?","How do I save my bank details?"],
+  answer:()=>`Here's the complete guide to withdrawing via bank:\n\n<div class="step-box"><div class="step-title">🏦 Bank Withdrawal — Step by Step</div><div class="step-item"><span class="step-num">1</span><span>First, save your bank details: go to ${pg("Me → Bank Information")}, add your bank name, account number, and set a withdrawal password</span></div><div class="step-item"><span class="step-num">2</span><span>Go to ${pg("Me → Withdraw")} and tap the <b>Bank Transfer tab</b></span></div><div class="step-item"><span class="step-num">3</span><span>Enter the amount you want to withdraw (minimum <b>$10</b>)</span></div><div class="step-item"><span class="step-num">4</span><span>The fee breakdown shows automatically — <span class="am">10% fee</span> is deducted</span></div><div class="step-item"><span class="step-num">5</span><span>Enter your <b>withdrawal password</b> and confirm</span></div><div class="step-item"><span class="step-num">6</span><span>Admin processes within 48 hours ✅</span></div></div>\n<b>Available:</b> <span class="gd">Monday to Friday only</span>\n<div class="tip-box">💡 Sharing your withdrawal proof in ${pg("Feeds")} boosts your <b>Miner Trust Score</b> and gets you priority processing next time!</div>`
+},
 
-== PAGES & NAVIGATION ==
-- Dashboard: balance, team income, points, miner status, market prices, quick links
-- Miner: running miners (with progress rings and countdown timers) + purchase tab
-- Me (Profile): balance overview, bank settings, referral, team, transactions, miners
-- Recharge: bank transfer or USDT deposit
-- Withdraw: bank or USDT BEP20 withdrawal
-- Transactions: full history of all deposits and withdrawals
-- Team Record: history of team income earnings by level
-- Tasks: daily check-in calendar + social tasks
-- Feeds: community feed for sharing updates, reactions
-- About: full platform info
-- Invite: referral link + stats
-- Mining Power (Miner Power): detailed specs of each miner model
+// ───────── WITHDRAWAL (USDT) ──────────────────────────────────
+{
+  tags:["usdt withdraw","withdraw usdt","crypto withdraw","bep20 withdraw","withdraw crypto","usdt payout","usdt cashout"],
+  chips:["What's the minimum for USDT withdrawal?","How long does USDT take?","What's the fee?"],
+  answer:()=>`Here's how to withdraw USDT:\n\n<div class="step-box"><div class="step-title">💎 USDT Withdrawal — Step by Step</div><div class="step-item"><span class="step-num">1</span><span>Make sure you have a withdrawal password set at ${pg("Me → Bank Information")}</span></div><div class="step-item"><span class="step-num">2</span><span>Go to ${pg("Me → Withdraw")} and tap the <b>USDT tab</b></span></div><div class="step-item"><span class="step-num">3</span><span>Paste your <b>BEP20 wallet address</b> (must start with <span class="bl">0x</span>) — MetaMask, Trust Wallet, Binance supported</span></div><div class="step-item"><span class="step-num">4</span><span>Enter the amount (minimum <b>$10</b>), check the fee breakdown</span></div><div class="step-item"><span class="step-num">5</span><span>Enter your withdrawal password and submit</span></div><div class="step-item"><span class="step-num">6</span><span>USDT is <b>sent automatically</b> from our wallet on admin approval — usually within minutes ✅</span></div></div>\n<div class="warn-box">⚠️ BEP20 only for withdrawals. Always double-check your wallet address — wrong addresses cannot be recovered.</div>`
+},
 
-== FEES ==
-- Withdrawal fee: 10% on all withdrawals
-- No deposit fee
+// ───────── WITHDRAWAL DAYS ────────────────────────────────────
+{
+  tags:["what day","which day","monday","saturday","sunday","weekend","withdraw day","available days","when can i withdraw","withdrawal days","what days withdraw"],
+  chips:["How do I withdraw?","What's the fee?","Can I withdraw USDT any day?"],
+  answer:()=>`<b>Bank withdrawals</b> are processed <span class="gd">Monday to Friday only</span>.\n\nIf you submit on Saturday or Sunday, your request will queue and be processed first thing on Monday.\n\n<b>USDT withdrawals</b> are available <span class="gd">any day</span> — they're sent automatically from our wallet once approved, so no weekend restrictions.\n\n<div class="tip-box">💡 Share your withdrawal proof in ${pg("Feeds")} to build your Miner Trust Score and get priority processing!</div>`
+},
 
-== EXCHANGE RATE ==
-- $1 USD = ₦1,500 (for bank transfer deposits)
+// ───────── WITHDRAWAL FEE ─────────────────────────────────────
+{
+  tags:["fee","charge","deduction","percent","withdrawal fee","10 percent","10%","deducted","how much fee","how much deducted","fee on withdrawal"],
+  chips:["How do I withdraw?","Minimum withdrawal amount?","Which days can I withdraw?"],
+  answer:()=>`The withdrawal fee is <b>10% on all withdrawals</b> — both bank and USDT.\n\nIt's automatically deducted when you submit.\n\n<b>Examples:</b>\n<ul><li>Withdraw $10 → receive <span class="gd">$9.00</span></li><li>Withdraw $50 → receive <span class="gd">$45.00</span></li><li>Withdraw $100 → receive <span class="gd">$90.00</span></li><li>Withdraw $200 → receive <span class="gd">$180.00</span></li></ul>\nThe exact breakdown (requested, fee, you receive) is shown on the ${pg("Withdraw page")} before you confirm. No surprises! 💸`
+},
 
-== SUPPORTED BANKS / PAYMENTS ==
-- Bank deposits: via Opay transfer
-- USDT deposits: BEP20 (BSC) and TRC20 (TRON)
-- USDT withdrawals: BEP20 only
+// ───────── TEAM INCOME ───────────────────────────────────────
+{
+  tags:["team income","team balance","team money","what is team","team page","team earning","passive income from team","team funds","my team balance","team withdrawal","can i withdraw team","team income withdraw","use team income"],
+  chips:["How do I invite people?","What are the referral percentages?","Can I use team income to buy a miner?"],
+  answer:()=>`<b>Team income</b> is passive money you earn when people you referred complete their mining cycles.\n\n<div class="warn-box">🚫 <b>Important:</b> Team income <b>CANNOT be withdrawn</b> as cash. It can <b>only be used to buy miners</b>.</div>\n\n<b>How team income works:</b>\n<ul><li>🥇 <b>Level 1</b> (people you directly invited) → <span class="gd">10%</span> of their cycle earnings</li><li>🥈 <b>Level 2</b> (their referrals) → <span class="gd">4%</span> of their cycle earnings</li><li>🥉 <b>Level 3</b> (next level down) → <span class="gd">2%</span> of their cycle earnings</li></ul>\n<b>What you CAN do with team income:</b>\n<ul><li>✅ Use it to purchase any miner (deducted automatically at checkout)</li></ul>\n\nView your full team earnings history on ${pg("Me → Team Records")}. 📊`
+},
 
-== COMMON ISSUES & ANSWERS ==
-- "Balance not updating": Mining earnings only credit at END of cycle (24h or 48h). The live counter shows real-time decimals but doesn't move to balance until cycle ends.
-- "Miner paused": Cycle ended. Tap "Start New Cycle" to begin a new one.
-- "Can't withdraw": Need bank details saved AND withdrawal password set. Go to Me > Bank Information.
-- "Deposit not approved": Usually within 20 mins. Upload receipt if you haven't. Contact support if over 30 mins.
-- "Two pending deposits blocked": Only 1 pending deposit allowed at a time. Wait for current one to settle.
-- "Google sign-in issues": Ensure popups are allowed in browser settings.
-- "Email verification": New email signups must verify before first login. Phone signups don't need verification.
+// ───────── REFERRAL / INVITE ──────────────────────────────────
+{
+  tags:["referral","refer","invite","link","how to refer","referral link","share link","invite friend","bonus","referral code","invite people","how to invite","where is referral","get referral link"],
+  chips:["What are the referral percentages?","Where do I find my referral link?","What can I do with team income?"],
+  answer:()=>`<b>Refer friends and earn team income passively!</b>\n\n<div class="step-box"><div class="step-title">👥 How to Refer Friends</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me → Invite")}</span></div><div class="step-item"><span class="step-num">2</span><span>Copy your unique referral link</span></div><div class="step-item"><span class="step-num">3</span><span>Share it with friends on WhatsApp, Telegram, anywhere</span></div><div class="step-item"><span class="step-num">4</span><span>When they sign up and mine, you automatically earn a % of their cycle earnings</span></div><div class="step-item"><span class="step-num">5</span><span>Your team income builds up over time and can be used to <b>buy new miners</b></span></div></div>\n<b>Percentages:</b> <span class="gd">10%</span> Level 1 → <span class="gd">4%</span> Level 2 → <span class="gd">2%</span> Level 3\n\n<div class="warn-box">🚫 Team income cannot be withdrawn — use it to buy miners and grow your mining power!</div>`
+},
 
-== SUPPORT ==
-- Telegram support: https://t.me/tiffany682
-- Direct user-to-user community on Feeds page
+// ───────── BANK SETTINGS ─────────────────────────────────────
+{
+  tags:["bank detail","add bank","bank information","bank setting","bank page","account number","bank name","save bank","bank account","my bank","set bank","change bank","add account","where bank","find bank page"],
+  chips:["How do I set withdrawal password?","How do I withdraw?","What banks are supported?"],
+  answer:()=>`Here's how to save your bank details:\n\n<div class="step-box"><div class="step-title">🏦 Adding Bank Details</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me tab")} at the bottom navigation</span></div><div class="step-item"><span class="step-num">2</span><span>Tap <b>Bank Information</b></span></div><div class="step-item"><span class="step-num">3</span><span>Enter your bank name and account number</span></div><div class="step-item"><span class="step-num">4</span><span>Set a secure <b>withdrawal password</b> — you'll need this every time you withdraw</span></div><div class="step-item"><span class="step-num">5</span><span>Tap <b>Save</b></span></div></div>\n<div class="warn-box">⚠️ Double-check your account number before saving — wrong account numbers cannot be reversed. This is your real bank account where money will be sent.</div>`
+},
 
-== RULES FOR YOUR RESPONSES ==
-1. Be warm, friendly, and encouraging — like a helpful friend, not a robot
-2. Keep answers concise but complete. Use bullet points for steps.
-3. If asked about private/technical/backend info (private keys, admin passwords, function URLs, database structure, exact API keys, admin chat IDs), say you don't have that info and refer to support
-4. If you don't know something specific, give your best helpful guess and offer to connect to support
-5. Use emojis naturally but don't overdo it
-6. Always respond in the same language the user writes in
-7. For greetings or small talk, respond warmly and offer to help with CryptoJet topics
-8. Never make up prices, percentages, or features that aren't listed above
-9. Encourage users — mining is exciting and the platform is legitimate
-10. If user seems frustrated or confused, empathize first before explaining`;
+// ───────── WITHDRAWAL PASSWORD ───────────────────────────────
+{
+  tags:["withdrawal password","withdraw password","set password","forgot password","no password","create password","change password","reset password","password for withdrawal","where to set password"],
+  chips:["Where do I set my password?","What if I forget my password?","How do I withdraw?"],
+  answer:()=>`The <b>withdrawal password</b> is a security PIN set on the ${pg("Me → Bank Information")} page.\n\nYou enter it every time you request a withdrawal — it stops unauthorised cashouts.\n\n<b>If you forget it:</b>\n<div class="step-box"><div class="step-title">🔐 Reset Forgotten Password</div><div class="step-item"><span class="step-num">1</span><span>Go to the ${pg("Sign In page")}</span></div><div class="step-item"><span class="step-num">2</span><span>Tap <b>Forgot Password?</b> (only visible on Sign In mode)</span></div><div class="step-item"><span class="step-num">3</span><span><b>Email users:</b> Enter your email → get a 6-digit reset code → enter code → set new password</span></div><div class="step-item"><span class="step-num">4</span><span><b>Phone users:</b> Enter your number → add a recovery email → get reset code sent there</span></div></div>`
+},
 
-// ── HELPERS ──────────────────────────────────────────────────
-const chat      = document.getElementById("chat");
-const input     = document.getElementById("msgInput");
-const sendBtn   = document.getElementById("sendBtn");
-let history     = [];
-let isBusy      = false;
+// ───────── BALANCE NOT UPDATING ───────────────────────────────
+{
+  tags:["balance not update","balance wrong","not showing","balance not adding","why balance","balance issue","not adding","earnings not showing","where money","balance not change","why not adding","balance stuck","not credited","my balance"],
+  chips:["How do cycles work?","Is my miner still running?","How do I restart my miner?"],
+  answer:()=>`This is completely normal! Here's why:\n\n<b>Balance only updates at the END of a complete cycle:</b>\n<ul><li>The <b>live counter</b> on your miner shows real-time decimals — that's just a display, not your real balance yet</li><li><b>S-900 / S-1200 (24hr):</b> balance updates after the full 24 hours</li><li><b>S-244 / S-500 (48hr):</b> you'll see "pending balance" after 24hrs but it only credits after the full 48 hours</li></ul>\n<b>Quick checklist:</b>\n<ul><li>✅ Is your miner still running? Check ${pg("Miner → Running tab")}</li><li>✅ Did the cycle complete? Look for the red <span class="rd">Earning Paused</span> message</li><li>✅ If paused — tap <b>Start New Cycle</b> and it credits immediately when that cycle ends</li></ul>\n<div class="tip-box">💡 Balance updates happen automatically when a cycle ends — you don't need to do anything special!</div>`
+},
 
-function now() {
-  return new Date().toLocaleTimeString([], { hour:"2-digit", minute:"2-digit" });
+// ───────── MINER PAUSED ──────────────────────────────────────
+{
+  tags:["earning paused","miner paused","miner stopped","how to restart","start new cycle","restart miner","miner not running","miner inactive","cycle ended","paused","miner expired","miner done","how do i restart"],
+  chips:["How long is one cycle?","Why didn't my balance update?","How does mining work?"],
+  answer:()=>`When you see <span class="rd">Earning Paused</span> in red, it means a cycle just ended — and your earnings have been credited to your balance. 🎉\n\n<div class="step-box"><div class="step-title">🔄 How to Start a New Cycle</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Miner → Running tab")}</span></div><div class="step-item"><span class="step-num">2</span><span>Find the paused miner (it shows the red "Earning Paused" badge)</span></div><div class="step-item"><span class="step-num">3</span><span>Tap <b>Start New Cycle</b></span></div><div class="step-item"><span class="step-num">4</span><span>A fresh cycle begins immediately — earnings start accumulating again!</span></div></div>\n<div class="tip-box">💡 You can run unlimited cycles within your plan duration (30–45 days depending on the miner). Make sure to restart promptly so you don't waste time!</div>`
+},
+
+// ───────── TASKS & POINTS ────────────────────────────────────
+{
+  tags:["task","point","daily check","check in","social task","earn point","how points","telegram task","trust score","redeem","points system","ui points","tasks page","daily bonus","streak"],
+  chips:["How does trust score help?","Where is the Tasks page?","How do referrals work?"],
+  answer:()=>`<b>Tasks & Points</b> build your <b>Miner Trust Score</b> — which unlocks priority withdrawals!\n\n<b>Where to find it:</b> ${pg("Tasks tab")} in the bottom navigation or ${pg("Dashboard → Tasks")}\n\n<b>How to earn points:</b>\n<ul><li>📅 <b>Daily check-in</b> — tap once every 24 hours for +1 point. Build a streak!</li><li>📱 <b>Social tasks</b> — Follow on Telegram, WhatsApp, Facebook, Twitter, Instagram = <b>+2 points each</b></li></ul>\n<b>Why trust score matters:</b>\n<ul><li>🏅 Higher score = <b>priority withdrawal processing</b></li><li>Sharing withdrawal proof in ${pg("Feeds")} also boosts your score</li></ul>`
+},
+
+// ───────── FEEDS / COMMUNITY ──────────────────────────────────
+{
+  tags:["feed","community","post","share","withdrawal proof","proof","community feed","boost trust","feeds page","react","emoji","community post"],
+  chips:["How does trust score work?","How do I share proof?","What is Miner Trust Score?"],
+  answer:()=>`The ${pg("Feeds page")} is CryptoJet's community hub!\n\n<b>What you can do there:</b>\n<ul><li>📢 See platform announcements and updates</li><li>😊 React to posts with emojis</li><li>🏆 Share your withdrawal screenshots as proof</li></ul>\n<b>Why sharing proof matters:</b>\n<ul><li>Every withdrawal proof you post <b>boosts your Miner Trust Score</b></li><li>Higher trust score = <span class="gd">priority withdrawal processing</span></li><li>It also helps new users see that CryptoJet pays! 🤝</li></ul>\n\nAccess it from ${pg("Feeds tab")} in bottom navigation or ${pg("Dashboard → Feeds")}.`
+},
+
+// ───────── SIGN IN / SIGN UP ──────────────────────────────────
+{
+  tags:["sign in","sign up","login","create account","register","how to sign","new account","email sign","phone sign","google sign","how to create account","cant sign in","cant login","sign in problem"],
+  chips:["I forgot my password","Why do I need to verify email?","Can I sign in with Google?"],
+  answer:()=>`CryptoJet supports <b>3 ways to sign up or sign in</b>:\n\n<ul><li>✉️ <b>Email</b> — new accounts must verify email before first login. Check inbox + spam!</li><li>📱 <b>Phone</b> — 20 country codes supported. No OTP or verification needed — just number + password.</li><li>🔵 <b>Google</b> — one tap, automatic account creation if you're new.</li></ul>\n\nAll sign in options are on the ${pg("Sign In page")}.\n\n<b>Existing users</b> created before the verification system was added can sign in without re-verifying. ✅`
+},
+
+// ───────── EMAIL VERIFICATION ─────────────────────────────────
+{
+  tags:["verify email","verification","not verified","email verify","check email","verify my email","didnt receive","resend verification","spam","email not arriving","verification link","confirm email"],
+  chips:["Resend verification email","I'd rather sign up with phone","How do I sign in?"],
+  answer:()=>`After signing up with email, a <b>verification link</b> is sent to your inbox.\n\n<div class="step-box"><div class="step-title">📧 Email Verification Steps</div><div class="step-item"><span class="step-num">1</span><span>Check your email inbox for a message from CryptoJet</span></div><div class="step-item"><span class="step-num">2</span><span>Check your <b>Spam / Junk folder</b> too — it often goes there</span></div><div class="step-item"><span class="step-num">3</span><span>Click the verification link in the email</span></div><div class="step-item"><span class="step-num">4</span><span>Come back to ${pg("Sign In page")} and log in normally</span></div></div>\n\n<b>Didn't receive it?</b> On the sign in page, enter your email + password, tap Sign In — a <span class="hl">Resend email</span> link appears automatically.\n\n<b>Easier option:</b> Sign up with <b>phone number or Google</b> — no verification needed at all! 📱`
+},
+
+// ───────── EXCHANGE RATE ─────────────────────────────────────
+{
+  tags:["exchange rate","naira","ngn","how much naira","rate","dollar to naira","1500","conversion","usd to ngn","naira rate","how much is dollar","current rate"],
+  chips:["How do I recharge?","How much does the S-900 cost in naira?","Can I deposit USDT instead?"],
+  answer:()=>`The bank transfer exchange rate on CryptoJet is:\n\n<b>$1 USD = ₦1,500</b>\n\n<b>Quick reference:</b>\n<ul><li>S-244 ($10) → transfer <span class="gd">₦15,000</span></li><li>S-500 ($30) → transfer <span class="gd">₦45,000</span></li><li>S-900 ($50) → transfer <span class="gd">₦75,000</span></li><li>S-1200 ($120) → transfer <span class="gd">₦180,000</span></li></ul>\nThe exact naira amount for your chosen USD is shown automatically on ${pg("Recharge → Bank Transfer")} when you enter your amount. 💵`
+},
+
+// ───────── MINIMUMS ──────────────────────────────────────────
+{
+  tags:["minimum","min deposit","min withdraw","minimum deposit","minimum withdrawal","lowest amount","smallest","how much minimum","least i can","minimum amount"],
+  chips:["How do I recharge?","How do I withdraw?","What are the fees?"],
+  answer:()=>`Here are all the minimums on CryptoJet:\n\n<ul><li>💰 <b>Minimum USDT deposit:</b> <span class="gd">$5</span></li><li>🏦 <b>Bank deposit:</b> No stated minimum — deposit what you need</li><li>💸 <b>Minimum withdrawal (bank or USDT):</b> <span class="gd">$10</span></li><li>⛏️ <b>Cheapest miner:</b> <span class="gd">$10</span> (S-244)</li></ul>\n<div class="tip-box">💡 Remember: 10% fee on withdrawals. So $10 withdrawal → you receive $9. Plan accordingly!</div>`
+},
+
+// ───────── TRANSACTION HISTORY ───────────────────────────────
+{
+  tags:["transaction","history","transaction history","past transaction","my transactions","see transaction","all transaction","view transaction","check my deposit","check my withdrawal","where do i see"],
+  chips:["Why is my deposit still pending?","How do I recharge?","How do I withdraw?"],
+  answer:()=>`You can view all your transactions on the ${pg("Transaction History page")}.\n\n<b>How to get there:</b>\n<ul><li>Go to ${pg("Me tab")} → tap <b>Transaction History</b></li></ul>\n\n<b>What you'll see:</b>\n<ul><li>All deposits and withdrawals with their dates and amounts</li><li>Status: <span class="gd">Approved</span>, <span class="am">Pending</span>, or <span class="rd">Rejected</span></li><li>Payment method (Bank or USDT)</li></ul>\n\nUpdates happen in real time — the moment admin acts on a transaction, the status changes instantly. 📋`
+},
+
+// ───────── MINER ID ──────────────────────────────────────────
+{
+  tags:["miner id","what is cj","my id","user id","account id","find my id","cj number","what is my id","where is my id","my cryptojet id"],
+  chips:["Where can I see my Miner ID?","How do I contact support?","How do I sign in?"],
+  answer:()=>`Your <b>Miner ID</b> is your unique CryptoJet account code — it looks like <span class="gd">CJ1234</span> and is assigned at account creation.\n\n<b>Where to find it:</b>\n<ul><li>${pg("Dashboard")} — shown on your user card at the top</li><li>${pg("Me tab")} — shown in your profile section</li></ul>\n\nAlways have it ready when contacting support — it helps the team find your account instantly! 🆔`
+},
+
+// ───────── ABOUT CRYPTOJET ───────────────────────────────────
+{
+  tags:["about cryptojet","what is cryptojet","about this app","platform info","is it legit","is it real","is it safe","scam","fraud","trustworthy","real platform","how does cryptojet work","legitimate"],
+  chips:["How does mining work?","How do I get started?","How do I withdraw?"],
+  answer:()=>`<b>CryptoJet</b> is a Nigerian cloud mining investment platform launched in 2026. No hardware needed — everything runs online through your phone or browser.\n\n<b>What makes it trustworthy:</b>\n<ul><li>✅ All deposits manually reviewed before crediting</li><li>✅ USDT withdrawals sent automatically from a verified on-chain wallet</li><li>✅ Every user has full transaction history visibility</li><li>✅ Withdrawal password protection on every cashout</li><li>✅ Real-time balance updates the moment a transaction is approved</li><li>✅ 3-level referral team income system rewards active community members</li></ul>\n\nThousands of Nigerians are already earning daily. The process is simple: recharge → buy a miner → start → earn → repeat. 🇳🇬🚀`
+},
+
+// ───────── USDT NETWORKS ─────────────────────────────────────
+{
+  tags:["bep20","trc20","binance smart chain","tron network","network","which network","what network","usdt network","crypto network","bnb chain"],
+  chips:["How do I deposit USDT?","How do I withdraw USDT?","What's the minimum?"],
+  answer:()=>`CryptoJet supports two USDT networks:\n\n<b>For deposits (Recharge):</b>\n<ul><li>✅ <b>BEP20 (Binance Smart Chain)</b> — ultra-low fees (~$0.05–0.20), auto-verified</li><li>✅ <b>TRC20 (TRON)</b> — near-zero fees, also auto-verified</li></ul>\n<b>For withdrawals:</b>\n<ul><li>✅ <b>BEP20 only</b> — wallet must start with <span class="bl">0x</span></li><li>Compatible with MetaMask, Trust Wallet, Binance</li></ul>\n<div class="warn-box">⚠️ Always match network to network. Sending BEP20 USDT to a TRC20 address = permanent loss of funds.</div>`
+},
+
+// ───────── PENDING DEPOSIT LIMIT ─────────────────────────────
+{
+  tags:["pending deposit","one pending","two deposit","multiple deposit","cant deposit again","cant recharge again","already pending","another recharge","pending order","blocked recharge","deposit limit"],
+  chips:["How do I check my deposit status?","How long does approval take?","Contact support"],
+  answer:()=>`CryptoJet only allows <b>one pending deposit at a time</b>.\n\nIf you already have a deposit being reviewed, you can't submit another until it's settled.\n\n<div class="step-box"><div class="step-title">✅ What To Do</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me → Transaction History")}</span></div><div class="step-item"><span class="step-num">2</span><span>Check if your current deposit shows as <span class="am">Pending</span></span></div><div class="step-item"><span class="step-num">3</span><span>Wait for it to be Approved or Rejected (usually 3–20 minutes)</span></div><div class="step-item"><span class="step-num">4</span><span>Once settled, you can submit a new recharge</span></div></div>\n\nIf it's been over 30 minutes, contact support below with your receipt. 🙋`
+},
+
+// ───────── SUPPORT ────────────────────────────────────────────
+{
+  tags:["support","contact","telegram","live chat","real person","human","agent","customer service","speak to","not resolved","still confused","talk to someone","need help more","cant figure","cant solve","problem not solved"],
+  chips:[],
+  isSupport:true,
+  answer:()=>`I'll connect you with the <b>CryptoJet support team</b> right now!\n\nOur team is on Telegram and responds quickly — tap below to open a direct chat. They handle everything I can't. 💬`
+},
+
+];
+
+// ═══════════════════════════════════════════════════════════════
+//  MATCHING ENGINE
+// ═══════════════════════════════════════════════════════════════
+
+const FRUSTRATION = ["not working","scam","fraud","cheat","fake","lied","issue","wrong","broken","annoyed","upset","cheating","stolen","useless","terrible","worst","angry","mad","rip off","wasted","robbed","rubbish","rubbish","this is trash","disgusting","where is my money","took my money"];
+
+const SMALL_TALK_PATTERNS = [
+  { match:["lol","lmao","haha","😂","😅","funny"], resp:`Haha! 😄 Glad you're in a good mood! Is there anything CryptoJet-related I can help you with?` },
+  { match:["nice","dope","fire","🔥","lit","mad","wow","whoa","amazing","incredible"], resp:`Right?! CryptoJet is pretty awesome! 🔥 What would you like to know more about?` },
+  { match:["bored","nothing to do","just chatting","just browsing"], resp:`Well then, let's make it productive! 😄 Want to learn how to make passive income while you're chilling? Ask me how mining works! ⚡` },
+  { match:["morning","good morning"], resp:`Good morning! ☀️ Hope you're starting the day well! Ready to check on your mining earnings? I'm here to help with anything CryptoJet!` },
+  { match:["afternoon","good afternoon"], resp:`Good afternoon! 🌤️ Hope the day is going great! What can I help you with on CryptoJet today?` },
+  { match:["night","good night","evening"], resp:`Good evening! 🌙 Your miners are working around the clock even while you sleep! 😄 Anything I can help with?` },
+  { match:["who is your creator","who created you","anthropic","claude"], resp:`I'm CryptoJet AI — a smart assistant built specifically for this platform. I'm not able to share details about my underlying tech, but I'm here to help you get the most out of CryptoJet! What do you need? ⚡` },
+  { match:["i love you","love you","😍","❤️","🥰"], resp:`Aww, love the energy! 😄💚 I'm just here to make sure your CryptoJet experience is amazing. What can I help you with?` },
+  { match:["hungry","food","eat","lunch","dinner","breakfast"], resp:`Haha, food on my mind too! 🍽️ But first — make sure your miners are running so you can afford a good meal! 😄 Need help with anything CryptoJet?` },
+];
+
+function matchKB(input) {
+  const q = input.toLowerCase().trim();
+
+  // Small talk pattern matching
+  for (const { match, resp } of SMALL_TALK_PATTERNS) {
+    if (match.some(m => q.includes(m))) {
+      return { answer:resp, chips:["How does mining work?","How do I recharge?","How do I withdraw?"], isSupport:false };
+    }
+  }
+
+  // Frustration detection
+  for (const word of FRUSTRATION) {
+    if (q.includes(word)) {
+      return {
+        answer:`I completely understand your frustration, and I'm sorry you're going through this. 💙\n\nLet me connect you with our <b>live support team</b> right away — they can look into your specific situation personally and resolve it.`,
+        chips:[], isSupport:true
+      };
+    }
+  }
+
+  // Score-based KB matching
+  let best=null, bestScore=0;
+  for (const entry of KB) {
+    let score=0;
+    for (const tag of entry.tags) {
+      if (q.includes(tag)) score += tag.split(" ").length * 2;
+    }
+    if (score > bestScore) { bestScore=score; best=entry; }
+  }
+
+  if (best && bestScore > 0) {
+    return { answer:best.answer(), chips:best.chips||[], isSupport:best.isSupport||false };
+  }
+
+  // Smart fallback with best guess attempt
+  const GUESSES = [
+    { words:["balance","money","dollar","earn"], answer:`Sounds like you're asking about your balance or earnings! Your balance updates at the end of each mining cycle. Check ${pg("Miner → Running")} to see your active miners. Want a full explanation?`, chips:["How do cycles work?","Why isn't my balance updating?","How do I withdraw?"] },
+    { words:["miner","mine","s-244","s-900","s-500","s-1200","purchase","buy"], answer:`Looks like you're asking about miners! You can buy and manage all miners from ${pg("Miner tab")}. Want to see all available plans and prices?`, chips:["Show me all miners","Which miner is best?","How do I start mining?"] },
+    { words:["pay","send","transfer","naira","ngn","usdt","money in"], answer:`Sounds like a deposit question! Head to ${pg("Me → Recharge")} for all deposit options — bank transfer or USDT. Want a step-by-step guide?`, chips:["How do I recharge with bank?","How do I deposit USDT?","How long does approval take?"] },
+    { words:["withdraw","cash","out","receive","bank","payout"], answer:`Sounds like a withdrawal question! Go to ${pg("Me → Withdraw")} to cash out. Want the full step-by-step guide?`, chips:["How do I withdraw?","What's the fee?","Which days can I withdraw?"] },
+  ];
+
+  for (const guess of GUESSES) {
+    if (guess.words.some(w => q.includes(w))) {
+      return { answer:guess.answer, chips:guess.chips, isSupport:false };
+    }
+  }
+
+  return {
+    answer:`Hmm, I'm not quite sure what you mean, but I'd love to help! 😊\n\nHere are some things I can assist you with:\n<ul><li>⛏️ How mining and cycles work</li><li>💰 Recharging your balance (bank or USDT)</li><li>💸 Withdrawing your earnings</li><li>👥 Referrals and team income</li><li>📊 Miners and plans</li><li>🔐 Account and login issues</li></ul>\nTry rephrasing your question, or tap a suggestion below! 👇`,
+    chips:["How does mining work?","How do I recharge?","How do I withdraw?","Contact Support"],
+    isSupport:false
+  };
 }
-function scroll() {
-  chat.scrollTop = chat.scrollHeight;
-}
+
+// ═══════════════════════════════════════════════════════════════
+//  UI ENGINE
+// ═══════════════════════════════════════════════════════════════
+
+const chatEl  = document.getElementById("chat");
+const inputEl = document.getElementById("msgInput");
+let   busy    = false;
+
+function now() { return new Date().toLocaleTimeString([], { hour:"2-digit", minute:"2-digit" }); }
+function scroll() { chatEl.scrollTop = chatEl.scrollHeight; }
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-// ── ADD USER BUBBLE ───────────────────────────────────────────
-function addUser(text) {
+function addUserMsg(text) {
   const row = document.createElement("div");
   row.className = "msg-row user";
-  row.innerHTML = `
-    <div class="msg-wrap">
-      <div class="bubble user">${text.replace(/</g,"&lt;")}</div>
-      <div class="msg-time">${now()}</div>
-    </div>`;
-  chat.appendChild(row);
-  scroll();
+  row.innerHTML = `<div class="msg-wrap"><div class="bubble user">${text.replace(/</g,"&lt;")}</div><div class="msg-time">${now()}</div></div>`;
+  chatEl.appendChild(row); scroll();
 }
 
-// ── SHOW / REMOVE TYPING ──────────────────────────────────────
 function showTyping() {
   const row = document.createElement("div");
   row.className = "typing-row"; row.id = "typing";
-  row.innerHTML = `
-    <div class="row-avatar">⚡</div>
-    <div class="typing-bubble">
-      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-    </div>`;
-  chat.appendChild(row); scroll();
+  row.innerHTML = `<div class="row-avatar">⚡</div><div class="typing-bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  chatEl.appendChild(row); scroll();
 }
-function removeTyping() {
-  const t = document.getElementById("typing");
-  if (t) t.remove();
-}
+function removeTyping() { const t = document.getElementById("typing"); if(t) t.remove(); }
 
-// ── RENDER MARKDOWN-LITE ──────────────────────────────────────
-// Converts **bold**, *italic*, - lists, numbered lists into HTML
-function renderMarkdown(text) {
-  // Code blocks first
-  text = text.replace(/```[\s\S]*?```/g, match => {
-    const code = match.replace(/^```\w*\n?/, "").replace(/```$/, "");
-    return `<code style="background:#0c1628;padding:2px 6px;border-radius:5px;font-size:12px;color:#00ffcc;">${code.replace(/</g,"&lt;")}</code>`;
-  });
-  // Bold
-  text = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-  // Italic
-  text = text.replace(/\*(.*?)\*/g, "<em>$1</em>");
-  // Bullet lists
-  const lines = text.split("\n");
-  let result = []; let inList = false;
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (/^[-•]\s+/.test(trimmed)) {
-      if (!inList) { result.push("<ul>"); inList = true; }
-      result.push("<li>" + trimmed.replace(/^[-•]\s+/, "") + "</li>");
-    } else if (/^\d+\.\s+/.test(trimmed)) {
-      if (!inList) { result.push("<ul>"); inList = true; }
-      result.push("<li>" + trimmed.replace(/^\d+\.\s+/, "") + "</li>");
-    } else {
-      if (inList) { result.push("</ul>"); inList = false; }
-      result.push(trimmed ? trimmed + "<br>" : "<br>");
-    }
-  }
-  if (inList) result.push("</ul>");
-  return result.join("").replace(/(<br>)+$/,"").replace(/^(<br>)+/,"");
-}
-
-// ── ADD BOT BUBBLE ────────────────────────────────────────────
-async function addBot(text, chips) {
+async function addBotMsg(html, chips, isSupport) {
   const row = document.createElement("div");
   row.className = "msg-row";
-  const bubbleId = "b" + Date.now();
-  row.innerHTML = `
-    <div class="row-avatar">⚡</div>
-    <div class="msg-wrap">
-      <div class="bubble bot" id="${bubbleId}"></div>
-      <div class="msg-time">${now()}</div>
-    </div>`;
-  chat.appendChild(row);
+  const id = "m" + Date.now();
+  row.innerHTML = `<div class="row-avatar">⚡</div><div class="msg-wrap"><div class="bubble bot" id="${id}"></div><div class="msg-time">${now()}</div></div>`;
+  chatEl.appendChild(row);
+  const bubble = document.getElementById(id);
 
-  const bubble = document.getElementById(bubbleId);
-
-  // Stream-render word by word for short responses, instant for long
-  const words = text.split(" ");
-  if (words.length < 60) {
-    for (let i = 0; i < words.length; i++) {
-      bubble.innerHTML = renderMarkdown(words.slice(0, i + 1).join(" "));
-      scroll();
-      await sleep(18);
-    }
-  } else {
-    bubble.innerHTML = renderMarkdown(text);
+  // For complex HTML (step boxes, miner grids) — render instantly
+  const isComplex = html.includes("step-box") || html.includes("miner-grid") || html.includes("warn-box");
+  if (isComplex || html.length > 600) {
+    bubble.innerHTML = html;
     scroll();
+  } else {
+    // Stream word-by-word for short simple responses
+    const parts = html.split(/(<[^>]+>)/);
+    let built = "";
+    for (const part of parts) {
+      if (part.startsWith("<")) {
+        built += part;
+      } else {
+        const words = part.split(" ");
+        for (let i = 0; i < words.length; i++) {
+          built += (i > 0 ? " " : "") + words[i];
+          bubble.innerHTML = built;
+          scroll(); await sleep(16);
+        }
+      }
+    }
   }
-
   bubble.removeAttribute("id");
 
-  // Add chips if provided
+  // Chips
   if (chips && chips.length) {
     const chipRow = document.createElement("div");
     chipRow.className = "chips";
@@ -439,117 +508,57 @@ async function addBot(text, chips) {
       btn.className = "chip"; btn.textContent = c;
       btn.onclick = () => {
         document.querySelectorAll(".chips").forEach(el => el.remove());
-        input.value = c;
-        send();
+        inputEl.value = c; send();
       };
       chipRow.appendChild(btn);
     });
-    chat.appendChild(chipRow);
-    scroll();
+    chatEl.appendChild(chipRow); scroll();
+  }
+
+  // Support button
+  if (isSupport) {
+    const wrap = document.createElement("div");
+    wrap.className = "support-wrap";
+    const btn = document.createElement("button");
+    btn.className = "support-btn";
+    btn.innerHTML = "💬 Open Telegram Support";
+    btn.onclick = () => window.open("https://t.me/tiffany682", "_blank");
+    wrap.appendChild(btn);
+    chatEl.appendChild(wrap); scroll();
   }
 }
 
-// ── SEND MESSAGE ──────────────────────────────────────────────
 async function send() {
-  const text = input.value.trim();
-  if (!text || isBusy) return;
-
-  isBusy = true;
-  sendBtn.disabled = true;
+  const text = inputEl.value.trim();
+  if (!text || busy) return;
+  busy = true;
   document.querySelectorAll(".chips").forEach(el => el.remove());
 
-  addUser(text);
-  input.value = "";
-  history.push({ role:"user", content:text });
+  addUserMsg(text);
+  inputEl.value = "";
 
-  await sleep(400);
+  const delay = 400 + Math.random() * 500;
   showTyping();
+  await sleep(delay);
+  removeTyping();
 
-  try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model:      "claude-sonnet-4-20250514",
-        max_tokens: 1000,
-        system:     SYSTEM_PROMPT,
-        messages:   history
-      })
-    });
+  const { answer, chips, isSupport } = matchKB(text);
+  await addBotMsg(answer, chips, isSupport);
 
-    const data    = await response.json();
-    const content = data.content?.[0]?.text || "Sorry, I couldn't get a response. Please try again.";
-
-    removeTyping();
-    history.push({ role:"assistant", content });
-
-    // Keep history max 20 messages to avoid token overflow
-    if (history.length > 20) history = history.slice(-20);
-
-    // Detect support escalation
-    const wantsSupport = /telegram|support|human|agent|real person|t\.me/i.test(content);
-
-    await addBot(content, getSuggestedChips(text, content));
-
-    if (wantsSupport) {
-      const wrap = document.createElement("div");
-      wrap.className = "support-wrap";
-      const btn = document.createElement("button");
-      btn.className = "support-btn";
-      btn.innerHTML = "💬 Open Telegram Support";
-      btn.onclick = () => window.open("https://t.me/tiffany682", "_blank");
-      wrap.appendChild(btn);
-      chat.appendChild(wrap);
-      scroll();
-    }
-
-  } catch (err) {
-    removeTyping();
-    await addBot("I'm having trouble connecting right now. Please try again in a moment, or contact our support on Telegram. 🙏");
-  }
-
-  isBusy = false;
-  sendBtn.disabled = false;
-  input.focus();
+  busy = false;
+  inputEl.focus();
 }
 
-// ── SMART CHIP SUGGESTIONS ────────────────────────────────────
-function getSuggestedChips(userMsg, botResponse) {
-  const m = userMsg.toLowerCase();
-  const b = botResponse.toLowerCase();
+inputEl.addEventListener("keypress", e => { if (e.key === "Enter" && !busy) send(); });
 
-  if (m.includes("miner") || b.includes("s-244") || b.includes("s-1200"))
-    return ["How do I start mining?","How do I recharge?","Which miner is best?"];
-  if (m.includes("recharge") || m.includes("deposit") || m.includes("fund"))
-    return ["How long does approval take?","How do I withdraw?","What miners can I buy?"];
-  if (m.includes("withdraw") || m.includes("cash out"))
-    return ["What's the fee?","What days can I withdraw?","How do I add my bank?"];
-  if (m.includes("refer") || m.includes("team") || m.includes("invite"))
-    return ["Where is my referral link?","How do I withdraw team income?","What are the referral percentages?"];
-  if (m.includes("hi") || m.includes("hello") || m.includes("hey") || m.includes("start"))
-    return ["How does mining work?","How do I recharge?","What miners are available?","How do I withdraw?"];
-  if (m.includes("balance") || m.includes("earning"))
-    return ["Why isn't my balance updating?","How do I withdraw?","How does mining work?"];
-  if (b.includes("support") || b.includes("telegram"))
-    return [];
-
-  return ["How does mining work?","How do I recharge?","How do I withdraw?"];
-}
-
-// ── ENTER KEY ─────────────────────────────────────────────────
-input.addEventListener("keypress", e => { if (e.key === "Enter" && !isBusy) send(); });
-
-// ── GREETING ON LOAD ──────────────────────────────────────────
+// Boot greeting
 window.onload = async () => {
-  await sleep(300);
-  const greeting = `Hey! 👋 I'm **CryptoJet AI** — your 24/7 mining assistant powered by real AI.\n\nI know everything about CryptoJet — miners, recharges, withdrawals, referrals, team income, and more. What do you need help with?`;
-  await addBot(greeting, [
-    "How does mining work?",
-    "How do I recharge?",
-    "What miners are available?",
-    "How do I withdraw?",
-    "How does referral work?"
-  ]);
+  await sleep(400);
+  await addBotMsg(
+    `Hey! 👋 I'm <b>CryptoJet AI</b> — your smart 24/7 assistant.\n\nI know <b>everything</b> about this platform and I can give you <b>step-by-step guides</b> and point you to <b>exact pages</b>. What would you like help with?`,
+    ["How does mining work?","How do I recharge?","What miners can I buy?","How do I withdraw?","How do referrals work?"],
+    false
+  );
 };
 </script>
 </body>
