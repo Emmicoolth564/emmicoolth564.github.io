@@ -220,21 +220,22 @@ const TX_PAGE_SIZE         = 20;
 
 if (myUid !== ADMIN_UID) { alert("Access denied"); window.location.href = "signin.html"; }
 
-let allUsers        = {};
-let allTransactions = {};
-let currentOpenUid  = null;
-let allTxPage       = 0;       // current page index for "All Tx"
-let allTxSorted     = [];      // sorted entries cache
+let allUsers       = {};
+let currentOpenUid = null;
+// Tx are NEVER bulk-loaded. Each tab fetches only what it needs from Firebase.
+let allTxOldestKey = null;   // cursor for "All Tx" pagination
+let allTxExhausted = false;  // no more pages left
 
-// ── BOOT ──────────────────────────────────────────────────────
+// ── BOOT — only load users, pending count is a separate lightweight query ──
 window.addEventListener("load", async () => {
-  await Promise.all([ loadUsers(), loadTransactions() ]);
+  await loadUsers();
+  loadPendingCount(); // non-blocking, runs in background
   const params  = new URLSearchParams(window.location.search);
   const deepUid = params.get("uid");
   if (deepUid && allUsers[deepUid]) openDetail(deepUid, allUsers[deepUid]);
 });
 
-// ── LOAD DATA ─────────────────────────────────────────────────
+// ── LOAD USERS ────────────────────────────────────────────────
 async function loadUsers() {
   const snap = await db.ref("users").once("value");
   allUsers = snap.val() || {};
@@ -242,14 +243,10 @@ async function loadUsers() {
   renderUsers();
 }
 
-async function loadTransactions() {
-  const snap      = await db.ref("transactions").once("value");
-  allTransactions = snap.val() || {};
-  updatePendingBadge();
-}
-
-function updatePendingBadge() {
-  const count = Object.values(allTransactions).filter(t => t.status === "pending").length;
+// ── PENDING COUNT — only fetches pending status, very small payload ──
+async function loadPendingCount() {
+  const snap  = await db.ref("transactions").orderByChild("status").equalTo("pending").once("value");
+  const count = snap.numChildren();
   document.getElementById("pendingBadge").textContent = count + " Pending";
   document.getElementById("statPending").textContent  = count;
 }
@@ -306,31 +303,60 @@ function getReferrerName(refUid) {
   return (allUsers[refUid] && allUsers[refUid].minerId) || "Unknown";
 }
 
-// ── PENDING (with Approve / Reject buttons) ───────────────────
-function renderPending() {
-  const list    = document.getElementById("pendingList");
-  const entries = Object.entries(allTransactions).filter(([,t]) => t.status === "pending");
+// ── PENDING — fetches ONLY pending records from Firebase ──────
+async function renderPending() {
+  const list = document.getElementById("pendingList");
+  list.innerHTML = `<div class="empty"><div class="empty-spin"></div></div>`;
+  const snap    = await db.ref("transactions").orderByChild("status").equalTo("pending").once("value");
+  const entries = [];
+  snap.forEach(child => entries.push([child.key, child.val()]));
+  entries.sort((a,b) => (b[1].date||0) - (a[1].date||0));
   list.innerHTML = entries.length ? "" : `<div class="empty">No pending transactions</div>`;
-  entries.sort((a,b) => (b[1].date||0) - (a[1].date||0))
-         .forEach(([txId, tx]) => list.appendChild(buildTxCard(txId, tx, allUsers[tx.uid]||{}, true)));
+  entries.forEach(([txId, tx]) => list.appendChild(buildTxCard(txId, tx, allUsers[tx.uid]||{}, true)));
 }
 
-// ── ALL TX with pagination (20 per page) ──────────────────────
-function renderAllTx(reset = true) {
+// ── ALL TX — Firebase cursor pagination, 20 records at a time ─
+async function renderAllTx(reset = true) {
   if (reset) {
-    allTxPage  = 0;
-    allTxSorted = Object.entries(allTransactions).sort((a,b) => (b[1].date||0) - (a[1].date||0));
-    document.getElementById("allTxList").innerHTML = "";
+    allTxOldestKey = null;
+    allTxExhausted = false;
+    document.getElementById("allTxList").innerHTML = `<div class="empty"><div class="empty-spin"></div></div>`;
   }
-  const list  = document.getElementById("allTxList");
-  const start = allTxPage * TX_PAGE_SIZE;
-  const slice = allTxSorted.slice(start, start + TX_PAGE_SIZE);
+  if (allTxExhausted) return;
 
-  slice.forEach(([txId, tx]) => list.appendChild(buildTxCard(txId, tx, allUsers[tx.uid]||{}, false)));
-  allTxPage++;
+  const list = document.getElementById("allTxList");
+  const btn  = document.getElementById("loadMoreBtn");
+  btn.disabled = true;
+  btn.textContent = "Loading...";
 
-  const btn = document.getElementById("loadMoreBtn");
-  btn.style.display = allTxSorted.length > allTxPage * TX_PAGE_SIZE ? "block" : "none";
+  // Fetch TX_PAGE_SIZE + 1 so we know if there's a next page
+  let query = db.ref("transactions").orderByKey().limitToLast(TX_PAGE_SIZE + 1);
+  if (allTxOldestKey) query = query.endAt(allTxOldestKey);
+
+  const snap    = await query.once("value");
+  const entries = [];
+  snap.forEach(child => entries.push([child.key, child.val()]));
+
+  // If we used a cursor, the first result is the duplicate of the previous page's last item — drop it
+  if (allTxOldestKey) entries.shift();
+
+  // Sort newest first (Firebase orderByKey gives oldest first)
+  entries.sort((a,b) => (b[1].date||0) - (a[1].date||0));
+
+  // Determine if more pages exist
+  const hasMore = entries.length > TX_PAGE_SIZE;
+  const page    = hasMore ? entries.slice(0, TX_PAGE_SIZE) : entries;
+
+  if (reset) list.innerHTML = "";
+  page.forEach(([txId, tx]) => list.appendChild(buildTxCard(txId, tx, allUsers[tx.uid]||{}, false)));
+
+  // Update cursor to oldest key in this page
+  if (page.length) allTxOldestKey = page[page.length - 1][0];
+
+  allTxExhausted = !hasMore;
+  btn.disabled    = false;
+  btn.textContent = "Load More Transactions";
+  btn.style.display = allTxExhausted ? "none" : "block";
 }
 
 function loadMoreTx() { renderAllTx(false); }
@@ -375,10 +401,9 @@ async function handleApprove(txId) {
     const resp = await fetch(`${URL_APPROVE_RECHARGE}?txId=${txId}&secret=${SECRET}`);
     const text = await resp.text();
     if (!resp.ok) throw new Error(text);
-    // Update local cache & UI
-    allTransactions[txId].status = "approved";
     updateTxCardStatus(txId, "approved");
-    updatePendingBadge();
+    // Refresh pending count from Firebase
+    loadPendingCount();
     toast("✅ Recharge approved!");
   } catch(e) {
     setTxBtnsDisabled(txId, false);
@@ -394,9 +419,8 @@ async function handleReject(txId) {
     const resp = await fetch(`${URL_REJECT_RECHARGE}?txId=${txId}&secret=${SECRET}`);
     const text = await resp.text();
     if (!resp.ok) throw new Error(text);
-    allTransactions[txId].status = "rejected";
     updateTxCardStatus(txId, "rejected");
-    updatePendingBadge();
+    loadPendingCount();
     toast("🗑 Recharge rejected");
   } catch(e) {
     setTxBtnsDisabled(txId, false);
