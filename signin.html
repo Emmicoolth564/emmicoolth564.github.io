@@ -23,7 +23,6 @@ body {
   font-family:'DM Sans',sans-serif;
   background:var(--bg);
   color:var(--text);
-  min-height:100vh;
   background-image:
     radial-gradient(ellipse at 20% 20%, rgba(0,255,204,0.07) 0%, transparent 55%),
     radial-gradient(ellipse at 80% 80%, rgba(0,240,255,0.05) 0%, transparent 55%);
@@ -31,13 +30,12 @@ body {
 
 .page {
   max-width:420px; margin:0 auto;
-  padding:36px 20px 80px;
-  display:flex; flex-direction:column; min-height:100vh;
+  padding:28px 16px 40px;
 }
 
 /* ── LOGO — green like dashboard ── */
-.logo-wrap { text-align:center; margin-bottom:28px; }
-.logo-svg  { width:240px; }
+.logo-wrap { text-align:center; margin-bottom:20px; }
+.logo-svg  { width:min(240px,65vw); }
 .logo-text {
   font-size:50px; font-weight:900; fill:none;
   stroke:#00ffcc; stroke-width:2;
@@ -58,7 +56,7 @@ body {
 /* ── MODE TOGGLE ── */
 .mode-toggle {
   display:flex; background:var(--card); border-radius:14px;
-  padding:5px; margin-bottom:20px; border:1px solid var(--border); gap:4px;
+  padding:5px; margin-bottom:14px; border:1px solid var(--border); gap:4px;
 }
 .mode-btn {
   flex:1; padding:11px; border-radius:10px; text-align:center;
@@ -73,10 +71,10 @@ body {
 /* ── CARD ── */
 .card {
   background:var(--card); border:1px solid var(--border);
-  border-radius:22px; padding:24px 20px; margin-bottom:14px;
+  border-radius:20px; padding:20px 16px; margin-bottom:12px;
 }
-.card-title { font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; color:var(--text); margin-bottom:3px; }
-.card-sub   { font-size:13px; color:var(--muted); margin-bottom:20px; line-height:1.5; }
+.card-title { font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:700; color:var(--text); margin-bottom:3px; }
+.card-sub   { font-size:13px; color:var(--muted); margin-bottom:16px; line-height:1.5; }
 
 /* ── METHOD TABS ── */
 .method-tabs { display:flex; gap:8px; margin-bottom:16px; }
@@ -91,10 +89,10 @@ body {
 .method-tab.active { background:rgba(0,255,204,0.1); border-color:var(--green); color:var(--green); }
 
 /* ── INPUTS ── */
-.field { margin-bottom:13px; }
-.field label { display:block; font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
+.field { margin-bottom:10px; }
+.field label { display:block; font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:5px; }
 .field input {
-  width:100%; padding:13px 15px; border-radius:12px;
+  width:100%; padding:12px 14px; border-radius:12px;
   border:1.5px solid rgba(255,255,255,0.08);
   background:rgba(255,255,255,0.04); color:var(--text);
   font-size:15px; font-family:'DM Sans',sans-serif; transition:all 0.2s;
@@ -138,7 +136,7 @@ body {
 }
 .forgot-link:hover { color:var(--green); }
 
-.divider { display:flex; align-items:center; gap:10px; margin:14px 0; }
+.divider { display:flex; align-items:center; gap:10px; margin:10px 0; }
 .divider::before, .divider::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.07); }
 .divider span { font-size:12px; color:var(--muted); white-space:nowrap; }
 
@@ -166,14 +164,14 @@ body {
 .verify-notice .resend { color:var(--blue); cursor:pointer; font-weight:600; text-decoration:underline; }
 
 /* ── REMEMBER ── */
-.remember { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); margin-bottom:13px; cursor:pointer; }
+.remember { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); margin-bottom:10px; cursor:pointer; }
 .remember input[type=checkbox] { accent-color:var(--green); width:15px; height:15px; cursor:pointer; }
 
 /* ── SWITCH LINK ── */
-.switch-link { text-align:center; font-size:13px; color:var(--muted); margin-top:6px; }
+.switch-link { text-align:center; font-size:13px; color:var(--muted); margin-top:4px; }
 .switch-link span { color:var(--green); cursor:pointer; font-weight:600; }
 
-.footer { text-align:center; margin-top:auto; padding-top:24px; font-size:12px; color:#334155; line-height:1.7; }
+.footer { text-align:center; padding-top:16px; padding-bottom:20px; font-size:12px; color:#334155; line-height:1.7; }
 
 /* ── FORGOT PASSWORD OVERLAY ── */
 .overlay {
@@ -505,20 +503,55 @@ async function handlePhoneAuth() {
 
 // ── GOOGLE SIGN IN ────────────────────────────────────────────
 async function signInWithGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.addScope("email");
+  provider.addScope("profile");
+
   try {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    const cred     = await auth.signInWithPopup(provider);
-    const user     = cred.user;
-    const snap     = await db.ref("users/" + user.uid).once("value");
-    if (!snap.exists()) await createUserProfile(user.uid, user.displayName || "Miner", user.email);
+    const cred = await auth.signInWithPopup(provider);
+    const user = cred.user;
+
+    // Create profile if new user
+    const snap = await db.ref("users/" + user.uid).once("value");
+    if (!snap.exists()) {
+      await createUserProfile(user.uid, user.displayName || "Miner", user.email);
+    }
+
     localStorage.setItem("uid", user.uid);
-    if (document.getElementById("rememberMe").checked) localStorage.setItem("rememberedEmail", user.email || "");
+    if (document.getElementById("rememberMe").checked) {
+      localStorage.setItem("rememberedEmail", user.email || "");
+    }
+
     showToast("Signed in with Google ✅", "success");
-    setTimeout(() => window.location.href = "dashboard.html", 800);
+    // Short delay so toast is visible then redirect
+    setTimeout(() => { window.location.href = "dashboard.html"; }, 1000);
+
   } catch (err) {
-    if (err.code !== "auth/popup-closed-by-user") showToast(friendlyError(err.code || err.message), "error");
+    if (err.code === "auth/popup-blocked" || err.code === "auth/popup-closed-by-user") {
+      // Fallback to redirect-based sign in if popup blocked
+      if (err.code === "auth/popup-blocked") {
+        showToast("Popup blocked — trying redirect...", "error");
+        setTimeout(() => auth.signInWithRedirect(provider), 800);
+      }
+      // If user just closed the popup, do nothing
+    } else {
+      showToast(friendlyError(err.code || err.message), "error");
+    }
   }
 }
+
+// Handle redirect result (for when popup was blocked and we used redirect instead)
+auth.getRedirectResult().then(async result => {
+  if (!result || !result.user) return;
+  const user = result.user;
+  const snap = await db.ref("users/" + user.uid).once("value");
+  if (!snap.exists()) {
+    await createUserProfile(user.uid, user.displayName || "Miner", user.email);
+  }
+  localStorage.setItem("uid", user.uid);
+  showToast("Signed in with Google ✅", "success");
+  setTimeout(() => { window.location.href = "dashboard.html"; }, 1000);
+}).catch(() => {});
 
 // ── CREATE USER PROFILE ───────────────────────────────────────
 async function createUserProfile(uid, name, emailOrPhone, isPhone = false) {
