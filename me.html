@@ -66,22 +66,16 @@
     .uid { color:#22c55e; font-weight:700; }
     .level { color:#38bdf8; font-size:13px; }
 
-    /* BALANCE - SMALLER & CLEANER */
-    .balance {
-        margin:15px;
-        display:flex;
-        gap:10px;
-    }
-    .balance-box {
-        flex:1;
-        padding:14px 10px;
-        border-radius:16px;
-        background:#0f172a;
-        text-align:center;
-        box-shadow:0 0 15px rgba(0,255,204,0.08);
-    }
-    .balance-label { font-size:12px; color:#94a3b8; }
-    .balance-amount { font-size:22px; font-weight:700; color:#00ffcc; margin-top:4px; }
+    /* BALANCE CARD */
+.balance-card {
+  margin-top:12px; padding:14px; border-radius:14px;
+  background:#0f172a; display:flex; justify-content:space-between;
+  box-shadow:0 0 20px rgba(0,255,204,0.05);
+  border:1px solid rgba(255,255,255,0.04);
+}
+.balance-item { text-align:center; flex:1; }
+.label { font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:0.06em; }
+.value { margin-top:4px; font-size:17px; color:#00ffcc; font-weight:700; font-family:'Space Grotesk',sans-serif; }
 
     /* ACTIONS */
     .actions {
