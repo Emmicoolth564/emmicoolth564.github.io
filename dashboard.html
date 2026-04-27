@@ -335,7 +335,9 @@ if (!uid) window.location.href = "signin.html";
 function nav(p){ window.location.href = p; }
 
 // ── BALANCE LIVE ───────────────────────────────────────────────
-db.ref("users/" + uid).on("value", snap => {
+auth.onAuthStateChanged(user => {
+  if (!user) { window.location.href = "signin.html"; return; }
+  db.ref("users/" + uid).on("value", snap => {
   const d = snap.val() || {};
   document.getElementById("balance").innerText   = Math.floor(d.balance || 0);
   document.getElementById("uiPoints").innerText  = d.points  || 0;
@@ -364,7 +366,9 @@ async function loadUser() {
 loadUser();
 
 // ── MINING STATUS ──────────────────────────────────────────────
-db.ref("users/" + uid).on("value", snap => {
+auth.onAuthStateChanged(user => {
+  if (!user) { window.location.href = "signin.html"; return; }
+  db.ref("users/" + uid).on("value", snap => {
   const d       = snap.val() || {};
   const active  = d.mining === true || (d.miners && Object.keys(d.miners).length > 0);
   const statusEl= document.getElementById("minerStatus");
@@ -403,6 +407,7 @@ window.addEventListener("load", () => {
     else if (diff < -50) { slideIdx = Math.max(0, slideIdx - 1); slides.style.transform = `translateX(-${slideIdx * 100}%)`; }
   });
 });
+
 
 // ── SWIPE BETWEEN PAGES ────────────────────────────────────────
 let swipeX = 0;
@@ -466,6 +471,8 @@ window.addEventListener("load", () => {
     document.querySelector(".page-content").style.opacity = "1";
   }, 1500);
 });
+ });
+ });
 </script>
 </body>
 </html>

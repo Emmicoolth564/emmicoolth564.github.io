@@ -200,6 +200,7 @@
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
@@ -212,6 +213,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
+const auth = firebase.auth();
 
 const uid = localStorage.getItem("uid");
 if (!uid) window.location.href = "signin.html";
@@ -219,10 +221,13 @@ if (!uid) window.location.href = "signin.html";
 let currentPoints = 0;
 
 function loadPoints() {
+  auth.onAuthStateChanged(user => {
+  if (!user) { window.location.href = "signin.html"; return; }
   db.ref("users/" + uid).on("value", snap => {
     const d = snap.val() || {};
     currentPoints = d.points || 0;
     document.getElementById("points").innerText = currentPoints.toLocaleString();
+  });
   });
 }
 

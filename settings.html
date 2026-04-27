@@ -188,6 +188,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script>
 const firebaseConfig = {
@@ -204,7 +205,9 @@ const uid = localStorage.getItem("uid");
 if (!uid) { window.location.href = "signin.html"; }
 
 // Load user data
-db.ref("users/" + uid).on("value", snap => {
+auth.onAuthStateChanged(user => {
+  if (!user) { window.location.href = "signin.html"; return; }
+  db.ref("users/" + uid).on("value", snap => {
   const d = snap.val() || {};
   document.getElementById("minerIdDisplay").textContent = d.minerId || "CJ-XXXX";
   document.getElementById("nameDisplay").textContent    = d.name    || "CryptoJet User";
@@ -264,6 +267,7 @@ function showToast(msg, type = "success") {
   t.textContent = msg; t.className = "toast " + type; t.style.opacity = 1;
   setTimeout(() => t.style.opacity = 0, 2800);
 }
+});
 </script>
 </body>
 </html>

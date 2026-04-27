@@ -356,6 +356,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
+const auth = firebase.auth();
 
 /* UID = MINER ID */
 const uid = localStorage.getItem("uid");
@@ -622,7 +623,10 @@ window.addEventListener("click", function(e) {
 });
 
 /* INIT */
-load();
+auth.onAuthStateChanged(user => {
+  if (!user) { location.href = "signin.html"; return; }
+  load();
+});
 </script>
 
 </body>

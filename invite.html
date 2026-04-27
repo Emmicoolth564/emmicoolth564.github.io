@@ -177,6 +177,7 @@
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
@@ -189,6 +190,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
+const auth = firebase.auth();
 
 let uid = localStorage.getItem("uid");
 if (!uid) window.location.href = "signin.html";
@@ -208,10 +210,13 @@ function copyLink() {
 }
 
 /* LIVE DATA */
-db.ref("users/" + uid).on("value", snap => {
+auth.onAuthStateChanged(user => {
+  if (!user) { window.location.href = "signin.html"; return; }
+  db.ref("users/" + uid).on("value", snap => {
     const d = snap.val() || {};
     document.getElementById("refCount").innerText = d.referrals || 0;
     document.getElementById("refEarn").innerText = Math.floor(d.balance || 0);
+});
 });
 </script>
 </body>

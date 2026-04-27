@@ -402,6 +402,7 @@
 
 <!-- FIREBASE + LOGIC (UNTOUCHED) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
@@ -414,12 +415,15 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
+const auth = firebase.auth();
 
 let uid = localStorage.getItem("uid");
 if (!uid) window.location.href = "signin.html";
 
 /* LIVE DATA SYNC */
-db.ref("users/" + uid).on("value", snap => {
+auth.onAuthStateChanged(user => {
+  if (!user) { window.location.href = "signin.html"; return; }
+  db.ref("users/" + uid).on("value", snap => {
     let d = snap.val() || {};
 
     document.getElementById("userId").innerText = d.minerId || "----";
@@ -445,6 +449,7 @@ window.addEventListener("load", () => {
         document.getElementById("loader").style.display = "none";
         document.querySelector(".page-content").style.opacity = "1";
     }, 1500);
+});
 });
 </script>
 </body>

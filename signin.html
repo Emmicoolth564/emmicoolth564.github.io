@@ -258,14 +258,7 @@ body {
     </label>
 
     <button class="main-btn" id="mainBtn" onclick="handleAuth()">Create Account</button>
-
-    <div class="divider"><span>or continue with</span></div>
-
-    <button class="google-btn" onclick="signInWithGoogle()">
-      <div class="google-logo"></div>
-      Continue with Google
-    </button>
-  </div>
+  
 
   <div class="switch-link" id="switchLink">
     Already have an account? <span onclick="setMode('signin')">Sign In</span>
@@ -273,13 +266,14 @@ body {
 
   <div class="footer">
     By continuing you agree to our Terms and Privacy Policy.<br>
-    Crypto investments involve risk.
+    Crypto investments is a trusted profit deal.
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script>

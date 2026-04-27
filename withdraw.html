@@ -125,6 +125,7 @@ input:focus { border-color:#22c55e; outline:none; box-shadow:0 0 0 3px rgba(34,1
 <div class="toast" id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script>
 const firebaseConfig = {
@@ -135,6 +136,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
+const auth = firebase.auth();
 
 const uid = localStorage.getItem("uid");
 if (!uid) { alert("Please sign in first"); window.location.href = "signin.html"; }
@@ -153,7 +155,9 @@ let withdrawalPassword = null;
 let pendingAmount      = 0;
 let currentTab         = "bank";
 
-db.ref("users/" + uid).on("value", snap => {
+auth.onAuthStateChanged(user => {
+  if (!user) { window.location.href = "signin.html"; return; }
+  db.ref("users/" + uid).on("value", snap => {
     const d = snap.val() || {};
     currentBalance     = d.balance || 0;
     savedBank          = d.bank ? { bank:d.bank, name:d.name, number:d.number } : null;
@@ -401,6 +405,7 @@ function toast(msg) {
     t.textContent = msg; t.style.opacity = 1;
     setTimeout(() => t.style.opacity = 0, 3200);
 }
+});
 </script>
 </body>
 </html>
