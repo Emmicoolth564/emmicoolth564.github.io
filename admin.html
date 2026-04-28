@@ -220,8 +220,6 @@ const URL_REJECT_RECHARGE  = "https://rejectrecharge-t34xxkwqvq-ew.a.run.app";
 const SECRET               = "cryptojet_secret_2024";
 const TX_PAGE_SIZE         = 20;
 
-if (myUid !== ADMIN_UID) { alert("Access denied"); window.location.href = "signin.html"; }
-
 let allUsers       = {};
 let currentOpenUid = null;
 // Tx are NEVER bulk-loaded. Each tab fetches only what it needs from Firebase.
@@ -231,7 +229,11 @@ let allTxExhausted = false;  // no more pages left
 // ── BOOT — only load users, pending count is a separate lightweight query ──
 window.addEventListener("load", () => {
   auth.onAuthStateChanged(async user => {
-    if (!user) { window.location.href = "signin.html"; return; }
+    if (!user || user.uid !== ADMIN_UID) {
+      alert("Access denied");
+      window.location.href = "signin.html";
+      return;
+    }
     await loadUsers();
     loadPendingCount();
     const params  = new URLSearchParams(window.location.search);
