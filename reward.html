@@ -174,7 +174,7 @@
     <strong>How Rewards Work</strong><br><br>
     • Invite friends with your referral link<br>
     • When they buy any miner → you earn points instantly<br>
-    • When they signup → you earn 10 points<br>
+    • When they signup → you earn 3 points<br>
     • Claim your points anytime from here
 </div>
 
@@ -232,12 +232,11 @@ async function render() {
 /* MINER REFERRAL TAB - UPDATED POINTS */
 function renderMiner(d) {
     const miners = [
-        {name: "S-244", key: "S244", pts: 100},
-        {name: "S-500", key: "S500", pts: 200},
-        {name: "S-900", key: "S900", pts: 300},
-        {name: "S-1200", key: "S1200", pts: 400}
-    ];
-
+    {name: "S-244", key: "S244", pts: 50},
+    {name: "S-500", key: "S500", pts: 75},
+    {name: "S-900", key: "S900", pts: 100},
+    {name: "S-1200", key: "S1200", pts: 200}
+];
     let html = `<div class="card"><strong>Earn points when your referrals buy miners</strong></div>`;
 
     miners.forEach(m => {
@@ -266,22 +265,22 @@ function renderMiner(d) {
     document.getElementById("content").innerHTML = html;
 }
 
-/* SIGNUP REFERRAL TAB - FIXED TO 10 POINTS */
+/* SIGNUP REFERRAL TAB - FIXED TO 3 POINTS */
 function renderSignup(d) {
     const totalReferrals = d.referrals || 0;
     const claimed = d.signupClaimed || 0;
-    const availablePoints = (totalReferrals * 10) - claimed;   // 10 points per signup
+    const availablePoints = (totalReferrals * 3) - claimed;   // 3 points per signup
 
     let html = `
     <div class="card">
-        <strong>Earn 10 points for every successful signup with your link</strong>
+        <strong>Earn 3 points for every successful signup with your link</strong>
     </div>
 
     <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;">
             <div>
                 <strong>Signup Referrals</strong><br>
-                <span style="color:#94a3b8;">10 points each</span>
+                <span style="color:#94a3b8;">3 points each</span>
             </div>
             <div style="text-align:right;">
                 <div style="font-size:32px;color:#00ffcc;">${availablePoints}</div>
@@ -324,7 +323,7 @@ function claimMiner(key, pts) {
     });
 }
 
-/* CLAIM SIGNUP REWARDS - NOW 10 POINTS PER REFERRAL */
+/* CLAIM SIGNUP REWARDS - NOW 3 POINTS PER REFERRAL */
 function claimSignup(pts) {
     if (pts <= 0) {
         showFloat("No points to claim");
