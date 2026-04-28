@@ -209,6 +209,10 @@ body {
         <label>Confirm Password</label>
         <input type="password" id="confirmInput" placeholder="Repeat your password">
       </div>
+      <div class="field" id="refCodeField">
+        <label>Referral Code <span style="color:#334155;font-weight:400;">(optional)</span></label>
+        <input type="text" id="refCodeInput" placeholder="Enter referral code e.g. CJ1234">
+      </div>
     </div>
 
     <!-- PHONE FIELDS -->
@@ -249,6 +253,10 @@ body {
         <label>Confirm Password</label>
         <input type="password" id="phoneConfirmInput" placeholder="Repeat your password">
       </div>
+      <div class="field" id="phoneRefCodeField">
+        <label>Referral Code <span style="color:#334155;font-weight:400;">(optional)</span></label>
+        <input type="text" id="phoneRefCodeInput" placeholder="Enter referral code e.g. CJ1234">
+      </div>
     </div>
 
     <!-- REMEMBER ME -->
@@ -273,7 +281,6 @@ body {
 <div class="toast" id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script>
@@ -301,6 +308,8 @@ function setMode(mode) {
   document.getElementById("cardTitle").textContent           = isSignUp ? "Join CryptoJet" : "Welcome Back";
   document.getElementById("cardSub").textContent             = isSignUp ? "Start earning passive income today" : "Sign in to continue mining";
   document.getElementById("mainBtn").textContent             = isSignUp ? "Create Account" : "Sign In";
+  document.getElementById("refCodeField").style.display      = isSignUp ? "block" : "none";
+  document.getElementById("phoneRefCodeField").style.display = isSignUp ? "block" : "none";
   document.getElementById("switchLink").innerHTML            = isSignUp
     ? 'Already have an account? <span onclick="setMode(\'signin\')">Sign In</span>'
     : 'Don\'t have an account? <span onclick="setMode(\'signup\')">Sign Up</span>';
@@ -426,15 +435,27 @@ async function createUserProfile(uid, name, emailOrPhone, isPhone = false) {
   await db.ref("counter").set(counter);
   const userData = {
     name: name || "Miner", balance:0, team:0, level:"Novice Miner",
-    minerId:"CJ" + counter, points:100, referrals:0, createdAt:Date.now()
+    minerId:"CJ" + counter, points:3, referrals:0, createdAt:Date.now()
   };
   if (isPhone) userData.phone = emailOrPhone;
   else         userData.email = emailOrPhone;
   const params   = new URLSearchParams(window.location.search);
-  const referrer = params.get("ref") || localStorage.getItem("referrer");
+  // Try URL param first, then localStorage, then manual code input
+const manualCode = (document.getElementById("refCodeInput")?.value.trim() ||
+                   document.getElementById("phoneRefCodeInput")?.value.trim() || "").toUpperCase();
+
+let referrer = params.get("ref") || localStorage.getItem("referrer");
+
+// If no URL ref, look up the manual code in Firebase by minerId
+if (!referrer && manualCode) {
+  const codeSnap = await db.ref("users").orderByChild("minerId").equalTo(manualCode).once("value");
+  const codeData = codeSnap.val();
+  if (codeData) referrer = Object.keys(codeData)[0];
+}
   if (referrer && referrer !== uid) {
     userData.referredBy = referrer;
     db.ref("users/" + referrer + "/referrals").transaction(v => (v || 0) + 1);
+  db.ref("users/" + referrer + "/pendingRewards/signup").transaction(v => (v || 0) + 3);
     db.ref("users/" + referrer + "/teamMembers/" + uid).set({
     minerId: userData.minerId,
     name: userData.name || "Miner",

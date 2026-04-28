@@ -4,182 +4,98 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Invite & Earn • CryptoJet</title>
-
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
-
-    :root {
-        --neon: #00f0ff;
-        --accent: #00ffcc;
-    }
-
+    :root { --neon: #00f0ff; --accent: #00ffcc; }
     * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-        font-family: 'Inter', system-ui, sans-serif;
-        background: #020617;
-        color: #e2e8f0;
-        min-height: 100vh;
-        overflow-x: hidden;
-    }
+    body { font-family:'Inter',system-ui,sans-serif; background:#020617; color:#e2e8f0; min-height:100vh; overflow-x:hidden; }
 
-    .header {
-        padding: 30px 20px 20px;
-        text-align: center;
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 28px;
-        font-weight: 700;
-        color: var(--neon);
-        text-shadow: 0 0 30px rgba(0, 240, 255, 0.6);
-        letter-spacing: 2px;
-    }
+    .header { padding:30px 20px 20px; text-align:center; font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700; color:var(--neon); text-shadow:0 0 30px rgba(0,240,255,0.6); letter-spacing:2px; }
+    .content-wrapper { padding:0 20px 100px; }
 
-    .content-wrapper {
-        padding: 0 20px 100px;
-    }
+    .ref-card { background:linear-gradient(145deg,#0f172a,#1e2937); border-radius:24px; padding:28px 24px; margin-bottom:20px; box-shadow:0 20px 50px rgba(0,0,0,0.6); border:1px solid rgba(0,240,255,0.2); }
 
-    /* REFERRAL CARD */
-    .ref-card {
-        background: linear-gradient(145deg, #0f172a, #1e2937);
-        border-radius: 24px;
-        padding: 28px 24px;
-        margin-bottom: 24px;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-        border: 1px solid rgba(0,240,255,0.2);
-    }
+    .section-label { font-size:11px; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; }
 
-    .ref-link {
-        background: #020617;
-        padding: 16px;
-        border-radius: 16px;
-        font-size: 14px;
-        word-break: break-all;
-        margin: 16px 0;
-        border: 1px solid rgba(0,240,255,0.15);
-        color: #94a3b8;
-    }
+    .ref-link { background:#020617; padding:16px; border-radius:16px; font-size:13px; word-break:break-all; margin:8px 0 12px; border:1px solid rgba(0,240,255,0.15); color:#94a3b8; line-height:1.5; }
 
-    .btn {
-        width: 100%;
-        padding: 16px;
-        border: none;
-        border-radius: 16px;
-        background: linear-gradient(90deg, #00f0ff, #00ffcc);
-        color: #000;
-        font-weight: 700;
-        font-size: 16px;
-        cursor: pointer;
-        box-shadow: 0 0 25px rgba(0,240,255,0.4);
-        transition: 0.3s;
-    }
-    .btn:active { transform: scale(0.96); }
+    /* CODE BOX */
+    .code-box { background:#020617; padding:16px 20px; border-radius:16px; margin:8px 0 12px; border:1px solid rgba(0,255,204,0.2); display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .code-val { font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:700; color:#00ffcc; letter-spacing:3px; }
+    .code-hint { font-size:11px; color:#475569; margin-top:3px; }
 
-    /* STATS */
-    .stats {
-        display: flex;
-        gap: 12px;
-        margin: 24px 0;
-    }
-    .stat-box {
-        flex: 1;
-        background: #0f172a;
-        border-radius: 18px;
-        padding: 18px 12px;
-        text-align: center;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    }
-    .stat-number {
-        font-size: 28px;
-        font-weight: 700;
-        color: #00ffcc;
-    }
-    .stat-label {
-        font-size: 13px;
-        color: #94a3b8;
-        margin-top: 4px;
-    }
+    .btn { width:100%; padding:14px; border:none; border-radius:14px; background:linear-gradient(90deg,#00f0ff,#00ffcc); color:#000; font-weight:700; font-size:15px; cursor:pointer; box-shadow:0 0 22px rgba(0,240,255,0.35); transition:0.3s; margin-bottom:10px; font-family:'Inter',sans-serif; }
+    .btn:active { transform:scale(0.96); }
+    .btn-outline { background:transparent; border:1.5px solid rgba(0,255,204,0.25); color:#00ffcc; box-shadow:none; }
 
-    /* HOW IT WORKS */
-    .how-it-works {
-        background: #0f172a;
-        border-radius: 24px;
-        padding: 28px 24px;
-        margin-top: 30px;
-        line-height: 1.7;
-        color: #cbd5e1;
-    }
-    .how-it-works h3 {
-        color: #00ffcc;
-        margin-bottom: 16px;
-        font-size: 18px;
-    }
+    .stats { display:flex; gap:12px; margin:20px 0 4px; }
+    .stat-box { flex:1; background:#0f172a; border-radius:18px; padding:16px 12px; text-align:center; }
+    .stat-number { font-size:26px; font-weight:700; color:#00ffcc; }
+    .stat-label { font-size:12px; color:#94a3b8; margin-top:4px; }
 
-    /* BACK BUTTON */
-    .back-btn {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 26px;
-        color: #00ffcc;
-        background: rgba(0,255,204,0.12);
-        backdrop-filter: blur(14px);
-        border: 1px solid rgba(0,255,204,0.25);
-        box-shadow: 0 0 25px rgba(0,255,204,0.5);
-        cursor: pointer;
-        z-index: 99999;
-    }
+    .how-it-works { background:#0f172a; border-radius:24px; padding:28px 24px; margin-top:4px; line-height:1.7; color:#cbd5e1; }
+    .how-it-works h3 { color:#00ffcc; margin-bottom:16px; font-size:18px; }
+
+    .back-btn { position:fixed; top:20px; left:20px; width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:26px; color:#00ffcc; background:rgba(0,255,204,0.12); backdrop-filter:blur(14px); border:1px solid rgba(0,255,204,0.25); cursor:pointer; z-index:99999; }
+
+    .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%); background:#00ffcc; color:#022c22; padding:12px 22px; border-radius:999px; font-weight:700; font-size:13px; opacity:0; transition:opacity 0.3s; z-index:99999; pointer-events:none; }
 </style>
 </head>
 <body>
 
 <div class="back-btn" onclick="history.back()">←</div>
-
 <div class="header">Invite & Earn</div>
 
 <div class="content-wrapper">
 
-    <!-- REFERRAL CARD -->
-    <div class="ref-card">
-        <div style="font-weight:700; margin-bottom:12px;">Your Referral Link</div>
-        <div id="refLink" class="ref-link">Loading...</div>
-        <div class="btn" onclick="copyLink()">Copy Link</div>
+  <div class="ref-card">
 
-        <div class="stats">
-            <div class="stat-box">
-                <div id="refCount" class="stat-number">0</div>
-                <div class="stat-label">Referrals</div>
-            </div>
-            <div class="stat-box">
-                <div id="refEarn" class="stat-number">$0</div>
-                <div class="stat-label">Total Earned</div>
-            </div>
-        </div>
+    <!-- REFERRAL LINK -->
+    <div class="section-label">Your Referral Link</div>
+    <div id="refLink" class="ref-link">Loading...</div>
+    <button class="btn" onclick="copyLink()">🔗 Copy Referral Link</button>
+
+    <!-- REFERRAL CODE -->
+    <div class="section-label" style="margin-top:16px;">Your Invitation Code</div>
+    <div class="code-box">
+      <div>
+        <div class="code-val" id="inviteCode">----</div>
+        <div class="code-hint">Share this code — friends enter it at signup</div>
+      </div>
+      <button onclick="copyCode()" style="background:rgba(0,255,204,0.1);border:1px solid rgba(0,255,204,0.25);color:#00ffcc;padding:8px 16px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;">Copy Code</button>
     </div>
 
-    <!-- HOW IT WORKS -->
-    <div class="how-it-works">
-        <h3>How Referral Works</h3>
-        <p><strong>1.</strong> Share your unique referral link with friends.</p>
-        <p><strong>2.</strong> When they sign up and buy any miner, you earn points instantly.</p>
-        <p><strong>3.</strong> The more active they are, the more you earn passively — even while you sleep.</p>
-        <p><strong>4.</strong> Claim your points anytime from the Rewards page.</p>
-        
-        <div style="margin-top:24px; padding:16px; background:#020617; border-radius:16px; font-size:14px;">
-            <strong>Pro Tip:</strong> The more miners your referrals buy, the bigger your passive income becomes.
-        </div>
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat-box">
+        <div id="refCount" class="stat-number">0</div>
+        <div class="stat-label">Referrals</div>
+      </div>
+      <div class="stat-box">
+        <div id="teamIncome" class="stat-number">$0</div>
+        <div class="stat-label">Team Income</div>
+      </div>
     </div>
+  </div>
+
+  <div class="how-it-works">
+    <h3>How Referral Works</h3>
+    <p><strong>1.</strong> Share your referral link <b>or</b> your invitation code with friends.</p>
+    <p><strong>2.</strong> They sign up using your link — or enter your code manually at signup.</p>
+    <p><strong>3.</strong> When they buy any miner, you earn points and team income automatically.</p>
+    <p><strong>4.</strong> Claim your points anytime from the Rewards page.</p>
+    <div style="margin-top:20px;padding:14px;background:#020617;border-radius:14px;font-size:13px;color:#64748b;">
+      💡 <strong style="color:#94a3b8">Pro Tip:</strong> The invitation code is more reliable than the link — it works even if they refresh or close the page before signing up.
+    </div>
+  </div>
 
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
@@ -187,36 +103,42 @@ const firebaseConfig = {
   databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "cj-miner"
 };
-
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+const db   = firebase.database();
 const auth = firebase.auth();
 
-let uid = localStorage.getItem("uid");
+const uid = localStorage.getItem("uid");
 if (!uid) window.location.href = "signin.html";
 
-/* REFERRAL LINK */
-const refLink = window.location.origin + "/index.html?ref=" + uid;
-document.getElementById("refLink").innerText = refLink;
+let myMinerId = "";
+let refLinkVal = "";
 
-/* COPY LINK */
-function copyLink() {
-    navigator.clipboard.writeText(refLink).then(() => {
-        const btn = document.querySelector('.btn');
-        const originalText = btn.innerText;
-        btn.innerText = "✅ Copied!";
-        setTimeout(() => btn.innerText = originalText, 2000);
-    });
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.style.opacity = 1;
+  setTimeout(() => t.style.opacity = 0, 2000);
 }
 
-/* LIVE DATA */
+function copyLink() {
+  navigator.clipboard.writeText(refLinkVal).then(() => toast("✅ Link copied!"));
+}
+
+function copyCode() {
+  navigator.clipboard.writeText(myMinerId).then(() => toast("✅ Code copied!"));
+}
+
 auth.onAuthStateChanged(user => {
   if (!user) { window.location.href = "signin.html"; return; }
   db.ref("users/" + uid).on("value", snap => {
     const d = snap.val() || {};
-    document.getElementById("refCount").innerText = d.referrals || 0;
-    document.getElementById("refEarn").innerText = Math.floor(d.balance || 0);
-});
+    myMinerId = d.minerId || "";
+    refLinkVal = window.location.origin + "/index.html?ref=" + uid;
+
+    document.getElementById("refLink").innerText   = refLinkVal;
+    document.getElementById("inviteCode").innerText = myMinerId || "Loading...";
+    document.getElementById("refCount").innerText  = d.referrals || 0;
+    document.getElementById("teamIncome").innerText = "$" + Math.floor(d.team || 0);
+  });
 });
 </script>
 </body>
