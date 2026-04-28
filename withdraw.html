@@ -164,6 +164,7 @@ auth.onAuthStateChanged(user => {
     withdrawalPassword = d.withdrawalPassword || null;
     document.getElementById("balance").textContent = "$" + currentBalance.toFixed(2);
     renderCurrentTab();
+  });
 });
 
 function switchTab(tab) {
@@ -200,7 +201,7 @@ function renderBank() {
             <li class="inst-item"><span class="num">2</span><span class="inst-text">Share your withdrawal proof in the community feed to boost your Trust Score and get priority on future withdrawals</span></li>
             <li class="inst-item"><span class="num">3</span><span class="inst-text">Ensure your saved bank details are correct — wrong account numbers cannot be reversed</span></li>
             <li class="inst-item"><span class="num">4</span><span class="inst-text">A <span class="hi">10% processing fee</span> is deducted — the amount shown is exactly what lands in your account</span></li>
-            <li class="inst-item"><span class="num">5</span><span class="inst-text">Minimum withdrawal is <span class="hi-g">$10</span> — requests below this will be declined automatically</span></li>
+            <li class="inst-item"><span class="num">5</span><span class="inst-text">Minimum withdrawal is <span class="hi-g">$3</span> — requests below this will be declined automatically</span></li>
             <li class="inst-item"><span class="num">6</span><span class="inst-text">Do not submit duplicate withdrawal requests — it delays processing and may cause a temporary hold</span></li>
         </ul>
     </div>
@@ -237,7 +238,7 @@ function renderBank() {
 
 function startBankWithdraw() {
     const amount = parseFloat(document.getElementById("bankAmount").value);
-    if (!amount || amount < 10)  return toast("Minimum withdrawal is $10");
+    if (!amount || amount < 3)  return toast("Minimum withdrawal is $3");
     if (amount > currentBalance) return toast("Insufficient balance");
     if (!savedBank)              return toast("Please set your bank details first");
     if (!withdrawalPassword)     { toast("Please set a withdrawal password first"); setTimeout(() => window.location.href = "bank.html", 1800); return; }
@@ -264,7 +265,7 @@ function renderUSDT() {
             <li class="inst-item"><span class="num">2</span><span class="inst-text">Double-check your wallet address — wrong addresses result in <span class="hi">permanent loss</span> with no recovery possible</span></li>
             <li class="inst-item"><span class="num">3</span><span class="inst-text">Your wallet must support <span class="hi-b">BEP20</span> — compatible with MetaMask, Trust Wallet, Binance and most major wallets</span></li>
             <li class="inst-item"><span class="num">4</span><span class="inst-text">A <span class="hi">10% processing fee</span> is deducted — the amount shown is exactly what arrives in your wallet</span></li>
-            <li class="inst-item"><span class="num">5</span><span class="inst-text">Minimum withdrawal is <span class="hi-g">$10 USDT</span></span></li>
+            <li class="inst-item"><span class="num">5</span><span class="inst-text">Minimum withdrawal is <span class="hi-g">$3 USDT</span></span></li>
             <li class="inst-item"><span class="num">6</span><span class="inst-text">Share your withdrawal proof in the community to boost your Miner Trust Score and unlock priority processing</span></li>
         </ul>
     </div>
@@ -314,7 +315,7 @@ function startUSDTWithdraw() {
     const address = document.getElementById("usdtAddress").value.trim();
     const amount  = parseFloat(document.getElementById("usdtAmount").value);
     if (!address || !address.startsWith("0x") || address.length < 40) return toast("Please enter a valid BEP20 wallet address");
-    if (!amount || amount < 10)  return toast("Minimum withdrawal is $10");
+    if (!amount || amount < 3)  return toast("Minimum withdrawal is $3");
     if (amount > currentBalance) return toast("Insufficient balance");
     if (!withdrawalPassword) { toast("Please set a withdrawal password first"); setTimeout(() => window.location.href = "bank.html", 1800); return; }
     pendingAmount = amount;
@@ -405,7 +406,6 @@ function toast(msg) {
     t.textContent = msg; t.style.opacity = 1;
     setTimeout(() => t.style.opacity = 0, 3200);
 }
-});
 </script>
 </body>
 </html>

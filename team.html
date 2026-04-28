@@ -20,37 +20,59 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
 .spinner { width:44px; height:44px; border:4px solid rgba(0,255,204,0.15); border-top:4px solid var(--green); border-radius:50%; animation:spin 0.9s linear infinite; }
 @keyframes spin { to{transform:rotate(360deg);} }
 
-.stat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:16px; }
-.stat-box { background:var(--s1); border:1px solid var(--border); border-radius:16px; padding:14px; text-align:center; }
-.stat-val { font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:700; color:var(--neon); }
-.stat-lbl { font-size:11px; color:var(--muted); margin-top:3px; text-transform:uppercase; letter-spacing:0.06em; font-weight:600; }
+/* STAT GRID — 4 boxes */
+.stat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:14px 16px; }
+.stat-box { background:var(--s1); border:1px solid var(--border); border-radius:14px; padding:12px 6px; text-align:center; }
+.stat-val { font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; color:var(--neon); }
+.stat-lbl { font-size:10px; color:var(--muted); margin-top:3px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
 
-.tabs { display:flex; background:var(--s1); border-radius:999px; padding:5px; margin:0 16px 14px; gap:4px; }
-.tab { flex:1; padding:11px; text-align:center; font-weight:600; font-size:13px; border-radius:999px; cursor:pointer; color:var(--muted); transition:all 0.2s; }
-.tab.active { background:var(--green); color:#000; box-shadow:0 4px 12px rgba(0,255,204,0.3); }
+/* LEVEL TABS */
+.level-tabs { display:flex; background:var(--s1); border-radius:999px; padding:5px; margin:0 16px 10px; gap:4px; }
+.lvl-tab { flex:1; padding:10px 6px; text-align:center; font-weight:600; font-size:12px; border-radius:999px; cursor:pointer; color:var(--muted); transition:all 0.2s; white-space:nowrap; }
+.lvl-tab.active { color:#000; box-shadow:0 4px 12px rgba(0,255,204,0.3); }
+.lvl-tab.l-all.active  { background:var(--green); }
+.lvl-tab.l-1.active    { background:#00ffcc; }
+.lvl-tab.l-2.active    { background:#f59e0b; }
+.lvl-tab.l-3.active    { background:#c084fc; }
+
+/* STATUS FILTER */
+.status-tabs { display:flex; gap:8px; padding:0 16px 14px; }
+.s-tab { flex:1; padding:9px; text-align:center; font-weight:600; font-size:12px; border-radius:12px; cursor:pointer; border:1.5px solid rgba(255,255,255,0.07); color:var(--muted); background:rgba(255,255,255,0.03); transition:all 0.2s; }
+.s-tab.active { background:rgba(0,255,204,0.1); border-color:var(--green); color:var(--green); }
 
 .content { padding:0 16px 80px; }
 
 .member-card {
   background:var(--s1); border:1px solid var(--border);
-  border-radius:16px; padding:16px 18px; margin-bottom:10px;
+  border-radius:16px; padding:14px 16px; margin-bottom:10px;
   display:flex; justify-content:space-between; align-items:center;
-  animation:fadeIn 0.25s ease;
+  animation:fadeIn 0.2s ease;
 }
 @keyframes fadeIn { from{opacity:0;transform:translateY(4px);} to{opacity:1;transform:none;} }
 
-.member-left { display:flex; align-items:center; gap:12px; }
+.member-left { display:flex; align-items:center; gap:12px; flex:1; min-width:0; }
 .member-avatar {
-  width:40px; height:40px; border-radius:50%;
-  background:linear-gradient(135deg,#00f0ff,#00ffcc);
+  width:38px; height:38px; border-radius:50%;
   display:flex; align-items:center; justify-content:center;
-  font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:700; color:#000;
+  font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:700; color:#000;
   flex-shrink:0;
 }
-.member-id   { font-size:15px; font-weight:700; color:var(--text); margin-bottom:2px; }
-.member-date { font-size:11px; color:var(--muted); }
+.av-l1 { background:linear-gradient(135deg,#00ffcc,#00f0ff); }
+.av-l2 { background:linear-gradient(135deg,#f59e0b,#fbbf24); }
+.av-l3 { background:linear-gradient(135deg,#c084fc,#a855f7); }
 
-.status-badge { padding:5px 12px; border-radius:999px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; }
+.member-id   { font-size:14px; font-weight:700; color:var(--text); margin-bottom:2px; }
+.member-meta { font-size:11px; color:var(--muted); display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+
+.level-pip {
+  display:inline-block; padding:2px 8px; border-radius:999px;
+  font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em;
+}
+.pip-1 { background:rgba(0,255,204,0.12); color:var(--green); }
+.pip-2 { background:rgba(245,158,11,0.12); color:#f59e0b; }
+.pip-3 { background:rgba(192,132,252,0.12); color:#c084fc; }
+
+.status-badge { padding:5px 10px; border-radius:999px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; flex-shrink:0; }
 .active-badge   { background:rgba(0,255,204,0.12); color:var(--green); border:1px solid rgba(0,255,204,0.2); }
 .inactive-badge { background:rgba(100,116,139,0.12); color:var(--muted); border:1px solid rgba(100,116,139,0.2); }
 
@@ -59,17 +81,15 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
 .empty-title { font-size:16px; font-weight:700; color:var(--text); margin-bottom:6px; }
 .empty-sub   { font-size:13px; color:var(--muted); line-height:1.6; }
 
-.how-box { background:var(--s1); border:1px solid var(--border); border-radius:16px; padding:16px 18px; margin:0 16px 14px; }
-.how-title { font-size:13px; font-weight:700; color:var(--neon); margin-bottom:10px; }
-.how-row { display:flex; gap:10px; align-items:center; margin-bottom:6px; font-size:13px; color:var(--muted); }
-.how-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.how-box { background:var(--s1); border:1px solid var(--border); border-radius:16px; padding:14px 16px; margin:0 16px 14px; }
+.how-title { font-size:13px; font-weight:700; color:var(--neon); margin-bottom:8px; }
+.how-row { display:flex; gap:10px; align-items:center; margin-bottom:5px; font-size:12px; color:var(--muted); }
+.how-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
 </style>
 </head>
 <body>
 
-<div class="page-loader" id="pageLoader">
-  <div class="spinner"></div>
-</div>
+<div class="page-loader" id="pageLoader"><div class="spinner"></div></div>
 
 <div class="header">
   <div class="back" onclick="history.back()">←</div>
@@ -79,21 +99,32 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
 
 <div class="how-box">
   <div class="how-title">⚡ Team Income Breakdown</div>
-  <div class="how-row"><div class="how-dot" style="background:#00ffcc"></div>Level 1 (direct referrals) → earn 10% of their mining</div>
-  <div class="how-row"><div class="how-dot" style="background:#f59e0b"></div>Level 2 → earn 4% of their mining</div>
-  <div class="how-row"><div class="how-dot" style="background:#c084fc"></div>Level 3 → earn 2% of their mining</div>
+  <div class="how-row"><div class="how-dot" style="background:#00ffcc"></div>Level 1 (direct referrals) → 10% of their mining</div>
+  <div class="how-row"><div class="how-dot" style="background:#f59e0b"></div>Level 2 → 4% of their mining</div>
+  <div class="how-row"><div class="how-dot" style="background:#c084fc"></div>Level 3 → 2% of their mining</div>
 </div>
 
+<!-- STATS -->
 <div class="stat-grid" id="statGrid" style="display:none">
   <div class="stat-box"><div class="stat-val" id="totalCount">0</div><div class="stat-lbl">Total</div></div>
-  <div class="stat-box"><div class="stat-val" id="activeCount">0</div><div class="stat-lbl">Mining</div></div>
-  <div class="stat-box"><div class="stat-val" id="pendingCount">0</div><div class="stat-lbl">No Miner</div></div>
+  <div class="stat-box"><div class="stat-val" id="l1Count">0</div><div class="stat-lbl" style="color:#00ffcc;">L1</div></div>
+  <div class="stat-box"><div class="stat-val" id="l2Count">0</div><div class="stat-lbl" style="color:#f59e0b;">L2</div></div>
+  <div class="stat-box"><div class="stat-val" id="l3Count">0</div><div class="stat-lbl" style="color:#c084fc;">L3</div></div>
 </div>
 
-<div class="tabs" id="filterTabs" style="display:none">
-  <div class="tab active" onclick="setFilter('all',this)">All</div>
-  <div class="tab" onclick="setFilter('active',this)">⛏ Mining</div>
-  <div class="tab" onclick="setFilter('pending',this)">⏳ No Miner</div>
+<!-- LEVEL TABS -->
+<div class="level-tabs" id="levelTabs" style="display:none">
+  <div class="lvl-tab l-all active" onclick="setLevel(0,this)">All</div>
+  <div class="lvl-tab l-1"          onclick="setLevel(1,this)">L1 · 10%</div>
+  <div class="lvl-tab l-2"          onclick="setLevel(2,this)">L2 · 4%</div>
+  <div class="lvl-tab l-3"          onclick="setLevel(3,this)">L3 · 2%</div>
+</div>
+
+<!-- STATUS FILTER -->
+<div class="status-tabs" id="statusTabs" style="display:none">
+  <div class="s-tab active" onclick="setStatus('all',this)">All Members</div>
+  <div class="s-tab"        onclick="setStatus('active',this)">⛏ Mining</div>
+  <div class="s-tab"        onclick="setStatus('inactive',this)">⏳ No Miner</div>
 </div>
 
 <div class="content" id="content"></div>
@@ -115,138 +146,157 @@ const auth = firebase.auth();
 const uid = localStorage.getItem("uid");
 if (!uid) window.location.href = "signin.html";
 
-let allMembers = [];
-let filter     = "all";
+let allMembers  = [];
+let levelFilter = 0;    // 0=all, 1, 2, 3
+let statusFilter = "all"; // all, active, inactive
 
-function setFilter(f, el) {
-  filter = f;
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+function setLevel(l, el) {
+  levelFilter = l;
+  document.querySelectorAll(".lvl-tab").forEach(t => t.classList.remove("active"));
+  el.classList.add("active");
+  render();
+}
+
+function setStatus(s, el) {
+  statusFilter = s;
+  document.querySelectorAll(".s-tab").forEach(t => t.classList.remove("active"));
   el.classList.add("active");
   render();
 }
 
 function formatDate(ts) {
   if (!ts) return "Existing member";
-  const d   = new Date(ts);
-  const day = d.getDate();
-  const mon = d.toLocaleString("en-NG", { month:"short" });
-  const yr  = d.getFullYear();
-  return `Joined ${day} ${mon} ${yr}`;
+  const d = new Date(ts);
+  return `Joined ${d.getDate()} ${d.toLocaleString("en-NG",{month:"short"})} ${d.getFullYear()}`;
 }
 
 function render() {
   const content = document.getElementById("content");
-  let filtered  = allMembers;
-  if (filter === "active")  filtered = allMembers.filter(m => m.hasMiner);
-  if (filter === "pending") filtered = allMembers.filter(m => !m.hasMiner);
+  let filtered = allMembers;
+
+  if (levelFilter > 0) filtered = filtered.filter(m => m.level === levelFilter);
+  if (statusFilter === "active")   filtered = filtered.filter(m => m.hasMiner);
+  if (statusFilter === "inactive") filtered = filtered.filter(m => !m.hasMiner);
 
   if (filtered.length === 0) {
-    const msgs = {
-      all:     { icon:"👥", title:"No team members yet", sub:"Share your referral link to start building your team and earn passive income." },
-      active:  { icon:"⛏️", title:"No active miners yet", sub:"When your referrals buy a miner, they'll appear here." },
-      pending: { icon:"🎉", title:"Everyone is mining!", sub:"All your referrals have already bought miners." }
-    };
-    const m = msgs[filter];
     content.innerHTML = `
       <div class="empty-state">
-        <div class="empty-icon">${m.icon}</div>
-        <div class="empty-title">${m.title}</div>
-        <div class="empty-sub">${m.sub}</div>
+        <div class="empty-icon">👥</div>
+        <div class="empty-title">No members found</div>
+        <div class="empty-sub">Try changing the filter or share your referral link to grow your team.</div>
       </div>`;
     return;
   }
 
+  const pipClass = { 1:"pip-1", 2:"pip-2", 3:"pip-3" };
+  const pipLabel = { 1:"Level 1", 2:"Level 2", 3:"Level 3" };
+  const avClass  = { 1:"av-l1",  2:"av-l2",  3:"av-l3" };
+
   content.innerHTML = filtered.map(m => `
     <div class="member-card">
       <div class="member-left">
-        <div class="member-avatar">${(m.minerId || "CJ??").slice(0,4)}</div>
+        <div class="member-avatar ${avClass[m.level] || 'av-l1'}">${(m.minerId || "CJ??").slice(0,4)}</div>
         <div>
           <div class="member-id">${m.minerId || "Member"}</div>
-          <div class="member-date">${formatDate(m.joinedAt)}</div>
+          <div class="member-meta">
+            <span class="level-pip ${pipClass[m.level] || 'pip-1'}">${pipLabel[m.level] || "Level 1"}</span>
+            <span>${formatDate(m.joinedAt)}</span>
+          </div>
         </div>
       </div>
       <div class="status-badge ${m.hasMiner ? 'active-badge' : 'inactive-badge'}">
         ${m.hasMiner ? '⛏ Mining' : 'No Miner'}
       </div>
-    </div>
-  `).join("");
+    </div>`).join("");
+}
+
+function updateStats() {
+  document.getElementById("totalCount").textContent = allMembers.length;
+  document.getElementById("l1Count").textContent    = allMembers.filter(m => m.level === 1).length;
+  document.getElementById("l2Count").textContent    = allMembers.filter(m => m.level === 2).length;
+  document.getElementById("l3Count").textContent    = allMembers.filter(m => m.level === 3).length;
 }
 
 auth.onAuthStateChanged(async user => {
   if (!user) { window.location.href = "signin.html"; return; }
 
-  // Read BOTH sources in parallel
+  // Read teamMembers (L1 new signups) + teamIncome (all levels, all history)
   const [membersSnap, incomeSnap] = await Promise.all([
     db.ref("users/" + uid + "/teamMembers").once("value"),
     db.ref("teamIncome/" + uid).once("value")
   ]);
 
-  // Map of uid → member data (deduped)
-  const memberMap = {};
+  const memberMap = {}; // uid → member object
 
-  // Source 1: teamMembers (new system — has joinedAt, hasMiner)
+  // Source 1: teamMembers = Level 1 direct referrals (new system)
   const membersData = membersSnap.val() || {};
   Object.entries(membersData).forEach(([memberId, m]) => {
     memberMap[memberId] = {
       memberId,
       minerId:  m.minerId  || "Unknown",
       joinedAt: m.joinedAt || null,
-      hasMiner: m.hasMiner || false
+      hasMiner: m.hasMiner || false,
+      level:    1   // teamMembers are always Level 1
     };
   });
 
-  // Source 2: teamIncome — extract unique fromUid entries
-  // These are OLD referrals who have already mined — definitely hasMiner = true
+  // Source 2: teamIncome has level field on every record — use this to find L1/L2/L3
   const incomeData = incomeSnap.val() || {};
   Object.values(incomeData).forEach(record => {
     const fromUid   = record.fromUid;
     const fromMiner = record.fromMiner || "Unknown";
+    const level     = record.level || 1;
     if (!fromUid) return;
+
     if (memberMap[fromUid]) {
-      // Already in map — just make sure hasMiner is true since they mined
+      // Update: mark as miner, keep lowest level number (L1 > L2 > L3)
       memberMap[fromUid].hasMiner = true;
+      if (level < (memberMap[fromUid].level || 99)) {
+        memberMap[fromUid].level = level;
+      }
     } else {
-      // Old referral not in teamMembers — add them
       memberMap[fromUid] = {
         memberId: fromUid,
         minerId:  fromMiner,
-        joinedAt: null, // we don't know exact join date
-        hasMiner: true  // they have mined so definitely have a miner
+        joinedAt: null,
+        hasMiner: true,
+        level:    level
       };
     }
   });
 
   allMembers = Object.values(memberMap)
-    .sort((a, b) => (b.joinedAt || 0) - (a.joinedAt || 0));
+    .sort((a, b) => (a.level - b.level) || ((b.joinedAt || 0) - (a.joinedAt || 0)));
 
-  const active  = allMembers.filter(m => m.hasMiner).length;
-  const pending = allMembers.filter(m => !m.hasMiner).length;
-
-  document.getElementById("totalCount").textContent   = allMembers.length;
-  document.getElementById("activeCount").textContent  = active;
-  document.getElementById("pendingCount").textContent = pending;
+  updateStats();
 
   document.getElementById("pageLoader").classList.add("hidden");
-  document.getElementById("statGrid").style.display   = "grid";
-  document.getElementById("filterTabs").style.display = "flex";
+  document.getElementById("statGrid").style.display    = "grid";
+  document.getElementById("levelTabs").style.display   = "flex";
+  document.getElementById("statusTabs").style.display  = "flex";
 
   render();
 
-  // Live listener for new members going forward
+  // Live listener for new members
   db.ref("users/" + uid + "/teamMembers").on("value", snap => {
     const data = snap.val() || {};
     Object.entries(data).forEach(([memberId, m]) => {
-      if (memberMap[memberId]) {
-        memberMap[memberId].hasMiner = m.hasMiner || memberMap[memberId].hasMiner;
-        memberMap[memberId].joinedAt = m.joinedAt || memberMap[memberId].joinedAt;
+      if (!memberMap[memberId]) {
+        memberMap[memberId] = {
+          memberId,
+          minerId:  m.minerId  || "Unknown",
+          joinedAt: m.joinedAt || null,
+          hasMiner: m.hasMiner || false,
+          level:    1
+        };
       } else {
-        memberMap[memberId] = { memberId, minerId: m.minerId || "Unknown", joinedAt: m.joinedAt || null, hasMiner: m.hasMiner || false };
+        memberMap[memberId].hasMiner = m.hasMiner || memberMap[memberId].hasMiner;
+        if (!memberMap[memberId].joinedAt) memberMap[memberId].joinedAt = m.joinedAt;
       }
     });
-    allMembers = Object.values(memberMap).sort((a, b) => (b.joinedAt || 0) - (a.joinedAt || 0));
-    document.getElementById("totalCount").textContent   = allMembers.length;
-    document.getElementById("activeCount").textContent  = allMembers.filter(m => m.hasMiner).length;
-    document.getElementById("pendingCount").textContent = allMembers.filter(m => !m.hasMiner).length;
+    allMembers = Object.values(memberMap)
+      .sort((a, b) => (a.level - b.level) || ((b.joinedAt || 0) - (a.joinedAt || 0)));
+    updateStats();
     render();
   });
 });
