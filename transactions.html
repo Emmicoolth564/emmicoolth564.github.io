@@ -231,30 +231,26 @@ auth.onAuthStateChanged(user => {
   if (!user) { window.location.href = "signin.html"; return; }
   db.ref("userTransactions/" + uid).on("value", snap => {
     const txns = snap.val() || {};
-
     allTransactions = Object.entries(txns)
         .map(([key, tx]) => ({
-            id:        key,
-            type:      tx.type   || "recharge",
-            method:    tx.method || "bank",
-            amount:    tx.amount || 0,
-            status:    tx.status || "pending",
-            timestamp: tx.date   || Date.now()
+            id: key, type: tx.type || "recharge",
+            method: tx.method || "bank", amount: tx.amount || 0,
+            status: tx.status || "pending", timestamp: tx.date || Date.now()
         }))
         .sort((a, b) => b.timestamp - a.timestamp);
-
     document.getElementById("pageLoader").classList.add("hidden");
     document.getElementById("mainContent").style.display = "block";
     renderTransactions();
+  });
 });
 
 function formatDateTime(ts) {
-    const d    = new Date(ts);
-    const day  = d.getDate();
-    const mon  = d.toLocaleString('en-NG', { month: 'short' });
-    const yr   = d.getFullYear();
-    let   hr   = d.getHours();
-    const min  = d.getMinutes().toString().padStart(2, '0');
+    const d = new Date(ts);
+    const day = d.getDate();
+    const mon = d.toLocaleString('en-NG', { month: 'short' });
+    const yr  = d.getFullYear();
+    let   hr  = d.getHours();
+    const min = d.getMinutes().toString().padStart(2, '0');
     const ampm = hr >= 12 ? 'PM' : 'AM';
     hr = hr % 12 || 12;
     return `${day} ${mon} ${yr}  ·  ${hr}:${min} ${ampm}`;
@@ -262,29 +258,21 @@ function formatDateTime(ts) {
 
 function renderTransactions() {
     const list = document.getElementById("tx-list");
-
     const totalIn  = allTransactions.filter(t => t.type === "recharge" && t.status === "approved").reduce((s, t) => s + t.amount, 0);
     const totalOut = allTransactions.filter(t => t.type === "withdraw" && t.status === "approved").reduce((s, t) => s + t.amount, 0);
     document.getElementById("totalIn").textContent  = "$" + totalIn.toFixed(2);
     document.getElementById("totalOut").textContent = "$" + totalOut.toFixed(2);
-
-    const filtered = currentTab === "all"
-        ? allTransactions
-        : allTransactions.filter(tx => tx.status === currentTab);
-
+    const filtered = currentTab === "all" ? allTransactions : allTransactions.filter(tx => tx.status === currentTab);
     if (filtered.length === 0) {
         list.innerHTML = `<div class="empty"><div class="mini-spinner"></div></div>`;
         return;
     }
-
     list.innerHTML = filtered.map(tx => {
         const isRecharge = tx.type === "recharge";
         return `
         <div class="tx-card">
             <div class="tx-left">
-                <div class="tx-icon ${isRecharge ? 'icon-recharge' : 'icon-withdraw'}">
-                    ${isRecharge ? '💳' : '🏦'}
-                </div>
+                <div class="tx-icon ${isRecharge ? 'icon-recharge' : 'icon-withdraw'}">${isRecharge ? '💳' : '🏦'}</div>
                 <div class="tx-info">
                     <div class="tx-type">${isRecharge ? 'Recharge' : 'Withdrawal'}</div>
                     <div class="tx-date">${formatDateTime(tx.timestamp)}</div>
@@ -292,15 +280,12 @@ function renderTransactions() {
                 </div>
             </div>
             <div class="tx-right">
-                <div class="tx-amount ${isRecharge ? 'amount-in' : 'amount-out'}">
-                    ${isRecharge ? '+' : '−'}$${Number(tx.amount).toFixed(2)}
-                </div>
+                <div class="tx-amount ${isRecharge ? 'amount-in' : 'amount-out'}">${isRecharge ? '+' : '−'}$${Number(tx.amount).toFixed(2)}</div>
                 <div class="tx-badge badge-${tx.status}">${tx.status.toUpperCase()}</div>
             </div>
         </div>`;
     }).join("");
 }
-});
 </script>
 </body>
 </html>

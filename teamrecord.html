@@ -176,26 +176,23 @@ auth.onAuthStateChanged(user => {
   if (!user) { window.location.href = "signin.html"; return; }
   db.ref("teamIncome/" + uid).on("value", snap => {
     const data = snap.val() || {};
-    allRecords  = Object.entries(data)
+    allRecords = Object.entries(data)
         .map(([key, r]) => ({ key, ...r }))
         .sort((a, b) => b.timestamp - a.timestamp);
-
     updateSummary();
     document.getElementById("pageLoader").classList.add("hidden");
     document.getElementById("summary").style.display = "flex";
     document.getElementById("timeTabs").style.display = "flex";
     document.getElementById("levelTabs").style.display = "flex";
     render();
+  });
 });
+
 function updateSummary() {
-    const now     = Date.now();
-    const dayMs   = 86400000;
-    const weekMs  = 604800000;
-
+    const now = Date.now();
     const total = allRecords.reduce((s, r) => s + (r.amount || 0), 0);
-    const today = allRecords.filter(r => now - r.timestamp < dayMs).reduce((s, r) => s + (r.amount || 0), 0);
-    const week  = allRecords.filter(r => now - r.timestamp < weekMs).reduce((s, r) => s + (r.amount || 0), 0);
-
+    const today = allRecords.filter(r => now - r.timestamp < 86400000).reduce((s, r) => s + (r.amount || 0), 0);
+    const week  = allRecords.filter(r => now - r.timestamp < 604800000).reduce((s, r) => s + (r.amount || 0), 0);
     document.getElementById("totalEarned").textContent = "$" + total.toFixed(2);
     document.getElementById("todayEarned").textContent = "$" + today.toFixed(2);
     document.getElementById("weekEarned").textContent  = "$" + week.toFixed(2);
@@ -204,24 +201,16 @@ function updateSummary() {
 function render() {
     const content = document.getElementById("content");
     const now     = Date.now();
-
-    let filtered = allRecords;
-
-    // Time filter
+    let filtered  = allRecords;
     if (timeFilter === "today") filtered = filtered.filter(r => now - r.timestamp < 86400000);
     if (timeFilter === "week")  filtered = filtered.filter(r => now - r.timestamp < 604800000);
-
-    // Level filter
     if (levelFilter > 0) filtered = filtered.filter(r => r.level === levelFilter);
-
     if (filtered.length === 0) {
         content.innerHTML = `<div class="empty"><div class="mini-spin"></div></div>`;
         return;
     }
-
-    const lvlClass   = { 1:"lvl-1", 2:"lvl-2", 3:"lvl-3" };
-    const lvlLabel   = { 1:"Level 1 · 10%", 2:"Level 2 · 4%", 3:"Level 3 · 2%" };
-
+    const lvlClass = { 1:"lvl-1", 2:"lvl-2", 3:"lvl-3" };
+    const lvlLabel = { 1:"Level 1 · 10%", 2:"Level 2 · 4%", 3:"Level 3 · 2%" };
     content.innerHTML = filtered.map(r => `
         <div class="record-card">
             <div class="rec-left">
@@ -233,10 +222,8 @@ function render() {
                 <div class="rec-amount">+$${Number(r.amount).toFixed(4)}</div>
                 <div class="level-badge ${lvlClass[r.level] || 'lvl-1'}">${lvlLabel[r.level] || "Level 1"}</div>
             </div>
-        </div>
-    `).join("");
+        </div>`).join("");
 }
-});
 </script>
 </body>
 </html>
