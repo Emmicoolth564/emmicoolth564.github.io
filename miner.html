@@ -19,16 +19,33 @@
 
     .header { padding:30px 20px 20px; text-align:center; font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700; color:var(--neon); text-shadow:0 0 30px rgba(0,240,255,0.6); }
 
+    /* LEVEL HERO BADGE */
+    .level-hero { margin:0 20px 16px; border-radius:20px; padding:14px 20px; display:flex; align-items:center; gap:14px; }
+    .lh-icon { font-size:26px; flex-shrink:0; }
+    .lh-name { font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:800; }
+    .lh-sub  { font-size:11px; opacity:0.75; margin-top:2px; }
+    .lh-progress { margin-left:auto; text-align:right; }
+    .lh-prog-val { font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:800; }
+    .lh-prog-lbl { font-size:10px; opacity:0.6; text-transform:uppercase; letter-spacing:0.06em; }
+
+    .lh-novice   { background:linear-gradient(135deg,rgba(100,116,139,0.2),rgba(100,116,139,0.06)); border:1px solid rgba(100,116,139,0.3); color:#94a3b8; }
+    .lh-junior   { background:linear-gradient(135deg,rgba(34,197,94,0.18),rgba(34,197,94,0.05)); border:1px solid rgba(34,197,94,0.35); color:#22c55e; }
+    .lh-pro      { background:linear-gradient(135deg,rgba(0,240,255,0.16),rgba(0,240,255,0.05)); border:1px solid rgba(0,240,255,0.35); color:#00f0ff; }
+    .lh-elite    { background:linear-gradient(135deg,rgba(245,158,11,0.18),rgba(245,158,11,0.05)); border:1px solid rgba(245,158,11,0.35); color:#f59e0b; }
+    .lh-legend   { background:linear-gradient(135deg,rgba(168,85,247,0.18),rgba(168,85,247,0.05)); border:1px solid rgba(168,85,247,0.35); color:#c084fc; }
+    .lh-employee { background:linear-gradient(135deg,rgba(239,68,68,0.18),rgba(239,68,68,0.05)); border:1px solid rgba(239,68,68,0.35); color:#f87171; }
+
     .balance-header { text-align:center; margin:10px 20px 30px; background:rgba(15,23,42,0.9); border-radius:20px; padding:16px; box-shadow:0 0 30px rgba(0,240,255,0.2); }
     .balance-label  { font-size:13px; color:#94a3b8; }
     .balance-amount { font-size:32px; font-weight:700; color:#00ffcc; }
 
     .tabs { display:flex; justify-content:center; gap:12px; margin:0 20px 20px; }
-    .tabs button { padding:12px 28px; border:none; border-radius:9999px; background:#111827; color:#00f0ff; font-weight:600; font-size:15px; cursor:pointer; }
+    .tabs button { padding:12px 28px; border:none; border-radius:9999px; background:#111827; color:#00f0ff; font-weight:600; font-size:15px; cursor:pointer; font-family:'Inter',sans-serif; }
     .tabs button.active { background:#00ffcc; color:#000; box-shadow:0 0 20px #00ffcc; }
 
     .container { padding:0 20px 100px; }
 
+    /* ── RUNNING MINER CARD — EXACT ORIGINAL ── */
     .miner-card { background:linear-gradient(145deg,#0f172a,#1e2937); border-radius:24px; padding:24px; margin-bottom:24px; box-shadow:0 20px 40px rgba(0,0,0,0.6); border:1px solid rgba(0,240,255,0.2); }
     .miner-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
 
@@ -66,13 +83,68 @@
     .time-remaining { font-size:13px; color:#64748b; text-align:right; }
     .time-val { font-size:16px; font-weight:700; color:#e2e8f0; margin-top:2px; }
 
-    .btn { width:100%; padding:16px; border:none; border-radius:16px; background:linear-gradient(90deg,#00f0ff,#00ffcc); color:#000; font-weight:700; font-size:16px; cursor:pointer; margin-top:14px; box-shadow:0 0 20px rgba(0,240,255,0.4); }
+    .btn { width:100%; padding:16px; border:none; border-radius:16px; background:linear-gradient(90deg,#00f0ff,#00ffcc); color:#000; font-weight:700; font-size:16px; cursor:pointer; margin-top:14px; box-shadow:0 0 20px rgba(0,240,255,0.4); transition:0.2s; font-family:'Inter',sans-serif; }
+    .btn:active { transform:scale(0.97); }
 
-    .shop-card { background:linear-gradient(145deg,#0f172a,#1e2937); border-radius:24px; padding:24px; margin-bottom:24px; box-shadow:0 20px 40px rgba(0,0,0,0.6); border:1px solid rgba(0,240,255,0.15); }
+    /* ── LEVELS TAB ── */
+    .tier-section { margin-bottom:32px; }
+
+    .tier-header { border-radius:20px; padding:18px 20px; margin-bottom:14px; display:flex; align-items:center; gap:14px; }
+    .th-icon { font-size:30px; flex-shrink:0; }
+    .th-info { flex:1; }
+    .th-name { font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:800; }
+    .th-req  { font-size:12px; opacity:0.72; margin-top:5px; line-height:1.55; }
+    .th-badge { padding:6px 14px; border-radius:999px; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; flex-shrink:0; }
+
+    .tier-novice   { background:linear-gradient(135deg,#1a2535,#0c1628); border:1px solid rgba(148,163,184,0.3); color:#94a3b8; }
+    .tier-junior   { background:linear-gradient(135deg,#0d2318,#071a10); border:1px solid rgba(34,197,94,0.4); color:#22c55e; }
+    .tier-pro      { background:linear-gradient(135deg,#0a1e30,#060f1c); border:1px solid rgba(0,240,255,0.4); color:#00f0ff; }
+    .tier-elite    { background:linear-gradient(135deg,#1e1500,#120d00); border:1px solid rgba(245,158,11,0.45); color:#f59e0b; }
+    .tier-legend   { background:linear-gradient(135deg,#1a0d2e,#0d0618); border:1px solid rgba(168,85,247,0.45); color:#c084fc; }
+    .tier-employee { background:linear-gradient(135deg,#1e0a0a,#120505); border:1px solid rgba(239,68,68,0.45); color:#f87171; }
+
+    .badge-active   { background:rgba(0,240,255,0.12); color:#00f0ff; border:1px solid rgba(0,240,255,0.3); animation:glowbadge 2s infinite alternate; }
+    .badge-unlocked { background:rgba(34,197,94,0.12); color:#22c55e; border:1px solid rgba(34,197,94,0.3); }
+    .badge-locked   { background:rgba(100,116,139,0.1); color:#64748b; border:1px solid rgba(100,116,139,0.2); }
+    @keyframes glowbadge { from{box-shadow:none;} to{box-shadow:0 0 12px rgba(0,240,255,0.5);} }
+
+    /* SHOP CARD — inside levels tab */
+    .shop-card { border-radius:24px; padding:24px; margin-bottom:14px; box-shadow:0 20px 40px rgba(0,0,0,0.5); }
+    .shop-novice   { background:linear-gradient(145deg,#0f172a,#1e2937); border:1px solid rgba(0,240,255,0.15); }
+    .shop-junior   { background:linear-gradient(145deg,#071a10,#0a2016); border:1px solid rgba(34,197,94,0.25); }
+    .shop-pro      { background:linear-gradient(145deg,#060f1c,#091a2a); border:1px solid rgba(0,240,255,0.25); }
+    .shop-elite    { background:linear-gradient(145deg,#120d00,#1c1400); border:1px solid rgba(245,158,11,0.3); }
+    .shop-legend   { background:linear-gradient(145deg,#0d0618,#160a26); border:1px solid rgba(168,85,247,0.3); }
+    .shop-employee { background:linear-gradient(145deg,#120505,#1c0808); border:1px solid rgba(239,68,68,0.3); }
+
     .shop-header { display:flex; align-items:center; gap:16px; margin-bottom:16px; }
     .shop-img { width:72px; height:72px; object-fit:contain; filter:drop-shadow(0 0 14px #00f0ff); }
-    .shop-name { font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:700; color:#00ffcc; }
+    .shop-emoji { width:72px; height:72px; display:flex; align-items:center; justify-content:center; font-size:44px; flex-shrink:0; }
+    .shop-name { font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:700; }
+    .shop-sub  { font-size:13px; color:#64748b; margin-top:4px; }
 
+    .shop-btn { width:100%; padding:15px; border:none; border-radius:14px; font-weight:700; font-size:15px; cursor:pointer; margin-top:12px; transition:0.2s; font-family:'Inter',sans-serif; }
+    .shop-btn:active { transform:scale(0.97); }
+    .shop-btn.disabled { background:#334155; color:#64748b; cursor:not-allowed; }
+
+    .btn-novice   { background:linear-gradient(90deg,#00f0ff,#00ffcc); color:#000; box-shadow:0 0 20px rgba(0,240,255,0.4); }
+    .btn-junior   { background:linear-gradient(90deg,#22c55e,#00ffcc); color:#000; box-shadow:0 0 20px rgba(34,197,94,0.5); }
+    .btn-pro      { background:linear-gradient(90deg,#00bfff,#00f0ff); color:#000; box-shadow:0 0 20px rgba(0,240,255,0.6); }
+    .btn-elite    { background:linear-gradient(90deg,#f59e0b,#fbbf24); color:#000; box-shadow:0 0 20px rgba(245,158,11,0.6); }
+    .btn-legend   { background:linear-gradient(90deg,#a855f7,#c084fc); color:#fff; box-shadow:0 0 20px rgba(168,85,247,0.6); }
+    .btn-employee { background:linear-gradient(90deg,#ef4444,#f97316); color:#fff; box-shadow:0 0 20px rgba(239,68,68,0.6); }
+
+    /* LOCK NOTICE */
+    .lock-notice { background:rgba(100,116,139,0.06); border:1px solid rgba(100,116,139,0.15); border-radius:18px; padding:24px; text-align:center; }
+    .lock-notice .lock-emoji { font-size:36px; margin-bottom:10px; }
+    .lock-notice h4 { font-size:15px; font-weight:700; color:#94a3b8; margin-bottom:8px; }
+    .lock-notice p  { font-size:13px; color:#64748b; line-height:1.7; }
+    .lock-notice strong { color:#94a3b8; }
+
+    /* PROMOTION TOAST */
+    .promo-toast { position:fixed; top:80px; left:50%; transform:translateX(-50%); background:linear-gradient(90deg,#00ffcc,#00f0ff); color:#000; padding:14px 28px; border-radius:999px; font-weight:800; font-size:14px; box-shadow:0 0 40px rgba(0,255,204,0.8); opacity:0; transition:all 0.4s; z-index:100001; pointer-events:none; white-space:nowrap; font-family:'Space Grotesk',sans-serif; }
+
+    /* NAV */
     .nav-glass { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width:90%; height:70px; display:flex; justify-content:space-around; align-items:center; background:rgba(255,255,255,0.05); backdrop-filter:blur(20px); border-radius:25px; box-shadow:0 8px 30px rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08); z-index:999; }
     .nav-item { text-align:center; color:#aaa; font-size:11px; cursor:pointer; }
     .nav-item.active { color:#00ffcc; }
@@ -94,6 +166,19 @@
 
 <div class="header">CryptoJet Miner</div>
 
+<!-- LEVEL HERO -->
+<div id="levelHero" class="level-hero lh-novice">
+  <div class="lh-icon">⛏️</div>
+  <div>
+    <div class="lh-name">Novice Miner</div>
+    <div class="lh-sub">Build your team to level up</div>
+  </div>
+  <div class="lh-progress">
+    <div class="lh-prog-lbl">Active Team</div>
+    <div class="lh-prog-val" id="activeTeamCount">0</div>
+  </div>
+</div>
+
 <div class="balance-header">
     <div class="balance-label">AVAILABLE BALANCE</div>
     <div class="balance-amount" id="liveBalance">$0.00</div>
@@ -101,11 +186,13 @@
 
 <div class="tabs">
   <button id="runBtn" class="active" onclick="showTab('running')">Running</button>
-  <button id="shopBtn" onclick="showTab('shop')">Purchase</button>
+  <button id="levBtn" onclick="showTab('levels')">🏆 Levels</button>
 </div>
 
 <div id="runningTab" class="container"></div>
-<div id="shopTab"    class="container" style="display:none;"></div>
+<div id="levelsTab"  class="container" style="display:none;"></div>
+
+<div class="promo-toast" id="promoToast"></div>
 
 <div class="nav-glass">
   <div class="nav-item" onclick="nav('dashboard.html')"><div class="icon home"></div><span>Home</span></div>
@@ -124,28 +211,69 @@ const firebaseConfig = {
   projectId: "cj-miner"
 };
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+const db   = firebase.database();
 const auth = firebase.auth();
 
 const uid = localStorage.getItem("uid");
 if (!uid) { alert("Session expired"); window.location.href = "signin.html"; }
 
-let userData = null;
+let userData        = null;
+let currentLevelKey = "novice";
+
+// ── LEVEL DEFINITIONS ─────────────────────────────────────────
+const LEVELS = {
+  novice:   { name:"Novice Miner",  emoji:"⛏️",  cls:"novice",   l1:0,   total:0,   dbName:"Novice Miner"  },
+  junior:   { name:"Junior Miner",  emoji:"🥈",  cls:"junior",   l1:5,   total:20,  dbName:"Junior Miner"  },
+  pro:      { name:"Pro Miner",     emoji:"💎",  cls:"pro",      l1:10,  total:50,  dbName:"Pro Miner"     },
+  elite:    { name:"Elite Miner",   emoji:"🔥",  cls:"elite",    l1:25,  total:75,  dbName:"Elite Miner"   },
+  legend:   { name:"Legend Miner",  emoji:"👑",  cls:"legend",   l1:50,  total:150, dbName:"Legend Miner"  },
+  employee: { name:"Employee",      emoji:"🚀",  cls:"employee", l1:100, total:500, dbName:"Employee"      }
+};
+const LEVEL_ORDER = ["novice","junior","pro","elite","legend","employee"];
 
 // ── MINER CONFIG ──────────────────────────────────────────────
+// NOVICE — unchanged from original
 const MINERS = {
-  S244:  { name:"S-244",  price:10,  daily:0.5, cycleHours:48, img:"purchase1.png", duration:30 },
-  S500:  { name:"S-500",  price:30,  daily:1.5, cycleHours:48, img:"purchase2.png", duration:30 },
-  S900:  { name:"S-900",  price:50,  daily:2,   cycleHours:24, img:"purchase3.png", duration:35 },
-  S1200: { name:"S-1200", price:120, daily:4,   cycleHours:24, img:"purchase4.png", duration:45 }
+  S244:  { name:"S-244",          tier:"novice",   price:10,   daily:0.5,  cycleHours:48, img:"purchase1.png", duration:30, maxOwn:2 },
+  S500:  { name:"S-500",          tier:"novice",   price:30,   daily:1.5,  cycleHours:48, img:"purchase2.png", duration:30, maxOwn:1 },
+  S900:  { name:"S-900",          tier:"novice",   price:50,   daily:2,    cycleHours:24, img:"purchase3.png", duration:35, maxOwn:1 },
+  S1200: { name:"S-1200",         tier:"novice",   price:120,  daily:4,    cycleHours:24, img:"purchase4.png", duration:45, maxOwn:1 },
+
+  // JUNIOR — max $5K tier
+  JX200: { name:"JX-200 Turbo",   tier:"junior",   price:200,  daily:8,    cycleHours:24, img:"purchase1.png", duration:40, maxOwn:1, emoji:"💚" },
+  JX500: { name:"JX-500 Boost",   tier:"junior",   price:500,  daily:20,   cycleHours:24, img:"purchase2.png", duration:45, maxOwn:1, emoji:"🟢" },
+
+  // PRO
+  PX1K:  { name:"PX-1000 Apex",   tier:"pro",      price:1000, daily:42,   cycleHours:24, img:"purchase3.png", duration:45, maxOwn:1, emoji:"🔵" },
+  PX2K:  { name:"PX-2500 Core",   tier:"pro",      price:2500, daily:100,  cycleHours:24, img:"purchase4.png", duration:50, maxOwn:1, emoji:"💠" },
+
+  // ELITE
+  EX3K:  { name:"EX-3000 Blaze",  tier:"elite",    price:3000, daily:130,  cycleHours:24, img:"purchase1.png", duration:50, maxOwn:1, emoji:"🟡" },
+  EX5K:  { name:"EX-5000 Inferno",tier:"elite",    price:5000, daily:220,  cycleHours:24, img:"purchase2.png", duration:55, maxOwn:1, emoji:"🔶" },
+
+  // LEGEND
+  LX3K:  { name:"LX-3500 Titan",  tier:"legend",   price:3500, daily:155,  cycleHours:24, img:"purchase3.png", duration:55, maxOwn:1, emoji:"🟣" },
+  LX5K:  { name:"LX-5000 Zeus",   tier:"legend",   price:5000, daily:230,  cycleHours:24, img:"purchase4.png", duration:60, maxOwn:1, emoji:"👾" },
+
+  // EMPLOYEE
+  EM4K:  { name:"EM-4000 Oracle",  tier:"employee", price:4000, daily:185,  cycleHours:24, img:"purchase1.png", duration:60, maxOwn:1, emoji:"🚀" },
+  EM5K:  { name:"EM-5000 Nexus",   tier:"employee", price:5000, daily:250,  cycleHours:24, img:"purchase2.png", duration:60, maxOwn:1, emoji:"🌌" },
 };
 
-// ── REFERRAL LEVELS & PERCENTAGES ────────────────────────────
 const REFERRAL_LEVELS = [
-  { level: 1, pct: 0.10 },  // Level 1 direct referrer → 10%
-  { level: 2, pct: 0.04 },  // Level 2 → 4%
-  { level: 3, pct: 0.02 }   // Level 3 → 2%
+  { level:1, pct:0.10 },
+  { level:2, pct:0.04 },
+  { level:3, pct:0.02 }
 ];
+
+const REF_PTS = {
+  S244:50, S500:75, S900:100, S1200:200,
+  JX200:300, JX500:500,
+  PX1K:800, PX2K:1500,
+  EX3K:2000, EX5K:3000,
+  LX3K:4000, LX5K:5000,
+  EM4K:6000, EM5K:8000
+};
 
 // ── HELPERS ───────────────────────────────────────────────────
 function fmtTime(ms) {
@@ -155,110 +283,99 @@ function fmtTime(ms) {
   const s = Math.floor((ms%60000)/1000);
   return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
 }
+function fmtDate(ts) { return new Date(ts).toLocaleDateString("en-NG"); }
+function nav(page)   { window.location.href = page; }
 
-function fmtDate(ts) {
-  return new Date(ts).toLocaleDateString("en-NG");
+function getTierColor(cls) {
+  return { novice:"#00ffcc", junior:"#22c55e", pro:"#00f0ff", elite:"#f59e0b", legend:"#c084fc", employee:"#f87171" }[cls] || "#00ffcc";
 }
 
-function computeEarned(id, minerData) {
-  const cfg     = MINERS[id];
-  const now     = Date.now();
-  const elapsed = now - minerData.start;
-  const cycleMs = cfg.cycleHours * 3600000;
-  const dayMs   = 24 * 3600000;
+// ── LEVEL CHECK ───────────────────────────────────────────────
+async function checkAndUpdateLevel() {
+  const membersSnap = await db.ref("users/" + uid + "/teamMembers").once("value");
+  const members = membersSnap.val() || {};
+  const l1Active = Object.values(members).filter(m => m.hasMiner === true).length;
 
-  if (elapsed >= cycleMs) {
-    const totalEarn = cfg.daily * (cfg.cycleHours / 24);
-    return { displayEarned: totalEarn, pct: 100, isComplete: true, phase: "done", timeLeft: 0 };
+  const incomeSnap = await db.ref("teamIncome/" + uid).once("value");
+  const income = incomeSnap.val() || {};
+  const uniqueActive = new Set();
+  Object.keys(members).forEach(mUid => { if (members[mUid].hasMiner) uniqueActive.add(mUid); });
+  Object.values(income).forEach(r => { if (r.fromUid) uniqueActive.add(r.fromUid); });
+  const totalActive = uniqueActive.size;
+
+  document.getElementById("activeTeamCount").textContent = totalActive;
+
+  // Determine new level
+  let newLevelKey = "novice";
+  for (const key of LEVEL_ORDER) {
+    const req = LEVELS[key];
+    if (l1Active >= req.l1 && totalActive >= req.total) newLevelKey = key;
   }
+  currentLevelKey = newLevelKey;
+  const lv  = LEVELS[newLevelKey];
+  const idx = LEVEL_ORDER.indexOf(newLevelKey);
+  const nextReq = idx < LEVEL_ORDER.length - 1
+    ? `Need ${LEVELS[LEVEL_ORDER[idx+1]].l1} L1 + ${LEVELS[LEVEL_ORDER[idx+1]].total} total active miners`
+    : "Maximum level reached 🏆";
 
-  const pct      = (elapsed / cycleMs) * 100;
-  const timeLeft = cycleMs - elapsed;
+  // Update hero badge
+  const hero = document.getElementById("levelHero");
+  hero.className = `level-hero lh-${lv.cls}`;
+  hero.innerHTML = `
+    <div class="lh-icon">${lv.emoji}</div>
+    <div>
+      <div class="lh-name">${lv.name}</div>
+      <div class="lh-sub">${nextReq}</div>
+    </div>
+    <div class="lh-progress">
+      <div class="lh-prog-lbl">Active Team</div>
+      <div class="lh-prog-val">${totalActive}</div>
+    </div>`;
 
-  if (cfg.cycleHours === 24) {
-    const earned = (elapsed / dayMs) * cfg.daily;
-    return { displayEarned: Math.min(earned, cfg.daily), pct, isComplete: false, phase: "active", timeLeft };
-  } else {
-    if (elapsed < dayMs) {
-      const earned = (elapsed / dayMs) * cfg.daily;
-      return { displayEarned: earned, pct, isComplete: false, phase: "first24", timeLeft };
-    } else {
-      const extra  = elapsed - dayMs;
-      const earned = cfg.daily + (extra / dayMs) * cfg.daily;
-      return { displayEarned: Math.min(earned, cfg.daily * 2), pct, isComplete: false, phase: "second24", timeLeft };
-    }
+  // If promoted, update DB and show toast
+  const prevLevel = userData.level || "Novice Miner";
+  if (lv.dbName !== prevLevel) {
+    await db.ref("users/" + uid + "/level").set(lv.dbName);
+    userData.level = lv.dbName;
+    showPromoToast("🎉 Promoted to " + lv.name + "!");
   }
 }
 
-// ── CREDIT REFERRAL CHAIN ─────────────────────────────────────
-// When a user's miner cycle completes, walk up 3 levels of referrers
-// and credit the right % of earned amount into their `team` balance
-async function creditReferralChain(earnerUid, earnedAmount, minerName) {
-  let currentUid  = earnerUid;
-  let earnerMiner = null;
-
-  // Get earner's minerId for the record
-  const earnerSnap = await db.ref(`users/${earnerUid}/minerId`).once("value");
-  earnerMiner = earnerSnap.val() || earnerUid.substring(0, 8);
-
-  for (const { level, pct } of REFERRAL_LEVELS) {
-    // Get the referrer of currentUid
-    const refSnap    = await db.ref(`users/${currentUid}/referredBy`).once("value");
-    const referrerUid = refSnap.val();
-    if (!referrerUid) break; // no more referrers in chain
-
-    const teamCredit = parseFloat((earnedAmount * pct).toFixed(4));
-    if (teamCredit <= 0) { currentUid = referrerUid; continue; }
-
-    // Add to referrer's team balance
-    const teamSnap    = await db.ref(`users/${referrerUid}/team`).once("value");
-    const currentTeam = teamSnap.val() || 0;
-    await db.ref(`users/${referrerUid}/team`).set(
-      parseFloat((currentTeam + teamCredit).toFixed(4))
-    );
-
-    // Record in teamIncome for history
-    await db.ref(`teamIncome/${referrerUid}`).push({
-      fromUid:   earnerUid,
-      fromMiner: earnerMiner,
-      amount:    teamCredit,
-      level:     level,
-      miner:     minerName,
-      pct:       pct * 100,
-      timestamp: Date.now()
-    });
-
-    currentUid = referrerUid; // move up the chain
-  }
+function showPromoToast(msg) {
+  const t = document.getElementById("promoToast");
+  t.textContent = msg; t.style.opacity = 1;
+  setTimeout(() => t.style.opacity = 0, 4000);
 }
 
 // ── TAB SWITCH ────────────────────────────────────────────────
 function showTab(tab) {
   document.getElementById("runningTab").style.display = tab === "running" ? "block" : "none";
-  document.getElementById("shopTab").style.display    = tab === "shop"    ? "block" : "none";
+  document.getElementById("levelsTab").style.display  = tab === "levels"  ? "block" : "none";
   document.getElementById("runBtn").classList.toggle("active", tab === "running");
-  document.getElementById("shopBtn").classList.toggle("active", tab === "shop");
+  document.getElementById("levBtn").classList.toggle("active", tab === "levels");
 }
 
-// ── LOAD ──────────────────────────────────────────────────────
+// ── LOAD PAGE ─────────────────────────────────────────────────
 async function loadPage() {
   const snap = await db.ref("users/" + uid).once("value");
   userData = snap.val() || {};
   document.getElementById("liveBalance").textContent = "$" + Math.floor(userData.balance || 0) + ".00";
+  await checkAndUpdateLevel();
   renderRunning();
-  renderShop();
+  renderLevels();
 }
 
-// ── RENDER RUNNING TAB ────────────────────────────────────────
+// ── RENDER RUNNING TAB — EXACT ORIGINAL DESIGN ───────────────
 function renderRunning() {
   const container = document.getElementById("runningTab");
   container.innerHTML = "";
 
   const unlocked  = userData.minerUnlocked || {};
   const minersMap = userData.miners || {};
-
   let hasAny = false;
+
   Object.keys(unlocked).forEach(id => {
+    if (!MINERS[id]) return;
     const count = unlocked[id];
     for (let i = 1; i <= count; i++) {
       hasAny = true;
@@ -271,17 +388,25 @@ function renderRunning() {
       card.className = "miner-card";
       card.id = "card-" + key;
 
+      // Use img for novice miners, emoji display for others
+      const imgHTML = cfg.tier === "novice"
+        ? `<img src="${cfg.img}" class="miner-img" alt="${cfg.name}">`
+        : `<div style="position:absolute;top:8px;left:8px;width:72px;height:72px;display:flex;align-items:center;justify-content:center;font-size:40px;filter:drop-shadow(0 0 10px ${getTierColor(LEVELS[cfg.tier].cls)});">${cfg.emoji}</div>`;
+
+      const tierColor = getTierColor(LEVELS[cfg.tier].cls);
+      const ringColor = cfg.tier === "novice" ? "#00ffcc" : tierColor;
+
       card.innerHTML = `
         <div class="miner-header">
           <div class="ring-wrap">
             <svg class="ring-svg" viewBox="0 0 88 88">
               <circle class="ring-bg"   cx="44" cy="44" r="40"/>
-              <circle class="ring-fill" cx="44" cy="44" r="40" id="ring-${key}"/>
+              <circle class="ring-fill" cx="44" cy="44" r="40" id="ring-${key}" style="stroke:${ringColor}"/>
             </svg>
-            <img src="${cfg.img}" class="miner-img" alt="${cfg.name}">
+            ${imgHTML}
           </div>
           <div>
-            <div class="miner-name">${cfg.name}${unlocked[id] > 1 ? ` #${i}` : ""}</div>
+            <div class="miner-name" style="color:${ringColor};">${cfg.name}${unlocked[id] > 1 ? ` #${i}` : ""}</div>
             <div class="miner-dates">
               Bought: ${mData ? fmtDate(mData.start) : "—"}<br>
               Expires: ${expireTs ? fmtDate(expireTs) : "—"}
@@ -306,11 +431,42 @@ function renderRunning() {
   });
 
   if (!hasAny) {
-    container.innerHTML = `<p style="text-align:center;color:#64748b;padding:60px 20px;">No active miners yet.<br>Buy one from the Purchase tab.</p>`;
+    container.innerHTML = `<p style="text-align:center;color:#64748b;padding:60px 20px;font-size:15px;">No active miners yet.<br><br><span style="font-size:13px;">Go to the <strong style="color:#00ffcc;">Levels</strong> tab to buy your first miner.</span></p>`;
   }
 }
 
-// ── REFRESH SINGLE CARD (every second) ───────────────────────
+// ── COMPUTE EARNED ────────────────────────────────────────────
+function computeEarned(id, minerData) {
+  const cfg     = MINERS[id];
+  const now     = Date.now();
+  const elapsed = now - minerData.start;
+  const cycleMs = cfg.cycleHours * 3600000;
+  const dayMs   = 24 * 3600000;
+
+  if (elapsed >= cycleMs) {
+    const totalEarn = cfg.daily * (cfg.cycleHours / 24);
+    return { displayEarned:totalEarn, pct:100, isComplete:true, phase:"done", timeLeft:0 };
+  }
+
+  const pct      = (elapsed / cycleMs) * 100;
+  const timeLeft = cycleMs - elapsed;
+
+  if (cfg.cycleHours === 24) {
+    const earned = (elapsed / dayMs) * cfg.daily;
+    return { displayEarned:Math.min(earned,cfg.daily), pct, isComplete:false, phase:"active", timeLeft };
+  } else {
+    if (elapsed < dayMs) {
+      const earned = (elapsed / dayMs) * cfg.daily;
+      return { displayEarned:earned, pct, isComplete:false, phase:"first24", timeLeft };
+    } else {
+      const extra  = elapsed - dayMs;
+      const earned = cfg.daily + (extra / dayMs) * cfg.daily;
+      return { displayEarned:Math.min(earned, cfg.daily*2), pct, isComplete:false, phase:"second24", timeLeft };
+    }
+  }
+}
+
+// ── REFRESH SINGLE CARD — EXACT ORIGINAL LAYOUT ──────────────
 function refreshCard(id, key, mData) {
   const box = document.getElementById("statusbox-" + key);
   if (!box) return;
@@ -373,40 +529,65 @@ function refreshCard(id, key, mData) {
   }
 }
 
-// ── CREDIT BALANCE + REFERRAL CHAIN ON CYCLE END ──────────────
+// ── CREDIT BALANCE + REFERRAL CHAIN ──────────────────────────
 const _credited = {};
 async function checkAndCredit(id, key, mData) {
   if (_credited[key]) return;
   if (mData.credited)  return;
-
   _credited[key] = true;
 
   const cfg       = MINERS[id];
   const totalEarn = cfg.daily * (cfg.cycleHours / 24);
   const now       = Date.now();
 
-  // Mark credited
   await db.ref(`users/${uid}/miners/${key}`).update({ credited: true });
 
-  // Add to user's own balance
   const balSnap = await db.ref(`users/${uid}/balance`).once("value");
   const balance = balSnap.val() || 0;
   await db.ref(`users/${uid}/balance`).set(balance + totalEarn);
 
-  // Record in miningRecords
   await db.ref(`users/${uid}/miningRecords`).push({
-    amount:    totalEarn,
-    miner:     cfg.name,
-    timestamp: now
+    amount: totalEarn, miner: cfg.name, timestamp: now
   });
 
-  // Update local display
   userData.balance = balance + totalEarn;
   document.getElementById("liveBalance").textContent = "$" + Math.floor(userData.balance) + ".00";
 
-  // ── CREDIT REFERRAL CHAIN (10% / 4% / 2%) ────────────────
-  // Runs in background — doesn't block the UI
   creditReferralChain(uid, totalEarn, cfg.name).catch(console.error);
+  checkAndUpdateLevel().catch(console.error);
+}
+
+async function creditReferralChain(earnerUid, earnedAmount, minerName) {
+  let currentUid = earnerUid;
+  const earnerSnap = await db.ref(`users/${earnerUid}/minerId`).once("value");
+  const earnerMiner = earnerSnap.val() || earnerUid.substring(0, 8);
+
+  for (const { level, pct } of REFERRAL_LEVELS) {
+    const refSnap     = await db.ref(`users/${currentUid}/referredBy`).once("value");
+    const referrerUid = refSnap.val();
+    if (!referrerUid) break;
+
+    const teamCredit = parseFloat((earnedAmount * pct).toFixed(4));
+    if (teamCredit <= 0) { currentUid = referrerUid; continue; }
+
+    const teamSnap    = await db.ref(`users/${referrerUid}/team`).once("value");
+    const currentTeam = teamSnap.val() || 0;
+    await db.ref(`users/${referrerUid}/team`).set(
+      parseFloat((currentTeam + teamCredit).toFixed(4))
+    );
+
+    await db.ref(`teamIncome/${referrerUid}`).push({
+      fromUid:   earnerUid,
+      fromMiner: earnerMiner,
+      amount:    teamCredit,
+      level:     level,
+      miner:     minerName,
+      pct:       pct * 100,
+      timestamp: Date.now()
+    });
+
+    currentUid = referrerUid;
+  }
 }
 
 // ── START MINER ───────────────────────────────────────────────
@@ -416,69 +597,130 @@ async function startMiner(id, key) {
   await db.ref(`users/${uid}/miners/${key}`).set(newData);
   if (!userData.miners) userData.miners = {};
   userData.miners[key] = newData;
-  delete _credited[key]; // allow re-crediting on next cycle
+  delete _credited[key];
   renderRunning();
 }
 
-// ── RENDER SHOP ───────────────────────────────────────────────
-function renderShop() {
-  const container = document.getElementById("shopTab");
+// ── RENDER LEVELS TAB ─────────────────────────────────────────
+function renderLevels() {
+  const container = document.getElementById("levelsTab");
   container.innerHTML = "";
 
-  Object.keys(MINERS).forEach(id => {
-    const m     = MINERS[id];
-    const owned = (userData.minerUnlocked && userData.minerUnlocked[id]) || 0;
+  LEVEL_ORDER.forEach(levelKey => {
+    const lv          = LEVELS[levelKey];
+    const userIdx     = LEVEL_ORDER.indexOf(currentLevelKey);
+    const tierIdx     = LEVEL_ORDER.indexOf(levelKey);
+    const isUnlocked  = tierIdx <= userIdx;
+    const isCurrent   = levelKey === currentLevelKey;
 
-    let btnHTML = `<button class="btn" onclick="buyMiner('${id}',${m.price})">Buy for $${m.price}</button>`;
-    if (id === "S244" && owned >= 2) btnHTML = `<button class="btn" style="background:#334155;color:white;cursor:not-allowed;">Maximum 2 Purchased</button>`;
-    else if (id !== "S244" && owned >= 1) btnHTML = `<button class="btn" style="background:#334155;color:white;cursor:not-allowed;">Already Owned</button>`;
+    const badgeText  = isCurrent ? "✦ YOUR LEVEL" : isUnlocked ? "UNLOCKED" : "🔒 LOCKED";
+    const badgeClass = isCurrent ? "badge-active"  : isUnlocked ? "badge-unlocked" : "badge-locked";
+    const reqText    = levelKey === "novice"
+      ? "Available to all users — start here"
+      : `${lv.l1} Level 1 active members + ${lv.total} total active team`;
 
-    const card = document.createElement("div");
-    card.className = "shop-card";
-    card.innerHTML = `
-      <div class="shop-header">
-        <img src="${m.img}" class="shop-img" alt="${m.name}">
-        <div>
-          <div class="shop-name">${m.name}</div>
-          <div style="font-size:13px;color:#64748b;">${m.cycleHours}h cycle • ${m.duration} day plan</div>
+    const section = document.createElement("div");
+    section.className = "tier-section";
+    section.innerHTML = `
+      <div class="tier-header tier-${lv.cls}">
+        <div class="th-icon">${lv.emoji}</div>
+        <div class="th-info">
+          <div class="th-name">${lv.name}</div>
+          <div class="th-req">📋 ${reqText}</div>
         </div>
-      </div>
-      <div class="stats-grid">
-        <div class="stat-item"><div class="stat-label">PRICE</div><div class="stat-value">$${m.price}</div></div>
-        <div class="stat-item"><div class="stat-label">DAILY</div><div class="stat-value" style="color:#00ff88;">$${m.daily}</div></div>
-        <div class="stat-item"><div class="stat-label">PER CYCLE</div><div class="stat-value">$${m.daily * (m.cycleHours / 24)}</div></div>
-        <div class="stat-item"><div class="stat-label">DURATION</div><div class="stat-value">${m.duration} days</div></div>
-      </div>
-      <div style="margin-top:12px;">${btnHTML}</div>`;
-    container.appendChild(card);
+        <div class="th-badge ${badgeClass}">${badgeText}</div>
+      </div>`;
+
+    const tierMiners = Object.entries(MINERS).filter(([, m]) => m.tier === levelKey);
+
+    if (!isUnlocked) {
+      const lockDiv = document.createElement("div");
+      lockDiv.className = "lock-notice";
+      lockDiv.innerHTML = `
+        <div class="lock-emoji">🔒</div>
+        <h4>${lv.name} Miners — Locked</h4>
+        <p>You need <strong>${lv.l1} Level 1 active members</strong> and <strong>${lv.total} total active team</strong> to unlock these miners.<br><br><em>Active = members who currently have a running miner.</em></p>`;
+      section.appendChild(lockDiv);
+    } else {
+      tierMiners.forEach(([id, m]) => {
+        const owned   = (userData.minerUnlocked || {})[id] || 0;
+        const isMaxed = owned >= m.maxOwn;
+        const tierColor = getTierColor(lv.cls);
+
+        const imgHTML = m.tier === "novice"
+          ? `<img src="${m.img}" class="shop-img" alt="${m.name}">`
+          : `<div class="shop-emoji" style="color:${tierColor}">${m.emoji}</div>`;
+
+        let btnHTML = "";
+        if (isMaxed) {
+          btnHTML = `<button class="shop-btn disabled">✅ Already Owned</button>`;
+        } else {
+          btnHTML = `<button class="shop-btn btn-${lv.cls}" onclick="buyMiner('${id}',${m.price})">Buy for $${m.price.toLocaleString()}</button>`;
+        }
+
+        const card = document.createElement("div");
+        card.className = `shop-card shop-${lv.cls}`;
+        card.innerHTML = `
+          <div class="shop-header">
+            ${imgHTML}
+            <div>
+              <div class="shop-name" style="color:${tierColor};">${m.name}</div>
+              <div class="shop-sub">${m.cycleHours}h cycle • ${m.duration} day plan • Max ${m.maxOwn}×</div>
+            </div>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-item"><div class="stat-label">PRICE</div><div class="stat-value">$${m.price.toLocaleString()}</div></div>
+            <div class="stat-item"><div class="stat-label">DAILY</div><div class="stat-value" style="color:#00ff88;">$${m.daily}</div></div>
+            <div class="stat-item"><div class="stat-label">PER CYCLE</div><div class="stat-value">$${(m.daily*(m.cycleHours/24)).toFixed(2)}</div></div>
+            <div class="stat-item"><div class="stat-label">DURATION</div><div class="stat-value">${m.duration}d</div></div>
+          </div>
+          ${btnHTML}`;
+        section.appendChild(card);
+      });
+    }
+
+    container.appendChild(section);
   });
 }
 
 // ── BUY MINER ─────────────────────────────────────────────────
 async function buyMiner(id, price) {
-  const snap = await db.ref("users/" + uid).once("value");
-  const data = snap.val() || {};
+  const m = MINERS[id];
+  if (!m) return;
+
+  // Level check
+  const tierIdx = LEVEL_ORDER.indexOf(m.tier);
+  const userIdx = LEVEL_ORDER.indexOf(currentLevelKey);
+  if (userIdx < tierIdx) {
+    const lv = LEVELS[m.tier];
+    alert(`You need ${lv.name} to buy this miner!\n\nRequirement: ${lv.l1} L1 active + ${lv.total} total active team.`);
+    return;
+  }
+
+  const snap      = await db.ref("users/" + uid).once("value");
+  const data      = snap.val() || {};
   const available = (data.balance || 0) + (data.team || 0);
-  if (available < price) return alert("Not enough balance");
+  if (available < price) return alert("Not enough balance.\nRequired: $" + price.toLocaleString());
 
-  let unlocked = data.minerUnlocked || {};
-  let count    = unlocked[id] || 0;
-  if (id === "S244" && count >= 2) return alert("You can only buy S-244 twice");
-  if (id !== "S244" && count >= 1) return alert("You already own this miner");
+  const unlocked = data.minerUnlocked || {};
+  const count    = unlocked[id] || 0;
+  if (count >= m.maxOwn) return alert("You already own the maximum of this miner.");
 
-  const instanceKey    = id === "S244" ? `${id}_${count + 1}` : id;
-  const deductTeam     = Math.min(price, data.team || 0);
-  const deductBalance  = price - deductTeam;
+  const instanceKey   = id === "S244" ? `${id}_${count + 1}` : id;
+  const deductTeam    = Math.min(price, data.team || 0);
+  const deductBalance = price - deductTeam;
+  const referrer      = data.referredBy;
 
-  // Referral points for referrer
-  const refPoints = { S244:100, S500:200, S900:300, S1200:400 };
-  const referrer  = data.referredBy;
-  if (referrer && refPoints[id]) {
+  if (referrer && REF_PTS[id]) {
+    const pts = REF_PTS[id];
     db.ref("users/" + referrer).transaction(u => {
       if (!u) return u;
       u.pendingRewards = u.pendingRewards || {};
-      u.pendingRewards[id] = (u.pendingRewards[id] || 0) + refPoints[id];
+      u.pendingRewards[id] = (u.pendingRewards[id] || 0) + pts;
       return u;
+    });
+    db.ref("users/" + referrer + "/referralMinerRecords").push({
+      buyerUid: uid, buyerMiner: m.name, pointsEarned: pts, timestamp: Date.now()
     });
   }
 
@@ -486,42 +728,42 @@ async function buyMiner(id, price) {
     balance: Math.max(0, (data.balance || 0) - deductBalance),
     team:    Math.max(0, (data.team    || 0) - deductTeam),
     [`minerUnlocked/${id}`]:   count + 1,
-    [`miners/${instanceKey}`]: { start: Date.now(), lastUpdate: Date.now(), credited: false }
+    [`miners/${instanceKey}`]: { start:Date.now(), lastUpdate:Date.now(), credited:false }
   });
 
-  // Mark hasMiner = true in referrer's teamMembers
   if (referrer) {
     db.ref("users/" + referrer + "/teamMembers/" + uid + "/hasMiner").set(true);
   }
 
-  loadPage();
+  await loadPage();
+  showTab("running");
 }
 
-// ── TICK — display update every second ───────────────────────
+// ── TICK ──────────────────────────────────────────────────────
 function startTick() {
   setInterval(() => {
     if (!userData || !userData.miners) return;
     const unlocked = userData.minerUnlocked || {};
     Object.keys(unlocked).forEach(id => {
+      if (!MINERS[id]) return;
       const count = unlocked[id];
       for (let i = 1; i <= count; i++) {
-        const key   = id === "S244" ? `${id}_${i}` : id;
+        const key = id === "S244" ? `${id}_${i}` : id;
         refreshCard(id, key, userData.miners[key]);
       }
     });
   }, 1000);
 }
 
-function nav(page) { window.location.href = page; }
-
-window.addEventListener("load", () => {
+// ── BOOT ──────────────────────────────────────────────────────
+window.addEventListener("load", async () => {
   auth.onAuthStateChanged(async user => {
     if (!user) { window.location.href = "signin.html"; return; }
     await loadPage();
     startTick();
     setTimeout(() => document.getElementById("loader").style.display = "none", 1500);
     const params = new URLSearchParams(window.location.search);
-    if (params.get("tab") === "purchase") showTab("shop");
+    if (params.get("tab") === "purchase") showTab("levels");
   });
 });
 </script>
