@@ -292,6 +292,25 @@ function getTierColor(cls) {
 
 // ── LEVEL CHECK ───────────────────────────────────────────────
 async function checkAndUpdateLevel() {
+    if (userData.levelOverride) {
+    const dbLevel    = userData.level || "Novice Miner";
+    const matchedKey = LEVEL_ORDER.find(k => LEVELS[k].dbName === dbLevel) || "novice";
+    currentLevelKey  = matchedKey;
+    const lv   = LEVELS[matchedKey];
+    const hero = document.getElementById("levelHero");
+    hero.className = `level-hero lh-${lv.cls}`;
+    hero.innerHTML = `
+      <div class="lh-icon">${lv.emoji}</div>
+      <div>
+        <div class="lh-name">${lv.name}</div>
+        <div class="lh-sub">Level set by admin</div>
+      </div>
+      <div class="lh-progress">
+        <div class="lh-prog-lbl">Active Team</div>
+        <div class="lh-prog-val" id="activeTeamCount">—</div>
+      </div>`;
+    return;
+   } 
   const membersSnap = await db.ref("users/" + uid + "/teamMembers").once("value");
   const members = membersSnap.val() || {};
   const l1Active = Object.values(members).filter(m => m.hasMiner === true).length;
@@ -338,6 +357,7 @@ async function checkAndUpdateLevel() {
       await db.ref("users/" + uid + "/level").set(lv.dbName);
     showPromoToast("🎉 Promoted to " + lv.name + "!");
   }
+}
 
 function showPromoToast(msg) {
   const t = document.getElementById("promoToast");
