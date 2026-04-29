@@ -617,6 +617,7 @@ function buildDetailHTML(uid, u) {
         <option value="Pro Miner"     ${(u.level||"")==="Pro Miner"     ?"selected":""}>Pro Miner</option>
         <option value="Elite Miner"   ${(u.level||"")==="Elite Miner"   ?"selected":""}>Elite Miner</option>
         <option value="Legend Miner"  ${(u.level||"")==="Legend Miner"  ?"selected":""}>Legend Miner</option>
+        <option value="Employee"      ${(u.level||"")==="Employee"       ?"selected":""}>Employee</option>
       </select>
       <button class="adj-btn add" style="margin-top:12px;width:100%;" onclick="updateLevel('${uid}')">Update Level</button>
     </div>
