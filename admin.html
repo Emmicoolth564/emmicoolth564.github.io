@@ -748,7 +748,10 @@ async function adjustBalance(uid, type) {
 // ── UPDATE USER LEVEL ─────────────────────────────────────────
 async function updateLevel(uid) {
   const level = document.getElementById("lvlSelect").value;
-  await db.ref(`users/${uid}/level`).set(level);
+  await db.ref(`users/${uid}`).update({
+    level: level,
+    levelOverride: true
+  });
   allUsers[uid] = { ...(allUsers[uid]||{}), level };
   toast("✅ Level updated to " + level);
 }

@@ -334,12 +334,10 @@ async function checkAndUpdateLevel() {
 
   // If promoted, update DB and show toast
   const prevLevel = userData.level || "Novice Miner";
-  if (lv.dbName !== prevLevel) {
-    await db.ref("users/" + uid + "/level").set(lv.dbName);
-    userData.level = lv.dbName;
+  if (lv.dbName !== prevLevel && !userData.levelOverride) {
+      await db.ref("users/" + uid + "/level").set(lv.dbName);
     showPromoToast("🎉 Promoted to " + lv.name + "!");
   }
-}
 
 function showPromoToast(msg) {
   const t = document.getElementById("promoToast");
