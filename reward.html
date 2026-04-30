@@ -209,12 +209,8 @@ function renderMiner(d) {
 // ── SIGNUP REFERRAL TAB ───────────────────────────────────────────────────
 function renderSignup(d) {
   const totalPts    = d.points       || 0;
-  const totalSignups = d.referrals   || 0;
-  // pendingSignup tracks unclaimed signup points
-  // Each signup = 3 points
-  const totalEarned = totalSignups * 3;
-  const claimed     = d.signupClaimed || 0;
-  const available   = Math.max(0, totalEarned - claimed);
+  const available   = d.pendingRewards?.signup || 0;
+  const totalSignups = d.referrals || 0;
 
   const html = `
     <div class="points-card">
@@ -228,9 +224,9 @@ function renderSignup(d) {
     <div class="signup-card">
       <div style="font-size:13px;color:#64748b;">Total Signup Referrals</div>
       <div class="signup-big">${totalSignups}</div>
-      <div class="signup-sub">× 3 points each = ${totalEarned} pts earned · ${claimed} pts claimed</div>
+      <div class="signup-sub">${totalSignups} signup${totalSignups !== 1 ? "s" : ""} recorded · 3 pts each</div>
       <div style="font-size:24px;font-weight:700;color:#00ffcc;margin-bottom:16px;">${available} pts available</div>
-      <button class="btn" onclick="claimSignup(${available})" ${available > 0 ? "" : "disabled"}>
+      <button class="btn" onclick="claimSignup()" ${available > 0 ? "" : "disabled"}>
         ${available > 0 ? `Claim ${available} Points` : "No points available"}
       </button>
     </div>
@@ -266,19 +262,15 @@ async function claimMiner(key, pts) {
 }
 
 // ── CLAIM SIGNUP POINTS ────────────────────────────────────────────────────
-async function claimSignup(pts) {
-  if (pts <= 0) return showFloat("No points to claim");
-  const snap = await db.ref("users/" + uid).once("value");
-  const d    = snap.val() || {};
-  // Recalculate live available to avoid stale data
-  const totalEarned = (d.referrals || 0) * 3;
-  const claimed     = d.signupClaimed || 0;
-  const live        = Math.max(0, totalEarned - claimed);
+async function claimSignup() {
+  const snap  = await db.ref("users/" + uid).once("value");
+  const d     = snap.val() || {};
+  const live  = d.pendingRewards?.signup || 0;
   if (live <= 0) { showFloat("No points to claim"); render(); return; }
 
   await db.ref("users/" + uid).update({
-    points:       (d.points || 0) + live,
-    signupClaimed: claimed + live
+    points:                  (d.points || 0) + live,
+    "pendingRewards/signup": 0
   });
   showFloat(`+${live} pts 🎉`);
   render();
