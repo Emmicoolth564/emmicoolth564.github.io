@@ -4,187 +4,89 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rewards • CryptoJet</title>
-
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
-
-    :root {
-        --neon: #00f0ff;
-        --accent: #00ffcc;
-    }
-
+    :root { --neon:#00f0ff; --accent:#00ffcc; }
     * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-        font-family: 'Inter', system-ui, sans-serif;
-        background: #020617;
-        color: #e2e8f0;
-        min-height: 100vh;
-        overflow-x: hidden;
-    }
+    body { font-family:'Inter',system-ui,sans-serif; background:#020617; color:#e2e8f0; min-height:100vh; overflow-x:hidden; }
 
-    .header {
-        padding: 30px 20px 20px;
-        text-align: center;
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 28px;
-        font-weight: 700;
-        color: var(--neon);
-        text-shadow: 0 0 30px rgba(0, 240, 255, 0.6);
-    }
+    .header { padding:30px 20px 20px; text-align:center; font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700; color:var(--neon); text-shadow:0 0 30px rgba(0,240,255,0.6); }
 
-    .tabs {
-        display:flex;
-        background:#0f172a;
-        border-radius:9999px;
-        padding:6px;
-        margin:20px 16px 16px;
-    }
-    .tab {
-        flex:1;
-        padding:14px;
-        text-align:center;
-        font-weight:600;
-        border-radius:9999px;
-        cursor:pointer;
-        color:#94a3b8;
-    }
-    .tab.active {
-        background:#22c55e;
-        color:#022c22;
-        box-shadow:0 4px 15px rgba(34,197,94,0.4);
-    }
+    .tabs { display:flex; background:#0f172a; border-radius:9999px; padding:6px; margin:20px 16px 16px; }
+    .tab { flex:1; padding:14px; text-align:center; font-weight:600; border-radius:9999px; cursor:pointer; color:#94a3b8; font-family:'Inter',sans-serif; }
+    .tab.active { background:#22c55e; color:#022c22; box-shadow:0 4px 15px rgba(34,197,94,0.4); }
 
-    .content-wrapper { padding:0 16px 30px; }
+    .content-wrapper { padding:0 16px 100px; }
 
-    .card {
-        background: linear-gradient(145deg, #0f172a, #1e2937);
-        border-radius: 24px;
-        padding: 24px;
-        margin-bottom: 20px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        border: 1px solid rgba(0,240,255,0.15);
-        transition: all 0.4s ease;
-    }
-    .card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 25px 50px rgba(0,240,255,0.25);
-    }
+    /* POINTS SUMMARY CARD */
+    .points-card { background:linear-gradient(145deg,#0f172a,#1e2937); border-radius:20px; padding:20px 22px; margin-bottom:16px; border:1px solid rgba(0,240,255,0.15); display:flex; align-items:center; justify-content:space-between; }
+    .pts-label { font-size:13px; color:#94a3b8; margin-bottom:4px; }
+    .pts-val { font-family:'Space Grotesk',sans-serif; font-size:32px; font-weight:700; color:#00ffcc; }
+    .pts-icon { font-size:36px; }
 
-    .points {
-        font-size: 32px;
-        font-weight: 700;
-        color: #00ffcc;
-        margin: 8px 0;
-    }
+    /* TIER SEPARATOR */
+    .tier-sep { display:flex; align-items:center; gap:12px; margin:20px 0 12px; }
+    .tier-sep-line { flex:1; height:1px; background:rgba(0,240,255,0.1); }
+    .tier-sep-label { font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:#475569; white-space:nowrap; }
 
-    .btn {
-        width: 100%;
-        padding: 16px;
-        border: none;
-        border-radius: 16px;
-        background: linear-gradient(90deg, #00f0ff, #00ffcc);
-        color: #000;
-        font-weight: 700;
-        font-size: 16px;
-        cursor: pointer;
-        margin-top: 16px;
-        box-shadow: 0 0 20px rgba(0,240,255,0.4);
-        transition: 0.3s;
-    }
-    .btn:disabled {
-        background: #334155;
-        color: #94a3b8;
-        box-shadow: none;
-        cursor: not-allowed;
-    }
+    /* MINER REWARD CARD */
+    .card { background:linear-gradient(145deg,#0f172a,#1e2937); border-radius:20px; padding:18px 20px; margin-bottom:12px; border:1px solid rgba(0,240,255,0.12); }
+    .card-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+    .card-left .miner-name { font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:700; color:var(--neon); }
+    .card-left .miner-pts  { font-size:13px; color:#64748b; margin-top:3px; }
+    .card-right { text-align:right; }
+    .pending-val { font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700; color:#00ffcc; line-height:1; }
+    .pending-lbl { font-size:11px; color:#64748b; margin-top:2px; }
 
-    .loader {
-        position: fixed;
-        inset: 0;
-        background: #020617;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 99999;
-        flex-direction: column;
-        color: #00f0ff;
-        gap: 20px;
-    }
-    .spinner {
-        width: 60px;
-        height: 60px;
-        border: 6px solid rgba(0,240,255,0.2);
-        border-top: 6px solid #00f0ff;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn { width:100%; padding:14px; border:none; border-radius:14px; background:linear-gradient(90deg,#00f0ff,#00ffcc); color:#000; font-weight:700; font-size:15px; cursor:pointer; box-shadow:0 0 20px rgba(0,240,255,0.3); transition:0.2s; font-family:'Inter',sans-serif; }
+    .btn:hover { transform:scale(1.01); }
+    .btn:active { transform:scale(0.98); }
+    .btn:disabled { background:#1e2937; color:#475569; box-shadow:none; cursor:not-allowed; transform:none; }
 
-    .how-it-works {
-        background: #0f172a;
-        border-radius: 20px;
-        padding: 24px;
-        margin: 30px 16px 20px;
-        font-size: 14px;
-        line-height: 1.6;
-        color: #94a3b8;
-    }
+    /* Tier-colored buttons */
+    .btn-junior   { background:linear-gradient(90deg,#22c55e,#00ffcc); }
+    .btn-pro      { background:linear-gradient(90deg,#00f0ff,#00bfff); }
+    .btn-elite    { background:linear-gradient(90deg,#f59e0b,#fbbf24); }
+    .btn-legend   { background:linear-gradient(90deg,#a855f7,#c084fc); color:#fff; }
+    .btn-employee { background:linear-gradient(90deg,#ef4444,#f97316); color:#fff; }
 
-    .float {
-        position: fixed;
-        top: 30%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 42px;
-        font-weight: 700;
-        color: #00ffcc;
-        text-shadow: 0 0 30px #00ffcc;
-        opacity: 0;
-        pointer-events: none;
-        z-index: 100000;
-        animation: floatPop 1.8s ease forwards;
-    }
+    .loader { position:fixed; inset:0; background:#020617; display:flex; align-items:center; justify-content:center; z-index:99999; flex-direction:column; color:#00f0ff; gap:20px; }
+    .spinner { width:60px; height:60px; border:6px solid rgba(0,240,255,0.2); border-top:6px solid #00f0ff; border-radius:50%; animation:spin 1s linear infinite; }
+    @keyframes spin { to{ transform:rotate(360deg); } }
 
+    .how-it-works { background:#0f172a; border-radius:18px; padding:20px 22px; margin:20px 0; font-size:14px; line-height:1.7; color:#94a3b8; border:1px solid rgba(0,240,255,0.08); }
+    .how-it-works strong { color:var(--neon); }
+
+    .float { position:fixed; top:30%; left:50%; transform:translate(-50%,-50%); font-size:42px; font-weight:700; color:#00ffcc; text-shadow:0 0 30px #00ffcc; opacity:0; pointer-events:none; z-index:100000; animation:floatPop 1.8s ease forwards; }
     @keyframes floatPop {
-        0% { transform: translate(-50%, -80%) scale(0.3); opacity: 0; }
-        40% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-        100% { transform: translate(-50%, -20%) scale(1); opacity: 0; }
+      0%  { transform:translate(-50%,-80%) scale(0.3); opacity:0; }
+      40% { transform:translate(-50%,-50%) scale(1.2); opacity:1; }
+      100%{ transform:translate(-50%,-20%) scale(1);   opacity:0; }
     }
+
+    /* Signup tab */
+    .signup-card { background:linear-gradient(145deg,#0f172a,#1e2937); border-radius:20px; padding:24px; margin-bottom:16px; border:1px solid rgba(0,240,255,0.12); text-align:center; }
+    .signup-big  { font-family:'Space Grotesk',sans-serif; font-size:48px; font-weight:700; color:#00ffcc; margin:12px 0 4px; }
+    .signup-sub  { font-size:13px; color:#64748b; margin-bottom:20px; }
 </style>
 </head>
 <body>
 
-<!-- LOADER -->
-<div class="loader" id="loader">
-    <div class="spinner"></div>
-    <div>Loading your rewards...</div>
-</div>
+<div class="loader" id="loader"><div class="spinner"></div><div>Loading your rewards...</div></div>
 
 <div class="header">REWARDS</div>
 
 <div class="tabs">
-    <div class="tab active" id="tab-miner" onclick="switchTab('miner', event)">Miner Referral</div>
-    <div class="tab" id="tab-signup" onclick="switchTab('signup', event)">Signup Referral</div>
+  <div class="tab active" id="tab-miner"  onclick="switchTab('miner',event)">Miner Referral</div>
+  <div class="tab"        id="tab-signup" onclick="switchTab('signup',event)">Signup Referral</div>
 </div>
 
 <div id="content" class="content-wrapper"></div>
-
-<!-- HOW IT WORKS -->
-<div class="how-it-works">
-    <strong>How Rewards Work</strong><br><br>
-    • Invite friends with your referral link<br>
-    • When they buy any miner → you earn points instantly<br>
-    • When they signup → you earn 3 points<br>
-    • Claim your points anytime from here
-</div>
-
-<!-- FLOAT ANIMATION -->
 <div id="float" class="float"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
@@ -192,167 +94,204 @@ const firebaseConfig = {
   databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "cj-miner"
 };
-
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+const db   = firebase.database();
 const auth = firebase.auth();
 
 const uid = localStorage.getItem("uid");
-if (!uid) {
-    alert("Please sign in first");
-    window.location.href = "signin.html";
-}
+if (!uid) { alert("Please sign in first"); window.location.href = "signin.html"; }
 
 let currentTab = "miner";
 
-/* SWITCH TAB */
-function switchTab(tab, e) {
-    currentTab = tab;
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-    e.target.classList.add("active");
-    render();
-}
-
-/* MAIN RENDER */
-async function render() {
-    const snap = await db.ref("users/" + uid).once("value");
-    const d = snap.val() || {};
-
-    document.getElementById("loader").style.display = "none";
-
-    const content = document.getElementById("content");
-
-    if (currentTab === "miner") {
-        renderMiner(d);
-    } else {
-        renderSignup(d);
-    }
-}
-
-/* MINER REFERRAL TAB - UPDATED POINTS */
-function renderMiner(d) {
-    const miners = [
-    {name: "S-244", key: "S244", pts: 50},
-    {name: "S-500", key: "S500", pts: 75},
-    {name: "S-900", key: "S900", pts: 100},
-    {name: "S-1200", key: "S1200", pts: 200}
+// ── ALL MINERS with their referral points ──────────────────────────────────
+// Points are what YOU earn when YOUR referral buys this miner
+const MINERS = [
+  // NOVICE
+  { key:"S244",  name:"S-244",          pts:50,    tier:"novice",   tierLabel:"⛏️ Novice" },
+  { key:"S500",  name:"S-500",          pts:75,    tier:"novice",   tierLabel:"⛏️ Novice" },
+  { key:"S900",  name:"S-900",          pts:100,   tier:"novice",   tierLabel:"⛏️ Novice" },
+  { key:"S1200", name:"S-1200",         pts:200,   tier:"novice",   tierLabel:"⛏️ Novice" },
+  // JUNIOR
+  { key:"JX200", name:"JX-200 Turbo",   pts:300,   tier:"junior",   tierLabel:"🥈 Junior"  },
+  { key:"JX500", name:"JX-500 Boost",   pts:500,   tier:"junior",   tierLabel:"🥈 Junior"  },
+  // PRO
+  { key:"PX1K",  name:"PX-1000 Apex",   pts:800,   tier:"pro",      tierLabel:"💎 Pro"     },
+  { key:"PX2K",  name:"PX-2000 Core",   pts:1500,  tier:"pro",      tierLabel:"💎 Pro"     },
+  // ELITE
+  { key:"EX3K",  name:"EX-1500 Blaze",  pts:2000,  tier:"elite",    tierLabel:"🔥 Elite"   },
+  { key:"EX5K",  name:"EX-2000 Inferno",pts:3000,  tier:"elite",    tierLabel:"🔥 Elite"   },
+  // LEGEND
+  { key:"LX3K",  name:"LX-2200 Titan",  pts:4000,  tier:"legend",   tierLabel:"👑 Legend"  },
+  { key:"LX5K",  name:"LX-3000 Zeus",   pts:5000,  tier:"legend",   tierLabel:"👑 Legend"  },
+  // EMPLOYEE
+  { key:"EM4K",  name:"EM-4000 Oracle", pts:6000,  tier:"employee", tierLabel:"🚀 Employee"},
+  { key:"EM5K",  name:"EM-5000 Nexus",  pts:8000,  tier:"employee", tierLabel:"🚀 Employee"},
 ];
-    let html = `<div class="card"><strong>Earn points when your referrals buy miners</strong></div>`;
 
-    miners.forEach(m => {
-        const pending = d.pendingRewards?.[m.key] || 0;
-        const claimed = d.minerRewardsClaimed?.[m.key];
+const TIER_BTN = { novice:"btn", junior:"btn btn-junior", pro:"btn btn-pro", elite:"btn btn-elite", legend:"btn btn-legend", employee:"btn btn-employee" };
 
-        html += `
-        <div class="card">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-                <div>
-                    <strong>${m.name}</strong><br>
-                    <span style="color:#94a3b8;">${m.pts} Points</span>
-                </div>
-                <div style="text-align:right;">
-                    <div style="font-size:28px;color:#00ffcc;">${pending}</div>
-                    <small>Available</small>
-                </div>
-            </div>
-
-            <button onclick="claimMiner('${m.key}', ${m.pts})" class="btn" ${claimed || pending === 0 ? 'disabled' : ''}>
-                ${claimed ? "Already Claimed" : pending > 0 ? "Claim Now" : "No points yet"}
-            </button>
-        </div>`;
-    });
-
-    document.getElementById("content").innerHTML = html;
+function switchTab(tab, e) {
+  currentTab = tab;
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  e.target.classList.add("active");
+  render();
 }
 
-/* SIGNUP REFERRAL TAB - FIXED TO 3 POINTS */
-function renderSignup(d) {
-    const totalReferrals = d.referrals || 0;
-    const claimed = d.signupClaimed || 0;
-    const availablePoints = (totalReferrals * 3) - claimed;   // 3 points per signup
+async function render() {
+  const snap = await db.ref("users/" + uid).once("value");
+  const d    = snap.val() || {};
+  document.getElementById("loader").style.display = "none";
+  currentTab === "miner" ? renderMiner(d) : renderSignup(d);
+}
 
-    let html = `
-    <div class="card">
-        <strong>Earn 3 points for every successful signup with your link</strong>
-    </div>
+// ── MINER REFERRAL TAB ────────────────────────────────────────────────────
+function renderMiner(d) {
+  const pending  = d.pendingRewards  || {};
+  const totalPts = d.points          || 0;
 
-    <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-            <div>
-                <strong>Signup Referrals</strong><br>
-                <span style="color:#94a3b8;">3 points each</span>
-            </div>
-            <div style="text-align:right;">
-                <div style="font-size:32px;color:#00ffcc;">${availablePoints}</div>
-                <small>Available Points</small>
-            </div>
-        </div>
+  // Group miners by tier
+  const tiers = {};
+  MINERS.forEach(m => {
+    if (!tiers[m.tier]) tiers[m.tier] = [];
+    tiers[m.tier].push(m);
+  });
 
-        <button onclick="claimSignup(${availablePoints})" class="btn" ${availablePoints <= 0 ? 'disabled' : ''}>
-            ${availablePoints > 0 ? "Claim Now" : "No points available"}
-        </button>
+  let html = `
+    <div class="points-card">
+      <div>
+        <div class="pts-label">YOUR TOTAL POINTS</div>
+        <div class="pts-val">${totalPts} pts</div>
+      </div>
+      <div class="pts-icon">🏆</div>
     </div>`;
 
-    document.getElementById("content").innerHTML = html;
-}
+  const tierOrder = ["novice","junior","pro","elite","legend","employee"];
+  tierOrder.forEach(tier => {
+    const group = tiers[tier];
+    if (!group) return;
 
-/* CLAIM MINER REWARDS */
-function claimMiner(key, pts) {
-    db.ref("users/" + uid).once("value").then(snap => {
-        const d = snap.val() || {};
+    html += `<div class="tier-sep"><div class="tier-sep-line"></div><div class="tier-sep-label">${group[0].tierLabel}</div><div class="tier-sep-line"></div></div>`;
 
-        if (d.minerRewardsClaimed?.[key]) {
-            showFloat("Already claimed ❌");
-            return;
-        }
-
-        const pending = d.pendingRewards?.[key] || 0;
-        if (pending === 0) {
-            showFloat("No points to claim");
-            return;
-        }
-
-        db.ref("users/" + uid).update({
-            points: (d.points || 0) + pts,
-            [`minerRewardsClaimed/${key}`]: true,
-            [`pendingRewards/${key}`]: 0
-        });
-
-        showFloat(`+${pts} pts 💰`);
-        render();
+    group.forEach(m => {
+      const pts     = pending[m.key] || 0;  // points waiting to be claimed
+      const canClaim = pts > 0;
+      html += `
+        <div class="card">
+          <div class="card-top">
+            <div class="card-left">
+              <div class="miner-name">${m.name}</div>
+              <div class="miner-pts">+${m.pts} pts per referral who buys this</div>
+            </div>
+            <div class="card-right">
+              <div class="pending-val">${pts}</div>
+              <div class="pending-lbl">pts ready</div>
+            </div>
+          </div>
+          <button class="${TIER_BTN[m.tier]}" onclick="claimMiner('${m.key}',${pts})" ${canClaim ? "" : "disabled"}>
+            ${canClaim ? `Claim ${pts} Points` : "No points yet"}
+          </button>
+        </div>`;
     });
+  });
+
+  html += `
+    <div class="how-it-works">
+      <strong>How Miner Rewards Work</strong><br><br>
+      • Your referral buys a miner → you instantly get points added here<br>
+      • You can claim those points any time<br>
+      • Points claimed go to your total points balance<br>
+      • Use points in the Exchange page to convert to Team Income
+    </div>`;
+
+  document.getElementById("content").innerHTML = html;
 }
 
-/* CLAIM SIGNUP REWARDS - NOW 3 POINTS PER REFERRAL */
-function claimSignup(pts) {
-    if (pts <= 0) {
-        showFloat("No points to claim");
-        return;
-    }
+// ── SIGNUP REFERRAL TAB ───────────────────────────────────────────────────
+function renderSignup(d) {
+  const totalPts    = d.points       || 0;
+  const totalSignups = d.referrals   || 0;
+  // pendingSignup tracks unclaimed signup points
+  // Each signup = 3 points
+  const totalEarned = totalSignups * 3;
+  const claimed     = d.signupClaimed || 0;
+  const available   = Math.max(0, totalEarned - claimed);
 
-    db.ref("users/" + uid).once("value").then(snap => {
-        const d = snap.val() || {};
+  const html = `
+    <div class="points-card">
+      <div>
+        <div class="pts-label">YOUR TOTAL POINTS</div>
+        <div class="pts-val">${totalPts} pts</div>
+      </div>
+      <div class="pts-icon">🏆</div>
+    </div>
 
-        db.ref("users/" + uid).update({
-            points: (d.points || 0) + pts,
-            signupClaimed: (d.signupClaimed || 0) + pts
-        });
+    <div class="signup-card">
+      <div style="font-size:13px;color:#64748b;">Total Signup Referrals</div>
+      <div class="signup-big">${totalSignups}</div>
+      <div class="signup-sub">× 3 points each = ${totalEarned} pts earned · ${claimed} pts claimed</div>
+      <div style="font-size:24px;font-weight:700;color:#00ffcc;margin-bottom:16px;">${available} pts available</div>
+      <button class="btn" onclick="claimSignup(${available})" ${available > 0 ? "" : "disabled"}>
+        ${available > 0 ? `Claim ${available} Points` : "No points available"}
+      </button>
+    </div>
 
-        showFloat(`+${pts} pts 🎉`);
-        render();
-    });
+    <div class="how-it-works">
+      <strong>How Signup Rewards Work</strong><br><br>
+      • Someone signs up using your referral link or code → you earn 3 points<br>
+      • Points accumulate here until you claim them<br>
+      • You can claim as many times as you have unclaimed points<br>
+      • Old referrals are also counted — any you haven't claimed yet are here
+    </div>`;
+
+  document.getElementById("content").innerHTML = html;
 }
 
-/* FLOAT ANIMATION */
+// ── CLAIM MINER POINTS ─────────────────────────────────────────────────────
+// Fix: no permanent block — pendingRewards[key] IS the source of truth.
+// Add pts to balance, reset pending to 0. Next referral who buys that miner
+// will increment pending again so they can claim again.
+async function claimMiner(key, pts) {
+  if (pts <= 0) return showFloat("No points to claim");
+  const snap = await db.ref("users/" + uid).once("value");
+  const d    = snap.val() || {};
+  const live = d.pendingRewards?.[key] || 0;
+  if (live <= 0) { showFloat("No points to claim"); render(); return; }
+
+  await db.ref("users/" + uid).update({
+    points: (d.points || 0) + live,
+    [`pendingRewards/${key}`]: 0   // reset — next referral purchase will re-increment
+  });
+  showFloat(`+${live} pts 💰`);
+  render();
+}
+
+// ── CLAIM SIGNUP POINTS ────────────────────────────────────────────────────
+async function claimSignup(pts) {
+  if (pts <= 0) return showFloat("No points to claim");
+  const snap = await db.ref("users/" + uid).once("value");
+  const d    = snap.val() || {};
+  // Recalculate live available to avoid stale data
+  const totalEarned = (d.referrals || 0) * 3;
+  const claimed     = d.signupClaimed || 0;
+  const live        = Math.max(0, totalEarned - claimed);
+  if (live <= 0) { showFloat("No points to claim"); render(); return; }
+
+  await db.ref("users/" + uid).update({
+    points:       (d.points || 0) + live,
+    signupClaimed: claimed + live
+  });
+  showFloat(`+${live} pts 🎉`);
+  render();
+}
+
 function showFloat(text) {
-    const el = document.getElementById("float");
-    el.innerText = text;
-    el.style.animation = "none";
-    void el.offsetWidth;
-    el.style.animation = "floatPop 1.8s ease forwards";
+  const el = document.getElementById("float");
+  el.innerText = text;
+  el.style.animation = "none";
+  void el.offsetWidth;
+  el.style.animation = "floatPop 1.8s ease forwards";
 }
 
-/* INIT */
 auth.onAuthStateChanged(user => {
   if (!user) { window.location.href = "signin.html"; return; }
   render();

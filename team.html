@@ -20,43 +20,30 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
 .spinner { width:44px; height:44px; border:4px solid rgba(0,255,204,0.15); border-top:4px solid var(--green); border-radius:50%; animation:spin 0.9s linear infinite; }
 @keyframes spin { to{transform:rotate(360deg);} }
 
-/* STAT GRID — 4 boxes */
 .stat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:14px 16px; }
 .stat-box { background:var(--s1); border:1px solid var(--border); border-radius:14px; padding:12px 6px; text-align:center; }
 .stat-val { font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; color:var(--neon); }
 .stat-lbl { font-size:10px; color:var(--muted); margin-top:3px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
 
-/* LEVEL TABS */
 .level-tabs { display:flex; background:var(--s1); border-radius:999px; padding:5px; margin:0 16px 10px; gap:4px; }
 .lvl-tab { flex:1; padding:10px 6px; text-align:center; font-weight:600; font-size:12px; border-radius:999px; cursor:pointer; color:var(--muted); transition:all 0.2s; white-space:nowrap; }
 .lvl-tab.active { color:#000; box-shadow:0 4px 12px rgba(0,255,204,0.3); }
-.lvl-tab.l-all.active  { background:var(--green); }
-.lvl-tab.l-1.active    { background:#00ffcc; }
-.lvl-tab.l-2.active    { background:#f59e0b; }
-.lvl-tab.l-3.active    { background:#c084fc; }
+.lvl-tab.l-all.active { background:var(--green); }
+.lvl-tab.l-1.active   { background:#00ffcc; }
+.lvl-tab.l-2.active   { background:#f59e0b; }
+.lvl-tab.l-3.active   { background:#c084fc; }
 
-/* STATUS FILTER */
 .status-tabs { display:flex; gap:8px; padding:0 16px 14px; }
 .s-tab { flex:1; padding:9px; text-align:center; font-weight:600; font-size:12px; border-radius:12px; cursor:pointer; border:1.5px solid rgba(255,255,255,0.07); color:var(--muted); background:rgba(255,255,255,0.03); transition:all 0.2s; }
 .s-tab.active { background:rgba(0,255,204,0.1); border-color:var(--green); color:var(--green); }
 
 .content { padding:0 16px 80px; }
 
-.member-card {
-  background:var(--s1); border:1px solid var(--border);
-  border-radius:16px; padding:14px 16px; margin-bottom:10px;
-  display:flex; justify-content:space-between; align-items:center;
-  animation:fadeIn 0.2s ease;
-}
+.member-card { background:var(--s1); border:1px solid var(--border); border-radius:16px; padding:14px 16px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; animation:fadeIn 0.2s ease; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(4px);} to{opacity:1;transform:none;} }
 
 .member-left { display:flex; align-items:center; gap:12px; flex:1; min-width:0; }
-.member-avatar {
-  width:38px; height:38px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:700; color:#000;
-  flex-shrink:0;
-}
+.member-avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:700; color:#000; flex-shrink:0; }
 .av-l1 { background:linear-gradient(135deg,#00ffcc,#00f0ff); }
 .av-l2 { background:linear-gradient(135deg,#f59e0b,#fbbf24); }
 .av-l3 { background:linear-gradient(135deg,#c084fc,#a855f7); }
@@ -64,10 +51,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
 .member-id   { font-size:14px; font-weight:700; color:var(--text); margin-bottom:2px; }
 .member-meta { font-size:11px; color:var(--muted); display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
 
-.level-pip {
-  display:inline-block; padding:2px 8px; border-radius:999px;
-  font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em;
-}
+.level-pip { display:inline-block; padding:2px 8px; border-radius:999px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; }
 .pip-1 { background:rgba(0,255,204,0.12); color:var(--green); }
 .pip-2 { background:rgba(245,158,11,0.12); color:#f59e0b; }
 .pip-3 { background:rgba(192,132,252,0.12); color:#c084fc; }
@@ -85,6 +69,8 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
 .how-title { font-size:13px; font-weight:700; color:var(--neon); margin-bottom:8px; }
 .how-row { display:flex; gap:10px; align-items:center; margin-bottom:5px; font-size:12px; color:var(--muted); }
 .how-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+
+.note-box { background:rgba(245,158,11,0.07); border:1px solid rgba(245,158,11,0.18); border-radius:12px; padding:10px 14px; margin:0 16px 12px; font-size:12px; color:#f59e0b; line-height:1.6; }
 </style>
 </head>
 <body>
@@ -104,7 +90,10 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
   <div class="how-row"><div class="how-dot" style="background:#c084fc"></div>Level 3 → 2% of their mining</div>
 </div>
 
-<!-- STATS -->
+<div class="note-box" id="l2l3Note" style="display:none">
+  ℹ️ L2 & L3 members appear once they start mining. Your L1 members are shown even without a miner.
+</div>
+
 <div class="stat-grid" id="statGrid" style="display:none">
   <div class="stat-box"><div class="stat-val" id="totalCount">0</div><div class="stat-lbl">Total</div></div>
   <div class="stat-box"><div class="stat-val" id="l1Count">0</div><div class="stat-lbl" style="color:#00ffcc;">L1</div></div>
@@ -112,7 +101,6 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
   <div class="stat-box"><div class="stat-val" id="l3Count">0</div><div class="stat-lbl" style="color:#c084fc;">L3</div></div>
 </div>
 
-<!-- LEVEL TABS -->
 <div class="level-tabs" id="levelTabs" style="display:none">
   <div class="lvl-tab l-all active" onclick="setLevel(0,this)">All</div>
   <div class="lvl-tab l-1"          onclick="setLevel(1,this)">L1 · 10%</div>
@@ -120,7 +108,6 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
   <div class="lvl-tab l-3"          onclick="setLevel(3,this)">L3 · 2%</div>
 </div>
 
-<!-- STATUS FILTER -->
 <div class="status-tabs" id="statusTabs" style="display:none">
   <div class="s-tab active" onclick="setStatus('all',this)">All Members</div>
   <div class="s-tab"        onclick="setStatus('active',this)">⛏ Mining</div>
@@ -146,14 +133,16 @@ const auth = firebase.auth();
 const uid = localStorage.getItem("uid");
 if (!uid) window.location.href = "signin.html";
 
-let allMembers  = [];
-let levelFilter = 0;    // 0=all, 1, 2, 3
-let statusFilter = "all"; // all, active, inactive
+let allMembers   = [];
+let memberMap    = {};
+let levelFilter  = 0;
+let statusFilter = "all";
 
 function setLevel(l, el) {
   levelFilter = l;
   document.querySelectorAll(".lvl-tab").forEach(t => t.classList.remove("active"));
   el.classList.add("active");
+  document.getElementById("l2l3Note").style.display = "block";
   render();
 }
 
@@ -165,25 +154,35 @@ function setStatus(s, el) {
 }
 
 function formatDate(ts) {
-  if (!ts) return "Existing member";
+  if (!ts) return "";
   const d = new Date(ts);
   return `Joined ${d.getDate()} ${d.toLocaleString("en-NG",{month:"short"})} ${d.getFullYear()}`;
 }
 
+function buildSortedList() {
+  allMembers = Object.values(memberMap)
+    .sort((a, b) => (a.level - b.level) || ((b.joinedAt || 0) - (a.joinedAt || 0)));
+}
+
 function render() {
   const content = document.getElementById("content");
-  let filtered = allMembers;
+  let filtered  = allMembers;
 
-  if (levelFilter > 0) filtered = filtered.filter(m => m.level === levelFilter);
+  if (levelFilter > 0)             filtered = filtered.filter(m => m.level === levelFilter);
   if (statusFilter === "active")   filtered = filtered.filter(m => m.hasMiner);
   if (statusFilter === "inactive") filtered = filtered.filter(m => !m.hasMiner);
 
   if (filtered.length === 0) {
+    const msg = levelFilter > 1
+      ? "L2 & L3 members only appear once they start mining."
+      : statusFilter === "inactive"
+        ? "All your referrals have active miners! 🎉"
+        : "No members yet. Share your referral link to grow your team.";
     content.innerHTML = `
       <div class="empty-state">
         <div class="empty-icon">👥</div>
         <div class="empty-title">No members found</div>
-        <div class="empty-sub">Try changing the filter or share your referral link to grow your team.</div>
+        <div class="empty-sub">${msg}</div>
       </div>`;
     return;
   }
@@ -192,22 +191,30 @@ function render() {
   const pipLabel = { 1:"Level 1", 2:"Level 2", 3:"Level 3" };
   const avClass  = { 1:"av-l1",  2:"av-l2",  3:"av-l3" };
 
-  content.innerHTML = filtered.map(m => `
+  content.innerHTML = filtered.map(m => {
+    // Best display ID: stored minerId > uid prefix
+    const displayId = (m.minerId && m.minerId !== "Unknown")
+      ? m.minerId
+      : "ID-" + m.uid.slice(0, 6).toUpperCase();
+    const dateStr   = formatDate(m.joinedAt);
+    const lvl       = m.level || 1;
+    return `
     <div class="member-card">
       <div class="member-left">
-        <div class="member-avatar ${avClass[m.level] || 'av-l1'}">${(m.minerId || "CJ??").slice(0,4)}</div>
+        <div class="member-avatar ${avClass[lvl] || 'av-l1'}">${displayId.slice(0,4)}</div>
         <div>
-          <div class="member-id">${m.minerId || "Member"}</div>
+          <div class="member-id">${displayId}</div>
           <div class="member-meta">
-            <span class="level-pip ${pipClass[m.level] || 'pip-1'}">${pipLabel[m.level] || "Level 1"}</span>
-            <span>${formatDate(m.joinedAt)}</span>
+            <span class="level-pip ${pipClass[lvl] || 'pip-1'}">${pipLabel[lvl] || "Level 1"}</span>
+            ${dateStr ? `<span>${dateStr}</span>` : ""}
           </div>
         </div>
       </div>
       <div class="status-badge ${m.hasMiner ? 'active-badge' : 'inactive-badge'}">
         ${m.hasMiner ? '⛏ Mining' : 'No Miner'}
       </div>
-    </div>`).join("");
+    </div>`;
+  }).join("");
 }
 
 function updateStats() {
@@ -220,84 +227,113 @@ function updateStats() {
 auth.onAuthStateChanged(async user => {
   if (!user) { window.location.href = "signin.html"; return; }
 
-  // Read teamMembers (L1 new signups) + teamIncome (all levels, all history)
   const [membersSnap, incomeSnap] = await Promise.all([
     db.ref("users/" + uid + "/teamMembers").once("value"),
     db.ref("teamIncome/" + uid).once("value")
   ]);
 
-  const memberMap = {}; // uid → member object
-
-  // Source 1: teamMembers = Level 1 direct referrals (new system)
+  // ── SOURCE 1: teamMembers → ALL Level 1 direct referrals ──────────────
+  // Written at signup. Shows everyone regardless of miner status.
   const membersData = membersSnap.val() || {};
   Object.entries(membersData).forEach(([memberId, m]) => {
     memberMap[memberId] = {
-      memberId,
-      minerId:  m.minerId  || "Unknown",
+      uid:      memberId,
+      minerId:  m.minerId  || null,
       joinedAt: m.joinedAt || null,
-      hasMiner: m.hasMiner || false,
-      level:    1   // teamMembers are always Level 1
+      hasMiner: m.hasMiner === true,
+      level:    1  // teamMembers = always L1. Never change this.
     };
   });
 
-  // Source 2: teamIncome has level field on every record — use this to find L1/L2/L3
-  const incomeData = incomeSnap.val() || {};
+  // ── SOURCE 2: teamIncome → L2 & L3 members (only those who have mined) ─
+  // Also used to mark L1 members as hasMiner=true if income exists for them.
+  const incomeData  = incomeSnap.val() || {};
+  // Collect per-uid: lowest level seen in income records
+  const incomeIndex = {};
   Object.values(incomeData).forEach(record => {
-    const fromUid   = record.fromUid;
-    const fromMiner = record.fromMiner || "Unknown";
-    const level     = record.level || 1;
+    const fromUid = record.fromUid;
     if (!fromUid) return;
+    const lvl = record.level || 1;
+    if (!incomeIndex[fromUid] || lvl < incomeIndex[fromUid]) {
+      incomeIndex[fromUid] = lvl;
+    }
+  });
 
+  Object.entries(incomeIndex).forEach(([fromUid, lvl]) => {
     if (memberMap[fromUid]) {
-      // Update: mark as miner, keep lowest level number (L1 > L2 > L3)
+      // This is an L1 member who has now mined — just update hasMiner
       memberMap[fromUid].hasMiner = true;
-      if (level < (memberMap[fromUid].level || 99)) {
-        memberMap[fromUid].level = level;
-      }
+      // DO NOT change their level — they are L1
     } else {
+      // This is an L2 or L3 member — add them
       memberMap[fromUid] = {
-        memberId: fromUid,
-        minerId:  fromMiner,
+        uid:      fromUid,
+        minerId:  null,
         joinedAt: null,
         hasMiner: true,
-        level:    level
+        level:    lvl
       };
     }
   });
 
-  allMembers = Object.values(memberMap)
-    .sort((a, b) => (a.level - b.level) || ((b.joinedAt || 0) - (a.joinedAt || 0)));
-
+  buildSortedList();
   updateStats();
 
   document.getElementById("pageLoader").classList.add("hidden");
-  document.getElementById("statGrid").style.display    = "grid";
-  document.getElementById("levelTabs").style.display   = "flex";
-  document.getElementById("statusTabs").style.display  = "flex";
-
+  document.getElementById("statGrid").style.display   = "grid";
+  document.getElementById("levelTabs").style.display  = "flex";
+  document.getElementById("statusTabs").style.display = "flex";
+  document.getElementById("l2l3Note").style.display   = "block";
   render();
 
-  // Live listener for new members
-  db.ref("users/" + uid + "/teamMembers").on("value", snap => {
-    const data = snap.val() || {};
-    Object.entries(data).forEach(([memberId, m]) => {
-      if (!memberMap[memberId]) {
-        memberMap[memberId] = {
-          memberId,
-          minerId:  m.minerId  || "Unknown",
-          joinedAt: m.joinedAt || null,
-          hasMiner: m.hasMiner || false,
-          level:    1
-        };
-      } else {
-        memberMap[memberId].hasMiner = m.hasMiner || memberMap[memberId].hasMiner;
-        if (!memberMap[memberId].joinedAt) memberMap[memberId].joinedAt = m.joinedAt;
-      }
-    });
-    allMembers = Object.values(memberMap)
-      .sort((a, b) => (a.level - b.level) || ((b.joinedAt || 0) - (a.joinedAt || 0)));
-    updateStats();
-    render();
+  // ── LIVE: new L1 member signs up ──────────────────────────────────────
+  db.ref("users/" + uid + "/teamMembers").on("child_added", snap => {
+    const memberId = snap.key;
+    const m        = snap.val() || {};
+    if (!memberMap[memberId]) {
+      memberMap[memberId] = {
+        uid:      memberId,
+        minerId:  m.minerId  || null,
+        joinedAt: m.joinedAt || null,
+        hasMiner: m.hasMiner === true,
+        level:    1
+      };
+      buildSortedList();
+      updateStats();
+      render();
+    }
+  });
+
+  // ── LIVE: L1 member buys a miner (hasMiner flips to true) ────────────
+  db.ref("users/" + uid + "/teamMembers").on("child_changed", snap => {
+    const memberId = snap.key;
+    const m        = snap.val() || {};
+    if (memberMap[memberId]) {
+      if (m.hasMiner) memberMap[memberId].hasMiner = true;
+      if (m.minerId)  memberMap[memberId].minerId  = m.minerId;
+      buildSortedList();
+      updateStats();
+      render();
+    }
+  });
+
+  // ── LIVE: new team income = new L2/L3 member mined ───────────────────
+  db.ref("teamIncome/" + uid).on("child_added", snap => {
+    const record  = snap.val() || {};
+    const fromUid = record.fromUid;
+    if (!fromUid) return;
+    const lvl = record.level || 1;
+    if (memberMap[fromUid]) {
+      memberMap[fromUid].hasMiner = true;
+    } else {
+      memberMap[fromUid] = {
+        uid: fromUid, minerId: null, joinedAt: null,
+        hasMiner: true, level: lvl
+      };
+      buildSortedList();
+      updateStats();
+      render();
+    }
   });
 });
 </script>
