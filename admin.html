@@ -233,7 +233,7 @@ window.addEventListener("load", () => {
   auth.onAuthStateChanged(async user => {
     if (!user || user.uid !== ADMIN_UID) {
       alert("Access denied");
-      window.location.href = "signin";
+      window.location.href = "signin.html";
       return;
     }
     await loadUsers();

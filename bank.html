@@ -362,7 +362,7 @@ const auth = firebase.auth();
 
 /* UID = MINER ID */
 const uid = localStorage.getItem("uid");
-if (!uid) location.href = "signin";
+if (!uid) location.href = "signin.html";
 
 /* IMPORTANT GLOBALS */
 let tab = "bank";
@@ -626,7 +626,7 @@ window.addEventListener("click", function(e) {
 
 /* INIT */
 auth.onAuthStateChanged(user => {
-  if (!user) { location.href = "signin"; return; }
+  if (!user) { location.href = "signin.html"; return; }
   load();
 });
 </script>

@@ -141,7 +141,7 @@ const db = firebase.database();
 const auth = firebase.auth();
 
 const uid = localStorage.getItem("uid");
-if (!uid) { alert("Please sign in first"); window.location.href = "signin"; }
+if (!uid) { alert("Please sign in first"); window.location.href = "signin.html"; }
 
 const URL_APPROVE_WITHDRAW = "https://approvewithdraw-t34xxkwqvq-ew.a.run.app";
 const URL_REJECT_WITHDRAW  = "https://rejectwithdraw-t34xxkwqvq-ew.a.run.app";
@@ -158,7 +158,7 @@ let pendingAmount      = 0;
 let currentTab         = "bank";
 
 auth.onAuthStateChanged(user => {
-  if (!user) { window.location.href = "signin"; return; }
+  if (!user) { window.location.href = "signin.html"; return; }
   db.ref("users/" + uid).on("value", snap => {
     const d = snap.val() || {};
     currentBalance     = d.balance || 0;

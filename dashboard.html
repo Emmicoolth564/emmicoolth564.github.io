@@ -334,13 +334,13 @@ firebase.initializeApp(firebaseConfig);
 const db   = firebase.database();
 const auth = firebase.auth();
 const uid  = localStorage.getItem("uid");
-if (!uid) window.location.href = "signin";
+if (!uid) window.location.href = "signin.html";
 
 function nav(p){ window.location.href = p; }
 
 // ── AUTH + DB LISTENERS ──────────────────────────────────────
 auth.onAuthStateChanged(user => {
-  if (!user) { window.location.href = "signin"; return; }
+  if (!user) { window.location.href = "signin.html"; return; }
 
   // Balance, team, points — live
   db.ref("users/" + uid).on("value", snap => {

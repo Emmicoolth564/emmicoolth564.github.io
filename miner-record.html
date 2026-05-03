@@ -151,7 +151,7 @@ const auth = firebase.auth();
 const uid = localStorage.getItem("uid");
 if (!uid) {
     alert("Please sign in first");
-    window.location.href = "signin";
+    window.location.href = "signin.html";
 }
 
 function loadRecords() {
@@ -210,7 +210,7 @@ function loadRecords() {
 }
 
 auth.onAuthStateChanged(user => {
-  if (!user) { window.location.href = "signin"; return; }
+  if (!user) { window.location.href = "signin.html"; return; }
   loadRecords();
 });
 </script>

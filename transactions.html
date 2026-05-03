@@ -216,7 +216,7 @@ const db = firebase.database();
 const auth = firebase.auth();
 
 const uid = localStorage.getItem("uid");
-if (!uid) { alert("Please sign in first"); window.location.href = "signin"; }
+if (!uid) { alert("Please sign in first"); window.location.href = "signin.html"; }
 
 let currentTab = "all";
 let allTransactions = [];
@@ -230,7 +230,7 @@ function switchTab(tab, el) {
 
 // ── FAST: reads only THIS user's node directly — no scan, no filter ──
 auth.onAuthStateChanged(user => {
-  if (!user) { window.location.href = "signin"; return; }
+  if (!user) { window.location.href = "signin.html"; return; }
   db.ref("userTransactions/" + uid).on("value", snap => {
     const txns = snap.val() || {};
     allTransactions = Object.entries(txns)

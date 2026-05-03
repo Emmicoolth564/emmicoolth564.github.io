@@ -241,7 +241,7 @@ const db   = firebase.database();
 const auth = firebase.auth();
 
 const uid = localStorage.getItem("uid");
-if (!uid) window.location.href = "signin";
+if (!uid) window.location.href = "signin.html";
 
 let currentPoints  = 0;
 let claimedDays    = {};
@@ -456,7 +456,7 @@ function toast(msg) {
 
 // ── AUTH — only DB read inside, all functions outside ────────
 auth.onAuthStateChanged(user => {
-    if (!user) { window.location.href = "signin"; return; }
+    if (!user) { window.location.href = "signin.html"; return; }
     db.ref("users/" + uid).on("value", snap => {
         const d = snap.val() || {};
         currentPoints  = d.points || 0;

@@ -250,7 +250,7 @@ let unsubscribe = null;      // realtime listener cleanup
 /* ───────────────────────── ENTRY POINT ─────────────────────────── */
 // Follow the same auth pattern as miner.html / team.html
 auth.onAuthStateChanged(user => {
-  if (!user) { window.location.href = "signin"; return; }
+  if (!user) { window.location.href = "signin.html"; return; }
   startRealtimeListener(user.uid);
 });
 
