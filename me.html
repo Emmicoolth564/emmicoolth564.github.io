@@ -446,7 +446,7 @@ auth.onAuthStateChanged(user => {
     document.getElementById("userId").innerText    = d.minerId || "-";
     document.getElementById("points").innerText    = d.points  || 0;
     document.getElementById("balance").innerText   = Math.floor(d.balance || 0);
-    document.getElementById("teamIncome").innerText = (d.team || 0).toFixed(2);
+    document.getElementById("team").innerText = (d.team || 0).toFixed(2);
     document.getElementById("minerLevel").innerText = d.level  || "Novice Miner";
   });
 });
