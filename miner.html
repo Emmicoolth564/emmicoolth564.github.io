@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +19,6 @@
 
     .header { padding:30px 20px 20px; text-align:center; font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700; color:var(--neon); text-shadow:0 0 30px rgba(0,240,255,0.6); }
 
-    /* LEVEL HERO BADGE */
     .level-hero { margin:0 20px 16px; border-radius:20px; padding:14px 20px; display:flex; align-items:center; gap:14px; }
     .lh-icon { font-size:26px; flex-shrink:0; }
     .lh-name { font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:800; }
@@ -47,7 +44,6 @@
 
     .container { padding:0 20px 100px; }
 
-    /* ── RUNNING MINER CARD — EXACT ORIGINAL ── */
     .miner-card { background:linear-gradient(145deg,#0f172a,#1e2937); border-radius:24px; padding:24px; margin-bottom:24px; box-shadow:0 20px 40px rgba(0,0,0,0.6); border:1px solid rgba(0,240,255,0.2); }
     .miner-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
 
@@ -55,7 +51,8 @@
     .ring-svg { position:absolute; top:0; left:0; width:88px; height:88px; transform:rotate(-90deg); }
     .ring-bg   { fill:none; stroke:#1e2937; stroke-width:5; }
     .ring-fill { fill:none; stroke:#00ffcc; stroke-width:5; stroke-linecap:round; stroke-dasharray:251.2; stroke-dashoffset:251.2; transition:stroke-dashoffset 1s linear; }
-    .ring-fill.paused { stroke:#ef4444; }
+    .ring-fill.paused  { stroke:#ef4444; }
+    .ring-fill.expired { stroke:#475569; }
     .miner-img { width:72px; height:72px; object-fit:contain; filter:drop-shadow(0 0 14px #00f0ff); position:absolute; top:8px; left:8px; }
 
     .miner-name  { font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:700; color:#00ffcc; }
@@ -70,17 +67,18 @@
     .status-box.active   { background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.2); }
     .status-box.paused   { background:rgba(239,68,68,0.08);  border:1px solid rgba(239,68,68,0.25); }
     .status-box.inactive { background:rgba(100,116,139,0.1); border:1px solid rgba(100,116,139,0.2); }
+    .status-box.expired  { background:rgba(71,85,105,0.1);   border:1px solid rgba(71,85,105,0.3); }
 
     .status-left { flex:1; }
     .status-badge { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; }
     .badge-dot { width:8px; height:8px; border-radius:50%; }
     .badge-dot.green { background:#00ff88; animation:pulse 1.2s infinite; }
     .badge-dot.red   { background:#ef4444; animation:pulse 0.8s infinite; }
+    .badge-dot.blue  { background:#00f0ff; animation:pulse 1.5s infinite; }
     @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
 
     .earned-row { font-size:13px; color:#94a3b8; margin-top:2px; }
     .earned-val { font-size:22px; font-weight:700; color:#00ffcc; }
-    .earned-val.locked { color:#f59e0b; }
 
     .time-remaining { font-size:13px; color:#64748b; text-align:right; }
     .time-val { font-size:16px; font-weight:700; color:#e2e8f0; margin-top:2px; }
@@ -88,9 +86,17 @@
     .btn { width:100%; padding:16px; border:none; border-radius:16px; background:linear-gradient(90deg,#00f0ff,#00ffcc); color:#000; font-weight:700; font-size:16px; cursor:pointer; margin-top:14px; box-shadow:0 0 20px rgba(0,240,255,0.4); transition:0.2s; font-family:'Inter',sans-serif; }
     .btn:active { transform:scale(0.97); }
 
-    /* ── LEVELS TAB ── */
-    .tier-section { margin-bottom:32px; }
+    /* AUTO-RUN BADGE */
+    .auto-badge { display:inline-flex; align-items:center; gap:5px; background:rgba(0,255,204,0.1); border:1px solid rgba(0,255,204,0.2); border-radius:999px; padding:4px 10px; font-size:11px; font-weight:700; color:#00ffcc; margin-top:6px; }
 
+    /* PROGRESS BAR — shows days remaining */
+    .plan-progress { margin-top:12px; }
+    .plan-bar-bg  { height:4px; background:#1e2937; border-radius:999px; overflow:hidden; }
+    .plan-bar-fill{ height:100%; background:linear-gradient(90deg,#00ffcc,#00f0ff); border-radius:999px; transition:width 0.5s; }
+    .plan-label   { display:flex; justify-content:space-between; font-size:11px; color:#64748b; margin-top:4px; }
+
+    /* LEVELS TAB */
+    .tier-section { margin-bottom:32px; }
     .tier-header { border-radius:20px; padding:18px 20px; margin-bottom:14px; display:flex; align-items:center; gap:14px; }
     .th-icon { font-size:30px; flex-shrink:0; }
     .th-info { flex:1; }
@@ -110,7 +116,6 @@
     .badge-locked   { background:rgba(100,116,139,0.1); color:#64748b; border:1px solid rgba(100,116,139,0.2); }
     @keyframes glowbadge { from{box-shadow:none;} to{box-shadow:0 0 12px rgba(0,240,255,0.5);} }
 
-    /* SHOP CARD — inside levels tab */
     .shop-card { border-radius:24px; padding:24px; margin-bottom:14px; box-shadow:0 20px 40px rgba(0,0,0,0.5); }
     .shop-novice   { background:linear-gradient(145deg,#0f172a,#1e2937); border:1px solid rgba(0,240,255,0.15); }
     .shop-junior   { background:linear-gradient(145deg,#071a10,#0a2016); border:1px solid rgba(34,197,94,0.25); }
@@ -121,7 +126,6 @@
 
     .shop-header { display:flex; align-items:center; gap:16px; margin-bottom:16px; }
     .shop-img { width:72px; height:72px; object-fit:contain; filter:drop-shadow(0 0 14px #00f0ff); }
-    .shop-emoji { width:72px; height:72px; display:flex; align-items:center; justify-content:center; font-size:44px; flex-shrink:0; }
     .shop-name { font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:700; }
     .shop-sub  { font-size:13px; color:#64748b; margin-top:4px; }
 
@@ -136,17 +140,8 @@
     .btn-legend   { background:linear-gradient(90deg,#a855f7,#c084fc); color:#fff; box-shadow:0 0 20px rgba(168,85,247,0.6); }
     .btn-employee { background:linear-gradient(90deg,#ef4444,#f97316); color:#fff; box-shadow:0 0 20px rgba(239,68,68,0.6); }
 
-    /* LOCK NOTICE */
-    .lock-notice { background:rgba(100,116,139,0.06); border:1px solid rgba(100,116,139,0.15); border-radius:18px; padding:24px; text-align:center; }
-    .lock-notice .lock-emoji { font-size:36px; margin-bottom:10px; }
-    .lock-notice h4 { font-size:15px; font-weight:700; color:#94a3b8; margin-bottom:8px; }
-    .lock-notice p  { font-size:13px; color:#64748b; line-height:1.7; }
-    .lock-notice strong { color:#94a3b8; }
-
-    /* PROMOTION TOAST */
     .promo-toast { position:fixed; top:80px; left:50%; transform:translateX(-50%); background:linear-gradient(90deg,#00ffcc,#00f0ff); color:#000; padding:14px 28px; border-radius:999px; font-weight:800; font-size:14px; box-shadow:0 0 40px rgba(0,255,204,0.8); opacity:0; transition:all 0.4s; z-index:100001; pointer-events:none; white-space:nowrap; font-family:'Space Grotesk',sans-serif; }
 
-    /* NAV */
     .nav-glass { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width:90%; height:70px; display:flex; justify-content:space-around; align-items:center; background:rgba(255,255,255,0.05); backdrop-filter:blur(20px); border-radius:25px; box-shadow:0 8px 30px rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08); z-index:999; }
     .nav-item { text-align:center; color:#aaa; font-size:11px; cursor:pointer; }
     .nav-item.active { color:#00ffcc; }
@@ -168,7 +163,6 @@
 
 <div class="header">CryptoJet Miner</div>
 
-<!-- LEVEL HERO -->
 <div id="levelHero" class="level-hero lh-novice">
   <div class="lh-icon">⛏️</div>
   <div>
@@ -222,7 +216,6 @@ if (!uid) { alert("Session expired"); window.location.href = "signin.html"; }
 let userData        = null;
 let currentLevelKey = "novice";
 
-// ── LEVEL DEFINITIONS ─────────────────────────────────────────
 const LEVELS = {
   novice:   { name:"Novice Miner",  emoji:"⛏️",  cls:"novice",   l1:0,   total:0,   dbName:"Novice Miner"  },
   junior:   { name:"Junior Miner",  emoji:"🥈",  cls:"junior",   l1:5,   total:20,  dbName:"Junior Miner"  },
@@ -234,32 +227,29 @@ const LEVELS = {
 const LEVEL_ORDER = ["novice","junior","pro","elite","legend","employee"];
 
 // ── MINER CONFIG ──────────────────────────────────────────────
-// NOVICE — unchanged from original
+// ALL miners now 24hr cycle — auto-run until duration expires, no manual restart
 const MINERS = {
-  S244:  { name:"S-244",          tier:"novice",   price:10,   daily:0.5,  cycleHours:48, img:"purchase1.png", duration:30, maxOwn:2 },
-  S500:  { name:"S-500",          tier:"novice",   price:30,   daily:1.5,  cycleHours:48, img:"purchase2.png", duration:30, maxOwn:1 },
-  S900:  { name:"S-900",          tier:"novice",   price:50,   daily:2,    cycleHours:24, img:"purchase3.png", duration:35, maxOwn:1 },
-  S1200: { name:"S-1200",         tier:"novice",   price:120,  daily:4,    cycleHours:24, img:"purchase4.png", duration:45, maxOwn:1 },
-
-  // JUNIOR  ← swap junior1.png / junior2.png with your real images
+  // NOVICE
+  S100:  { name:"S-100",           tier:"novice",   price:3,    daily:0.20, cycleHours:24, img:"purchase0.png", duration:30,  maxOwn:2 },
+  S244:  { name:"S-244",           tier:"novice",   price:10,   daily:0.50, cycleHours:24, img:"purchase1.png", duration:30,  maxOwn:2 },
+  S500:  { name:"S-500",           tier:"novice",   price:30,   daily:1.50, cycleHours:24, img:"purchase2.png", duration:30,  maxOwn:1 },
+  S900:  { name:"S-900",           tier:"novice",   price:50,   daily:2.00, cycleHours:24, img:"purchase3.png", duration:35,  maxOwn:1 },
+  S1200: { name:"S-1200",          tier:"novice",   price:120,  daily:4.00, cycleHours:24, img:"purchase4.png", duration:45,  maxOwn:1 },
+  // JUNIOR
   JX200: { name:"JX-200 Turbo",    tier:"junior",   price:200,  daily:5,    cycleHours:24, img:"junior1.png",   duration:60,  maxOwn:1, unlimited:false },
   JX500: { name:"JX-500 Boost",    tier:"junior",   price:500,  daily:8,    cycleHours:24, img:"junior2.png",   duration:85,  maxOwn:1, unlimited:false },
-
-  // PRO  ← swap pro1.png / pro2.png with your real images
+  // PRO
   PX1K:  { name:"PX-1000 Apex",    tier:"pro",      price:1000, daily:12,   cycleHours:24, img:"pro1.png",      duration:120, maxOwn:1, unlimited:false },
   PX2K:  { name:"PX-2000 Core",    tier:"pro",      price:2000, daily:20,   cycleHours:24, img:"pro2.png",      duration:150, maxOwn:1, unlimited:false },
-
-  // ELITE  ← swap elite1.png / elite2.png with your real images
+  // ELITE
   EX3K:  { name:"EX-1500 Blaze",   tier:"elite",    price:1500, daily:20,   cycleHours:24, img:"elite1.png",    duration:120, maxOwn:1, unlimited:false },
   EX5K:  { name:"EX-2000 Inferno", tier:"elite",    price:2000, daily:25,   cycleHours:24, img:"elite2.png",    duration:120, maxOwn:1, unlimited:false },
-
-  // LEGEND  ← swap legend1.png / legend2.png with your real images
+  // LEGEND
   LX3K:  { name:"LX-2200 Titan",   tier:"legend",   price:2200, daily:25,   cycleHours:24, img:"legend1.png",   duration:135, maxOwn:1, unlimited:false },
   LX5K:  { name:"LX-3000 Zeus",    tier:"legend",   price:3000, daily:30,   cycleHours:24, img:"legend2.png",   duration:160, maxOwn:1, unlimited:false },
-
-  // EMPLOYEE — unlimited, you own it forever  ← swap employee1.png / employee2.png
-  EM4K:  { name:"EM-4000 Oracle",   tier:"employee", price:4000, daily:10,   cycleHours:24, img:"employee1.png", duration:null, maxOwn:1, unlimited:true  },
-  EM5K:  { name:"EM-5000 Nexus",    tier:"employee", price:5000, daily:15,   cycleHours:24, img:"employee2.png", duration:null, maxOwn:1, unlimited:true  },
+  // EMPLOYEE — unlimited, no expiry
+  EM4K:  { name:"EM-4000 Oracle",   tier:"employee", price:4000, daily:10,   cycleHours:24, img:"employee1.png", duration:null, maxOwn:1, unlimited:true },
+  EM5K:  { name:"EM-5000 Nexus",    tier:"employee", price:5000, daily:15,   cycleHours:24, img:"employee2.png", duration:null, maxOwn:1, unlimited:true },
 };
 
 const REFERRAL_LEVELS = [
@@ -269,15 +259,15 @@ const REFERRAL_LEVELS = [
 ];
 
 const REF_PTS = {
-  S244:50, S500:75, S900:100, S1200:200,
+  S100:30,
+  S244:50,  S500:75,   S900:100,  S1200:200,
   JX200:300, JX500:500,
-  PX1K:800, PX2K:1500,
+  PX1K:800,  PX2K:1500,
   EX3K:2000, EX5K:3000,
   LX3K:4000, LX5K:5000,
   EM4K:6000, EM5K:8000
 };
 
-// ── HELPERS ───────────────────────────────────────────────────
 function fmtTime(ms) {
   if (ms <= 0) return "00:00:00";
   const h = Math.floor(ms/3600000);
@@ -294,7 +284,7 @@ function getTierColor(cls) {
 
 // ── LEVEL CHECK ───────────────────────────────────────────────
 async function checkAndUpdateLevel() {
-    if (userData.levelOverride) {
+  if (userData.levelOverride) {
     const dbLevel    = userData.level || "Novice Miner";
     const matchedKey = LEVEL_ORDER.find(k => LEVELS[k].dbName === dbLevel) || "novice";
     currentLevelKey  = matchedKey;
@@ -303,30 +293,21 @@ async function checkAndUpdateLevel() {
     hero.className = `level-hero lh-${lv.cls}`;
     hero.innerHTML = `
       <div class="lh-icon">${lv.emoji}</div>
-      <div>
-        <div class="lh-name">${lv.name}</div>
-        <div class="lh-sub">Level set by admin</div>
-      </div>
-      <div class="lh-progress">
-        <div class="lh-prog-lbl">Active Team</div>
-        <div class="lh-prog-val" id="activeTeamCount">—</div>
-      </div>`;
+      <div><div class="lh-name">${lv.name}</div><div class="lh-sub">Level set by admin</div></div>
+      <div class="lh-progress"><div class="lh-prog-lbl">Active Team</div><div class="lh-prog-val">—</div></div>`;
     return;
-   } 
+  }
   const membersSnap = await db.ref("users/" + uid + "/teamMembers").once("value");
-  const members = membersSnap.val() || {};
-  const l1Active = Object.values(members).filter(m => m.hasMiner === true).length;
-
-  const incomeSnap = await db.ref("teamIncome/" + uid).once("value");
-  const income = incomeSnap.val() || {};
+  const members     = membersSnap.val() || {};
+  const l1Active    = Object.values(members).filter(m => m.hasMiner === true).length;
+  const incomeSnap  = await db.ref("teamIncome/" + uid).once("value");
+  const income      = incomeSnap.val() || {};
   const uniqueActive = new Set();
   Object.keys(members).forEach(mUid => { if (members[mUid].hasMiner) uniqueActive.add(mUid); });
   Object.values(income).forEach(r => { if (r.fromUid) uniqueActive.add(r.fromUid); });
   const totalActive = uniqueActive.size;
-
   document.getElementById("activeTeamCount").textContent = totalActive;
 
-  // Determine new level
   let newLevelKey = "novice";
   for (const key of LEVEL_ORDER) {
     const req = LEVELS[key];
@@ -336,32 +317,23 @@ async function checkAndUpdateLevel() {
   const lv  = LEVELS[newLevelKey];
   const idx = LEVEL_ORDER.indexOf(newLevelKey);
   const nextReq = idx < LEVEL_ORDER.length - 1
-    ? `Need ${LEVELS[LEVEL_ORDER[idx+1]].l1} L1 + ${LEVELS[LEVEL_ORDER[idx+1]].total} total active miners`
+    ? `Need ${LEVELS[LEVEL_ORDER[idx+1]].l1} L1 + ${LEVELS[LEVEL_ORDER[idx+1]].total} total active`
     : "Maximum level reached 🏆";
 
-  // Update hero badge
   const hero = document.getElementById("levelHero");
   hero.className = `level-hero lh-${lv.cls}`;
   hero.innerHTML = `
     <div class="lh-icon">${lv.emoji}</div>
-    <div>
-      <div class="lh-name">${lv.name}</div>
-      <div class="lh-sub">${nextReq}</div>
-    </div>
-    <div class="lh-progress">
-      <div class="lh-prog-lbl">Active Team</div>
-      <div class="lh-prog-val">${totalActive}</div>
-    </div>`;
+    <div><div class="lh-name">${lv.name}</div><div class="lh-sub">${nextReq}</div></div>
+    <div class="lh-progress"><div class="lh-prog-lbl">Active Team</div><div class="lh-prog-val">${totalActive}</div></div>`;
 
-  // If promoted, update DB and show toast
   const prevLevel = userData.level || "Novice Miner";
   if (lv.dbName !== prevLevel && !userData.levelOverride) {
-      await db.ref("users/" + uid + "/level").set(lv.dbName);
-      userData.level = lv.dbName;
-      showPromoToast("🎉 Promoted to " + lv.name + "!");
+    await db.ref("users/" + uid + "/level").set(lv.dbName);
+    userData.level = lv.dbName;
+    showPromoToast("🎉 Promoted to " + lv.name + "!");
   }
 }
-
 
 function showPromoToast(msg) {
   const t = document.getElementById("promoToast");
@@ -369,7 +341,6 @@ function showPromoToast(msg) {
   setTimeout(() => t.style.opacity = 0, 4000);
 }
 
-// ── TAB SWITCH ────────────────────────────────────────────────
 function showTab(tab) {
   document.getElementById("runningTab").style.display = tab === "running" ? "block" : "none";
   document.getElementById("levelsTab").style.display  = tab === "levels"  ? "block" : "none";
@@ -377,21 +348,20 @@ function showTab(tab) {
   document.getElementById("levBtn").classList.toggle("active", tab === "levels");
 }
 
-// ── LOAD PAGE ─────────────────────────────────────────────────
 async function loadPage() {
   const snap = await db.ref("users/" + uid).once("value");
-  userData = snap.val() || {};
-  document.getElementById("liveBalance").textContent = "$" + Math.floor(userData.balance || 0) + ".00";
+  userData   = snap.val() || {};
+  // Show balance with 2 decimal places
+  document.getElementById("liveBalance").textContent = "$" + (userData.balance || 0).toFixed(2);
   await checkAndUpdateLevel();
   renderRunning();
   renderLevels();
 }
 
-// ── RENDER RUNNING TAB — EXACT ORIGINAL DESIGN ───────────────
+// ── RENDER RUNNING TAB ───────────────────────────────────────
 function renderRunning() {
   const container = document.getElementById("runningTab");
   container.innerHTML = "";
-
   const unlocked  = userData.minerUnlocked || {};
   const minersMap = userData.miners || {};
   let hasAny = false;
@@ -401,22 +371,33 @@ function renderRunning() {
     const count = unlocked[id];
     for (let i = 1; i <= count; i++) {
       hasAny = true;
-      const key      = id === "S244" ? `${id}_${i}` : id;
-      const cfg      = MINERS[id];
-      const mData    = minersMap[key];
-      const expireTs = (!cfg.unlimited && mData) ? mData.start + cfg.duration * 86400000 : null;
-      const totalLabel = cfg.unlimited ? "∞ Unlimited" : "$" + (cfg.daily * cfg.duration).toLocaleString();
-      const expiresLine = cfg.unlimited ? "Plan: Unlimited — you own it forever" : `Expires: ${expireTs ? fmtDate(expireTs) : "—"}`;
+      const key  = (id === "S244" || id === "S100") ? `${id}_${i}` : id;
+      const cfg  = MINERS[id];
+      const mData = minersMap[key];
 
-      const card = document.createElement("div");
-      card.className = "miner-card";
-      card.id = "card-" + key;
+      // Plan expiry uses purchaseDate (when first bought)
+      const purchaseDate = mData?.purchaseDate || mData?.start;
+      const planExpiry   = (!cfg.unlimited && purchaseDate && cfg.duration)
+        ? purchaseDate + cfg.duration * 86400000
+        : null;
+      const daysRemaining = planExpiry
+        ? Math.max(0, Math.ceil((planExpiry - Date.now()) / 86400000))
+        : null;
+      const daysTotal   = cfg.duration || 1;
+      const planPct     = planExpiry ? Math.max(0, Math.min(100, ((Date.now() - purchaseDate) / (daysTotal * 86400000)) * 100)) : 0;
 
-      // All miners use their PNG image — swap filenames in MINERS config above
-      const imgHTML = `<img src="${cfg.img}" class="miner-img" alt="${cfg.name}">`;
+      const totalEarnLabel = cfg.unlimited ? "∞ Unlimited" : "$" + (cfg.daily * cfg.duration).toLocaleString();
+      const expiresLine    = cfg.unlimited
+        ? "Plan: Unlimited — runs forever"
+        : planExpiry
+          ? `Expires: ${fmtDate(planExpiry)} · ${daysRemaining}d left`
+          : "Starting soon...";
 
       const tierColor = getTierColor(LEVELS[cfg.tier].cls);
       const ringColor = cfg.tier === "novice" ? "#00ffcc" : tierColor;
+      const card      = document.createElement("div");
+      card.className  = "miner-card";
+      card.id         = "card-" + key;
 
       card.innerHTML = `
         <div class="miner-header">
@@ -425,36 +406,29 @@ function renderRunning() {
               <circle class="ring-bg"   cx="44" cy="44" r="40"/>
               <circle class="ring-fill" cx="44" cy="44" r="40" id="ring-${key}" style="stroke:${ringColor}"/>
             </svg>
-            ${imgHTML}
+            <img src="${cfg.img}" class="miner-img" alt="${cfg.name}">
           </div>
           <div>
-            <div class="miner-name" style="color:${ringColor};">${cfg.name}${unlocked[id] > 1 ? ` #${i}` : ""}</div>
+            <div class="miner-name" style="color:${ringColor};">${cfg.name}${count > 1 ? ` #${i}` : ""}</div>
             <div class="miner-dates">
-              Bought: ${mData ? fmtDate(mData.start) : "—"}<br>
-              ${expiresLine}
+              Bought: ${purchaseDate ? fmtDate(purchaseDate) : "—"}<br>${expiresLine}
             </div>
+            <div class="auto-badge">⚡ Auto-Run</div>
           </div>
         </div>
         <div class="stats-grid">
-          <div class="stat-item">
-            <div class="stat-label">DAILY INCOME</div>
-            <div class="stat-value" style="color:#00ff88;">$${cfg.daily}</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-label">CYCLE</div>
-            <div class="stat-value">${cfg.cycleHours}h</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-label">TOTAL EARN</div>
-            <div class="stat-value" style="color:#f59e0b;">${totalLabel}</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-label">DURATION</div>
-            <div class="stat-value">${cfg.unlimited ? "∞" : cfg.duration + "d"}</div>
-          </div>
+          <div class="stat-item"><div class="stat-label">DAILY INCOME</div><div class="stat-value" style="color:#00ff88;">$${cfg.daily.toFixed(2)}</div></div>
+          <div class="stat-item"><div class="stat-label">CYCLE</div><div class="stat-value">${cfg.cycleHours}h</div></div>
+          <div class="stat-item"><div class="stat-label">TOTAL EARN</div><div class="stat-value" style="color:#f59e0b;">${totalEarnLabel}</div></div>
+          <div class="stat-item"><div class="stat-label">DURATION</div><div class="stat-value">${cfg.unlimited ? "∞" : cfg.duration + "d"}</div></div>
         </div>
-        <div id="statusbox-${key}"></div>
-      `;
+        ${!cfg.unlimited && planExpiry ? `
+        <div class="plan-progress">
+          <div class="plan-bar-bg"><div class="plan-bar-fill" style="width:${planPct}%"></div></div>
+          <div class="plan-label"><span>Plan started</span><span>${daysRemaining}d remaining</span></div>
+        </div>` : ""}
+        <div id="statusbox-${key}"></div>`;
+
       container.appendChild(card);
       refreshCard(id, key, mData);
     }
@@ -465,55 +439,58 @@ function renderRunning() {
   }
 }
 
-// ── COMPUTE EARNED ────────────────────────────────────────────
-function computeEarned(id, minerData) {
+// ── COMPUTE EARNED — always 24hr cycle ────────────────────────
+function computeEarned(id, mData) {
   const cfg     = MINERS[id];
   const now     = Date.now();
-  const elapsed = now - minerData.start;
-  const cycleMs = cfg.cycleHours * 3600000;
-  const dayMs   = 24 * 3600000;
+  const elapsed = now - mData.start;
+  const cycleMs = cfg.cycleHours * 3600000; // always 24hr = 86400000ms
+  const dayMs   = 86400000;
 
-  // Unlimited miners: cycle still runs 24h, but no plan expiry
   if (elapsed >= cycleMs) {
-    const totalEarn = cfg.daily * (cfg.cycleHours / 24);
-    return { displayEarned:totalEarn, pct:100, isComplete:true, phase:"done", timeLeft:0 };
+    return { displayEarned: cfg.daily, pct: 100, isComplete: true, timeLeft: 0 };
   }
 
   const pct      = (elapsed / cycleMs) * 100;
+  const earned   = (elapsed / dayMs) * cfg.daily;
   const timeLeft = cycleMs - elapsed;
-
-  if (cfg.cycleHours === 24) {
-    const earned = (elapsed / dayMs) * cfg.daily;
-    return { displayEarned:Math.min(earned,cfg.daily), pct, isComplete:false, phase:"active", timeLeft };
-  } else {
-    if (elapsed < dayMs) {
-      const earned = (elapsed / dayMs) * cfg.daily;
-      return { displayEarned:earned, pct, isComplete:false, phase:"first24", timeLeft };
-    } else {
-      const extra  = elapsed - dayMs;
-      const earned = cfg.daily + (extra / dayMs) * cfg.daily;
-      return { displayEarned:Math.min(earned, cfg.daily*2), pct, isComplete:false, phase:"second24", timeLeft };
-    }
-  }
+  return { displayEarned: Math.min(earned, cfg.daily), pct, isComplete: false, timeLeft };
 }
 
-// ── REFRESH SINGLE CARD — EXACT ORIGINAL LAYOUT ──────────────
+// ── REFRESH CARD ─────────────────────────────────────────────
 function refreshCard(id, key, mData) {
   const box = document.getElementById("statusbox-" + key);
   if (!box) return;
-
   const cfg = MINERS[id];
 
-  if (!mData || !mData.start) {
+  // Check plan expiry
+  const purchaseDate = mData?.purchaseDate || mData?.start;
+  const planExpiry   = (!cfg.unlimited && purchaseDate && cfg.duration)
+    ? purchaseDate + cfg.duration * 86400000 : null;
+  const isPlanExpired = planExpiry && Date.now() > planExpiry && !cfg.unlimited;
+
+  if (isPlanExpired) {
+    // Plan expired — show final state
+    const ring = document.getElementById("ring-" + key);
+    if (ring) ring.classList.add("expired");
     box.innerHTML = `
-      <div class="status-box inactive">
-        <div style="font-size:14px;color:#64748b;text-align:center;width:100%;">Miner ready — tap Start to begin</div>
-      </div>
-      <button class="btn" onclick="startMiner('${id}','${key}')">▶ Start Mining (${cfg.cycleHours}h)</button>`;
+      <div class="status-box expired">
+        <div class="status-left">
+          <div class="status-badge" style="color:#64748b;">
+            <span class="badge-dot" style="background:#475569"></span> Plan Expired
+          </div>
+          <div class="earned-row">This miner has completed its ${cfg.duration}-day plan</div>
+        </div>
+      </div>`;
     return;
   }
 
-  const { displayEarned, pct, isComplete, phase, timeLeft } = computeEarned(id, mData);
+  if (!mData || !mData.start) {
+    box.innerHTML = `<div class="status-box inactive"><div style="font-size:14px;color:#64748b;text-align:center;width:100%;">Starting miner...</div></div>`;
+    return;
+  }
+
+  const { displayEarned, pct, isComplete, timeLeft } = computeEarned(id, mData);
 
   // Update ring
   const ring = document.getElementById("ring-" + key);
@@ -522,26 +499,21 @@ function refreshCard(id, key, mData) {
     const offset = circ - (pct / 100) * circ;
     ring.style.strokeDasharray  = circ;
     ring.style.strokeDashoffset = offset;
-    ring.style.transition       = "stroke-dashoffset 1s linear";
-    isComplete ? ring.classList.add("paused") : ring.classList.remove("paused");
+    ring.classList.remove("paused", "expired");
   }
 
-  const totalEarn = cfg.daily * (cfg.cycleHours / 24);
-  const isLocked  = phase === "second24";
-
   if (isComplete) {
+    // Auto-credit and auto-restart — no button needed
     checkAndCredit(id, key, mData);
     box.innerHTML = `
       <div class="status-box paused">
         <div class="status-left">
-          <div class="status-badge" style="color:#ef4444;">
-            <span class="badge-dot red"></span> Earning Paused
+          <div class="status-badge" style="color:#00f0ff;">
+            <span class="badge-dot blue"></span> Crediting & Restarting...
           </div>
-          <div class="earned-row">Cycle complete — earned:</div>
-          <div class="earned-val">$${totalEarn.toFixed(2)} ✓</div>
+          <div class="earned-row">Cycle complete — crediting $${cfg.daily.toFixed(2)}</div>
         </div>
-      </div>
-      <button class="btn" onclick="startMiner('${id}','${key}')">🔄 Start New Cycle (${cfg.cycleHours}h)</button>`;
+      </div>`;
   } else {
     box.innerHTML = `
       <div class="status-box active">
@@ -549,48 +521,76 @@ function refreshCard(id, key, mData) {
           <div class="status-badge" style="color:#00ff88;">
             <span class="badge-dot green"></span> Actively Earning
           </div>
-          <div class="earned-row">Earned this cycle${isLocked ? ' <span style="color:#f59e0b;font-size:11px;">(pending balance)</span>' : ''}:</div>
-          <div class="earned-val ${isLocked ? 'locked' : ''}">$${displayEarned.toFixed(2)}</div>
+          <div class="earned-row">Earned this cycle:</div>
+          <div class="earned-val">$${displayEarned.toFixed(4)}</div>
         </div>
         <div style="text-align:right;">
-          <div class="time-remaining">Time left</div>
+          <div class="time-remaining">Next payout</div>
           <div class="time-val">${fmtTime(timeLeft)}</div>
         </div>
       </div>`;
   }
 }
 
-// ── CREDIT BALANCE + REFERRAL CHAIN ──────────────────────────
+// ── CREDIT + AUTO-RESTART ─────────────────────────────────────
 const _credited = {};
 async function checkAndCredit(id, key, mData) {
   if (_credited[key]) return;
   if (mData.credited)  return;
   _credited[key] = true;
 
-  const cfg       = MINERS[id];
-  const totalEarn = cfg.daily * (cfg.cycleHours / 24);
-  const now       = Date.now();
+  const cfg          = MINERS[id];
+  const totalEarn    = cfg.daily;  // 24hr cycle = exactly daily income
+  const now          = Date.now();
+  const purchaseDate = mData.purchaseDate || mData.start;
 
+  // Mark credited first (prevents double-credit)
   await db.ref(`users/${uid}/miners/${key}`).update({ credited: true });
 
-  const balSnap = await db.ref(`users/${uid}/balance`).once("value");
-  const balance = balSnap.val() || 0;
-  await db.ref(`users/${uid}/balance`).set(balance + totalEarn);
+  // Credit balance using increment (no read needed)
+  await db.ref(`users/${uid}/balance`).set(
+    firebase.database.ServerValue.increment(totalEarn)
+  );
 
+  // Log mining record
   await db.ref(`users/${uid}/miningRecords`).push({
     amount: totalEarn, miner: cfg.name, timestamp: now
   });
 
-  userData.balance = balance + totalEarn;
-  document.getElementById("liveBalance").textContent = "$" + Math.floor(userData.balance) + ".00";
+  // Re-read balance for display
+  const balSnap = await db.ref(`users/${uid}/balance`).once("value");
+  userData.balance = balSnap.val() || 0;
+  document.getElementById("liveBalance").textContent = "$" + userData.balance.toFixed(2);
 
+  // Trigger referral chain
   creditReferralChain(uid, totalEarn, cfg.name).catch(console.error);
   checkAndUpdateLevel().catch(console.error);
+
+  // ── AUTO-RESTART next cycle ───────────────────────────────
+  const planExpiry = (!cfg.unlimited && purchaseDate && cfg.duration)
+    ? purchaseDate + cfg.duration * 86400000 : null;
+
+  if (!planExpiry || Date.now() < planExpiry) {
+    // Plan still active — restart cycle automatically
+    const newData = {
+      start:        now,
+      purchaseDate: purchaseDate,  // keep original purchase date
+      lastUpdate:   now,
+      credited:     false
+    };
+    await db.ref(`users/${uid}/miners/${key}`).set(newData);
+    userData.miners[key] = newData;
+    delete _credited[key];
+    renderRunning();
+  } else {
+    // Plan expired — don't restart
+    renderRunning();
+  }
 }
 
 async function creditReferralChain(earnerUid, earnedAmount, minerName) {
-  let currentUid = earnerUid;
-  const earnerSnap = await db.ref(`users/${earnerUid}/minerId`).once("value");
+  let currentUid    = earnerUid;
+  const earnerSnap  = await db.ref(`users/${earnerUid}/minerId`).once("value");
   const earnerMiner = earnerSnap.val() || earnerUid.substring(0, 8);
 
   for (const { level, pct } of REFERRAL_LEVELS) {
@@ -609,7 +609,7 @@ async function creditReferralChain(earnerUid, earnedAmount, minerName) {
       fromUid:   earnerUid,
       fromMiner: earnerMiner,
       amount:    teamCredit,
-      level:     level,
+      level,
       miner:     minerName,
       pct:       pct * 100,
       timestamp: Date.now()
@@ -619,103 +619,11 @@ async function creditReferralChain(earnerUid, earnedAmount, minerName) {
   }
 }
 
-// ── START MINER ───────────────────────────────────────────────
-async function startMiner(id, key) {
-  const now     = Date.now();
-  const newData = { start: now, lastUpdate: now, credited: false };
-  await db.ref(`users/${uid}/miners/${key}`).set(newData);
-  if (!userData.miners) userData.miners = {};
-  userData.miners[key] = newData;
-  delete _credited[key];
-  renderRunning();
-}
-
-// ── RENDER LEVELS TAB ─────────────────────────────────────────
-function renderLevels() {
-  const container = document.getElementById("levelsTab");
-  container.innerHTML = "";
-
-  LEVEL_ORDER.forEach(levelKey => {
-    const lv          = LEVELS[levelKey];
-    const userIdx     = LEVEL_ORDER.indexOf(currentLevelKey);
-    const tierIdx     = LEVEL_ORDER.indexOf(levelKey);
-    const isUnlocked  = tierIdx <= userIdx;
-    const isCurrent   = levelKey === currentLevelKey;
-
-    const badgeText  = isCurrent ? "✦ YOUR LEVEL" : isUnlocked ? "UNLOCKED" : "🔒 LOCKED";
-    const badgeClass = isCurrent ? "badge-active"  : isUnlocked ? "badge-unlocked" : "badge-locked";
-    const reqText    = levelKey === "novice"
-      ? "Available to all users — start here"
-      : `${lv.l1} Level 1 active members + ${lv.total} total active team`;
-
-    const section = document.createElement("div");
-    section.className = "tier-section";
-    section.innerHTML = `
-      <div class="tier-header tier-${lv.cls}">
-        <div class="th-icon">${lv.emoji}</div>
-        <div class="th-info">
-          <div class="th-name">${lv.name}</div>
-          <div class="th-req">📋 ${reqText}</div>
-        </div>
-        <div class="th-badge ${badgeClass}">${badgeText}</div>
-      </div>`;
-
-    const tierMiners = Object.entries(MINERS).filter(([, m]) => m.tier === levelKey);
-
-    // Always show miners — locked tier just disables the button
-    tierMiners.forEach(([id, m]) => {
-      const owned     = (userData.minerUnlocked || {})[id] || 0;
-      const isMaxed   = owned >= m.maxOwn;
-      const tierColor = getTierColor(lv.cls);
-
-      let btnHTML = "";
-      if (isMaxed) {
-        btnHTML = `<button class="shop-btn disabled"> Already Owned</button>`;
-      } else if (!isUnlocked) {
-        // Visible but locked — clicking shows alert
-        btnHTML = `<button class="shop-btn disabled" onclick="lockedAlert('${lv.name}',${lv.l1},${lv.total})" style="cursor:pointer;opacity:0.6;">🔒 Locked — ${lv.name} Required</button>`;
-      } else {
-        btnHTML = `<button class="shop-btn btn-${lv.cls}" onclick="buyMiner('${id}',${m.price})">Buy for $${m.price.toLocaleString()}</button>`;
-      }
-
-      const card = document.createElement("div");
-      card.className = `shop-card shop-${lv.cls}`;
-      // Slightly dim locked tier cards
-      if (!isUnlocked) card.style.opacity = "0.6";
-
-      card.innerHTML = `
-        <div class="shop-header">
-          <img src="${m.img}" class="shop-img" alt="${m.name}">
-          <div>
-            <div class="shop-name" style="color:${tierColor};">${m.name}</div>
-            <div class="shop-sub">${m.cycleHours}h cycle • ${m.unlimited ? "Unlimited Plan ∞" : m.duration + " days"} • Max ${m.maxOwn}×</div>
-          </div>
-        </div>
-        <div class="stats-grid">
-          <div class="stat-item"><div class="stat-label">PRICE</div><div class="stat-value">$${m.price.toLocaleString()}</div></div>
-          <div class="stat-item"><div class="stat-label">DAILY</div><div class="stat-value" style="color:#00ff88;">$${m.daily}</div></div>
-          <div class="stat-item"><div class="stat-label">TOTAL EARN</div><div class="stat-value" style="color:#f59e0b;">${m.unlimited ? "∞" : "$" + (m.daily * m.duration).toLocaleString()}</div></div>
-          <div class="stat-item"><div class="stat-label">DURATION</div><div class="stat-value">${m.unlimited ? "∞ Forever" : m.duration + "d"}</div></div>
-        </div>
-        ${btnHTML}`;
-      section.appendChild(card);
-    });
-
-    container.appendChild(section);
-  });
-}
-
-// ── LOCKED TIER ALERT ─────────────────────────────────────────
-function lockedAlert(levelName, l1Needed, totalNeeded) {
-  alert(`🔒 ${levelName} Required\n\nTo unlock these miners you need:\n• ${l1Needed} Level 1 active members\n• ${totalNeeded} total active team members\n\n"Active" means they currently have a running miner.`);
-}
-
 // ── BUY MINER ─────────────────────────────────────────────────
 async function buyMiner(id, price) {
   const m = MINERS[id];
   if (!m) return;
 
-  // Level check
   const tierIdx = LEVEL_ORDER.indexOf(m.tier);
   const userIdx = LEVEL_ORDER.indexOf(currentLevelKey);
   if (userIdx < tierIdx) {
@@ -733,37 +641,123 @@ async function buyMiner(id, price) {
   const count    = unlocked[id] || 0;
   if (count >= m.maxOwn) return alert("You already own the maximum of this miner.");
 
-  const instanceKey   = id === "S244" ? `${id}_${count + 1}` : id;
+  // Key: S100 and S244 support multiple, others are single
+  const instanceKey   = (id === "S244" || id === "S100") ? `${id}_${count + 1}` : id;
   const deductTeam    = Math.min(price, data.team || 0);
   const deductBalance = price - deductTeam;
   const referrer      = data.referredBy;
+  const now           = Date.now();
 
+  // Credit referral points
   if (referrer && REF_PTS[id]) {
-    const pts = REF_PTS[id];
-    db.ref("users/" + referrer + "/pendingRewards/" + id).set(firebase.database.ServerValue.increment(pts));
+    db.ref("users/" + referrer + "/pendingRewards/" + id).set(
+      firebase.database.ServerValue.increment(REF_PTS[id])
+    );
     db.ref("users/" + referrer + "/referralMinerRecords").push({
-      buyerUid: uid, buyerMiner: m.name, pointsEarned: pts, timestamp: Date.now()
+      buyerUid: uid, buyerMiner: m.name, pointsEarned: REF_PTS[id], timestamp: now
     });
   }
 
+  // Update user — miner starts immediately on purchase, stores purchaseDate
   await db.ref("users/" + uid).update({
     balance: Math.max(0, (data.balance || 0) - deductBalance),
     team:    Math.max(0, (data.team    || 0) - deductTeam),
     [`minerUnlocked/${id}`]:   count + 1,
-    [`miners/${instanceKey}`]: { start:Date.now(), lastUpdate:Date.now(), credited:false }
+    [`miners/${instanceKey}`]: {
+      start:        now,
+      purchaseDate: now,   // ← tracks plan start for expiry
+      lastUpdate:   now,
+      credited:     false
+    }
   });
 
- if (referrer) {
+  // Update referrer teamMembers with hasMiner + minerId
+  if (referrer) {
     const myIdSnap  = await db.ref("users/" + uid + "/minerId").once("value");
     const myMinerId = myIdSnap.val() || uid.slice(0, 8);
     db.ref("users/" + referrer + "/teamMembers/" + uid).update({
-        hasMiner: true,
-        minerId:  myMinerId
+      hasMiner: true, minerId: myMinerId
     });
-}
+  }
 
   await loadPage();
   showTab("running");
+}
+
+// ── RENDER LEVELS TAB ─────────────────────────────────────────
+function renderLevels() {
+  const container = document.getElementById("levelsTab");
+  container.innerHTML = "";
+
+  LEVEL_ORDER.forEach(levelKey => {
+    const lv         = LEVELS[levelKey];
+    const userIdx    = LEVEL_ORDER.indexOf(currentLevelKey);
+    const tierIdx    = LEVEL_ORDER.indexOf(levelKey);
+    const isUnlocked = tierIdx <= userIdx;
+    const isCurrent  = levelKey === currentLevelKey;
+
+    const badgeText  = isCurrent ? "✦ YOUR LEVEL" : isUnlocked ? "UNLOCKED" : "🔒 LOCKED";
+    const badgeClass = isCurrent ? "badge-active"  : isUnlocked ? "badge-unlocked" : "badge-locked";
+    const reqText    = levelKey === "novice"
+      ? "Available to all users — start here"
+      : `${lv.l1} Level 1 active + ${lv.total} total active team`;
+
+    const section = document.createElement("div");
+    section.className = "tier-section";
+    section.innerHTML = `
+      <div class="tier-header tier-${lv.cls}">
+        <div class="th-icon">${lv.emoji}</div>
+        <div class="th-info">
+          <div class="th-name">${lv.name}</div>
+          <div class="th-req">📋 ${reqText}</div>
+        </div>
+        <div class="th-badge ${badgeClass}">${badgeText}</div>
+      </div>`;
+
+    Object.entries(MINERS).filter(([, m]) => m.tier === levelKey).forEach(([id, m]) => {
+      const owned     = (userData.minerUnlocked || {})[id] || 0;
+      const isMaxed   = owned >= m.maxOwn;
+      const tierColor = getTierColor(lv.cls);
+
+      let btnHTML = "";
+      if (isMaxed) {
+        btnHTML = `<button class="shop-btn disabled">✅ Already Owned</button>`;
+      } else if (!isUnlocked) {
+        btnHTML = `<button class="shop-btn disabled" onclick="lockedAlert('${lv.name}',${lv.l1},${lv.total})" style="cursor:pointer;opacity:0.6;">🔒 Locked — ${lv.name} Required</button>`;
+      } else {
+        btnHTML = `<button class="shop-btn btn-${lv.cls}" onclick="buyMiner('${id}',${m.price})">Buy for $${m.price.toLocaleString()}</button>`;
+      }
+
+      const card = document.createElement("div");
+      card.className = `shop-card shop-${lv.cls}`;
+      if (!isUnlocked) card.style.opacity = "0.6";
+
+      const totalEarn = m.unlimited ? "∞" : "$" + (m.daily * m.duration).toFixed(2);
+
+      card.innerHTML = `
+        <div class="shop-header">
+          <img src="${m.img}" class="shop-img" alt="${m.name}">
+          <div>
+            <div class="shop-name" style="color:${tierColor};">${m.name}</div>
+            <div class="shop-sub">Auto-run · ${m.unlimited ? "∞ Unlimited" : m.duration + " days"} · Max ${m.maxOwn}×</div>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item"><div class="stat-label">PRICE</div><div class="stat-value">$${m.price.toLocaleString()}</div></div>
+          <div class="stat-item"><div class="stat-label">DAILY</div><div class="stat-value" style="color:#00ff88;">$${m.daily.toFixed(2)}</div></div>
+          <div class="stat-item"><div class="stat-label">TOTAL EARN</div><div class="stat-value" style="color:#f59e0b;">${totalEarn}</div></div>
+          <div class="stat-item"><div class="stat-label">DURATION</div><div class="stat-value">${m.unlimited ? "∞ Forever" : m.duration + "d"}</div></div>
+        </div>
+        ${btnHTML}`;
+      section.appendChild(card);
+    });
+
+    container.appendChild(section);
+  });
+}
+
+function lockedAlert(levelName, l1Needed, totalNeeded) {
+  alert(`🔒 ${levelName} Required\n\nTo unlock these miners you need:\n• ${l1Needed} Level 1 active members\n• ${totalNeeded} total active team members`);
 }
 
 // ── TICK ──────────────────────────────────────────────────────
@@ -775,14 +769,13 @@ function startTick() {
       if (!MINERS[id]) return;
       const count = unlocked[id];
       for (let i = 1; i <= count; i++) {
-        const key = id === "S244" ? `${id}_${i}` : id;
+        const key = (id === "S244" || id === "S100") ? `${id}_${i}` : id;
         refreshCard(id, key, userData.miners[key]);
       }
     });
   }, 1000);
 }
 
-// ── BOOT ──────────────────────────────────────────────────────
 window.addEventListener("load", async () => {
   auth.onAuthStateChanged(async user => {
     if (!user) { window.location.href = "signin.html"; return; }
