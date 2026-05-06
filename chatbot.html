@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,6 +58,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .bubble.bot .mc-name{font-weight:700;color:var(--green);font-size:13px;}
 .bubble.bot .mc-info{font-size:11px;color:var(--muted);margin-top:2px;}
 .bubble.bot .mc-price{color:#22c55e;font-weight:700;font-size:13px;}
+.bubble.bot .tier-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin:10px 0 4px;padding-left:2px;}
 .bubble.bot .tip-box{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:10px;padding:10px 13px;margin:8px 0 4px;font-size:13px;color:#fcd34d;line-height:1.55;}
 .bubble.bot .warn-box{background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:10px 13px;margin:8px 0 4px;font-size:13px;color:#f87171;line-height:1.55;}
 .msg-time{font-size:11px;color:#334155;margin-top:3px;padding:0 2px;}
@@ -108,37 +107,34 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════
-//  PAGE REFERENCE HELPER
-// ═══════════════════════════════════════════════════════════════
 function pg(name) { return `<span class="page-tag">📍 ${name}</span>`; }
 
 // ═══════════════════════════════════════════════════════════════
-//  KNOWLEDGE BASE
+//  KNOWLEDGE BASE — Updated with all recent changes
 // ═══════════════════════════════════════════════════════════════
 const KB = [
 
-// ───────── GREETINGS & VIBES ──────────────────────────────────
+// ── GREETINGS ─────────────────────────────────────────────────
 {
-  tags:["hi","hello","hey","morning","afternoon","evening","night","howdy","what's up","sup","yo","hiya","good day","greetings","wassup","wazzup","namaste","salaam"],
+  tags:["hi","hello","hey","morning","afternoon","evening","night","howdy","what's up","sup","yo","hiya","good day","greetings","wassup"],
   chips:["How does mining work?","How do I recharge?","What miners are available?","How do I withdraw?"],
   mood:"greeting",
-  answer:()=>`Hey hey! 👋 Welcome to <b>CryptoJet AI</b> — your 24/7 smart assistant!\n\nI know <b>everything</b> about this platform — miners, recharges, withdrawals, team income, referrals, and more. I can even show you step-by-step guides and point you to exact pages.\n\nWhat can I help you with today? 😊`
+  answer:()=>`Hey hey! 👋 Welcome to <b>CryptoJet AI</b> — your 24/7 smart assistant!\n\nI know <b>everything</b> about this platform — miners, recharges, withdrawals, team income, referrals, level system, and more.\n\nWhat can I help you with today? 😊`
 },
 {
-  tags:["how are you","how r u","you good","you okay","how do you do","what about you","you alright","you fine"],
+  tags:["how are you","how r u","you good","you okay","you alright","you fine"],
   chips:["How does mining work?","How do I recharge?","How do I withdraw?"],
-  answer:()=>`I'm doing absolutely great — always charged up and ready to help! ⚡\n\nThanks for asking! 😄 How are <b>you</b> doing? And more importantly — how can I help you earn more on CryptoJet today?`
+  answer:()=>`I'm doing absolutely great — always charged up and ready to help! ⚡\n\nHow can I help you earn more on CryptoJet today?`
 },
 {
-  tags:["thank","thanks","thank you","appreciate","helpful","great bot","good bot","nice bot","amazing","love you","you rock","well done","great help"],
+  tags:["thank","thanks","thank you","appreciate","helpful","great bot","good bot","nice bot","amazing","you rock","well done"],
   chips:["How does mining work?","How do I withdraw?","How do I refer friends?"],
-  answer:()=>`Aww, you're very welcome! 😊 That made my day!\n\nIf there's anything else you want to know or need help with, I'm always right here. Keep mining and keep earning! 💰⚡`
+  answer:()=>`Aww, you're very welcome! 😊 That made my day!\n\nIf there's anything else you need, I'm always right here. Keep mining and keep earning! 💰⚡`
 },
 {
-  tags:["bye","goodbye","see you","later","cya","take care","peace","ttyl","gotta go","leaving"],
+  tags:["bye","goodbye","see you","later","cya","take care","ttyl","leaving"],
   chips:[],
-  answer:()=>`Goodbye! 👋 It was great chatting with you.\n\nCome back anytime — I'm always here 24/7. <b>Happy mining and happy earning!</b> 🚀💰`
+  answer:()=>`Goodbye! 👋 It was great chatting with you.\n\nCome back anytime — I'm here 24/7. <b>Happy mining and happy earning!</b> 🚀💰`
 },
 {
   tags:["okay","ok","alright","got it","understood","sure","noted","cool","nice","great","perfect","awesome"],
@@ -146,225 +142,232 @@ const KB = [
   answer:()=>`Great! 😊 Let me know whenever you need help — whether it's mining, recharging, withdrawals, or anything else about CryptoJet. I'm all yours! ⚡`
 },
 {
-  tags:["who are you","what are you","are you a bot","are you ai","are you human","what is your name","your name","who made you","who built you","are you real"],
+  tags:["who are you","what are you","are you a bot","are you ai","are you human","what is your name","your name","who made you","who built you"],
   chips:["How does mining work?","How do I get started?","What miners are available?"],
-  answer:()=>`I'm <b>CryptoJet AI</b> — a smart assistant built specifically for this platform! 🤖⚡\n\nI was trained with <b>complete knowledge</b> of CryptoJet — every feature, every page, every rule. I can give you step-by-step guides, refer you to exact pages, and answer almost any question about the platform.\n\nI'm not a replacement for human support, but I'm available 24/7 and I'm pretty good at what I do! 😄 What would you like to know?`
+  answer:()=>`I'm <b>CryptoJet AI</b> — a smart assistant built specifically for this platform! 🤖⚡\n\nI know every feature, every rule, every page. I'm not a replacement for human support, but I'm available 24/7 and pretty good at what I do! 😄 What would you like to know?`
 },
 {
-  tags:["help","help me","i need help","what can you do","what do you know","capabilities","what can you answer","what topics"],
+  tags:["help","help me","i need help","what can you do","what do you know","capabilities","what topics"],
   chips:["How does mining work?","How do I recharge?","How do I withdraw?","Referral & team income"],
-  answer:()=>`I can help you with <b>everything on CryptoJet</b>! Here's what I know:\n\n<ul><li>⛏️ <b>Mining</b> — how it works, cycles, earnings, restarting</li><li>💰 <b>Recharging</b> — bank transfer & USDT step-by-step</li><li>💸 <b>Withdrawals</b> — bank & USDT, fees, days, requirements</li><li>👥 <b>Team income & referrals</b> — how to invite & earn</li><li>📊 <b>Miners</b> — all 4 plans with prices & earnings</li><li>🔐 <b>Account</b> — sign in, password, verification</li><li>📋 <b>Pages & navigation</b> — I'll point you to exact pages</li><li>🏅 <b>Tasks, points & trust score</b></li><li>❓ <b>Troubleshooting</b> — balance issues, miner paused, etc.</li></ul>\nJust ask in plain language — I'll understand! 😊`
+  answer:()=>`I can help you with <b>everything on CryptoJet</b>! Here's what I know:\n\n<ul><li>⛏️ <b>Mining</b> — auto-run cycles, earnings, expiry</li><li>💰 <b>Recharging</b> — bank transfer & USDT step-by-step</li><li>💸 <b>Withdrawals</b> — bank & USDT, fees, rules, limits</li><li>👥 <b>Team income & referrals</b> — invite & earn passively</li><li>📊 <b>Miners</b> — all plans across all 6 tiers</li><li>🏆 <b>Level system</b> — how to unlock higher tier miners</li><li>🔐 <b>Account</b> — sign in, password, bank details</li><li>📋 <b>Navigation</b> — I point you to exact pages</li><li>🏅 <b>Tasks, points & trust score</b></li><li>❓ <b>Troubleshooting</b> — any issue you're facing</li></ul>\nJust ask in plain language — I'll understand! 😊`
 },
 
-// ───────── GETTING STARTED ────────────────────────────────────
+// ── GETTING STARTED ───────────────────────────────────────────
 {
-  tags:["how to start","get started","new here","just joined","first time","what to do","first step","how to begin","where do i start","step by step","beginning","new user","just registered","just signed up","what now"],
+  tags:["how to start","get started","new here","just joined","first time","what to do","first step","how to begin","where do i start","step by step","beginning","new user","just registered","what now"],
   chips:["How do I recharge?","Which miner should I buy?","How does mining work?"],
-  answer:()=>`Welcome to CryptoJet! 🎉 Here's your complete <b>getting started guide</b>:\n\n<div class="step-box"><div class="step-title">🚀 5 Steps to Your First Earnings</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me → Recharge")} and add funds to your balance via bank transfer or USDT</span></div><div class="step-item"><span class="step-num">2</span><span>Go to ${pg("Miner → Purchase")} and buy a miner that fits your budget</span></div><div class="step-item"><span class="step-num">3</span><span>Go to ${pg("Miner → Running")} and tap <b>Start Mining</b></span></div><div class="step-item"><span class="step-num">4</span><span>Watch your earnings grow on screen! At cycle end, tap <b>Start New Cycle</b></span></div><div class="step-item"><span class="step-num">5</span><span>When ready, go to ${pg("Me → Withdraw")} to cash out (Mon–Fri, minimum $10)</span></div></div>\n<div class="tip-box">💡 <b>Bonus moves:</b> Go to ${pg("Me → Invite")} to refer friends and earn team income. Check ${pg("Tasks")} daily for easy bonus points!</div>`
+  answer:()=>`Welcome to CryptoJet! 🎉 Here's your <b>getting started guide</b>:\n\n<div class="step-box"><div class="step-title">🚀 4 Steps to Your First Earnings</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me → Recharge")} and add funds via bank transfer or USDT (minimum $3)</span></div><div class="step-item"><span class="step-num">2</span><span>Go to ${pg("Miner → Levels tab")} and buy a miner that fits your budget — starting from just <b>$3</b></span></div><div class="step-item"><span class="step-num">3</span><span>Your miner <b>starts automatically</b> — no manual action needed! It runs non-stop until the plan expires</span></div><div class="step-item"><span class="step-num">4</span><span>Every 24 hours your daily earnings credit to your balance automatically. When ready, go to ${pg("Me → Withdraw")} to cash out</span></div></div>\n<div class="tip-box">💡 <b>Bonus moves:</b> Go to ${pg("Me → Invite")} to refer friends and earn team income. Check ${pg("Tasks")} daily for easy bonus points!</div>`
 },
 
-// ───────── HOW MINING WORKS ───────────────────────────────────
+// ── HOW MINING WORKS ─────────────────────────────────────────
 {
   tags:["how mining","how does mining","mining work","what is mining","how to mine","how do i mine","start mining","mining process","miner work","explain mining","how earn","how do i earn"],
-  chips:["Which miner should I buy?","How do I recharge?","When do earnings credit?"],
-  answer:()=>`Mining on CryptoJet is <b>100% automatic</b> — no hardware, no technical knowledge needed!\n\n<div class="step-box"><div class="step-title">⛏️ How It Works</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Miner → Purchase")} and buy any miner</span></div><div class="step-item"><span class="step-num">2</span><span>Go to ${pg("Miner → Running")} and tap <b>Start Mining</b></span></div><div class="step-item"><span class="step-num">3</span><span>Your miner runs automatically — a live counter shows earnings in real time</span></div><div class="step-item"><span class="step-num">4</span><span>At cycle end, your earnings are <b>credited to your main balance</b></span></div><div class="step-item"><span class="step-num">5</span><span>Tap <b>Start New Cycle</b> to keep earning — repeat as many times as you want within your plan duration</span></div></div>\n<b>S-900 & S-1200</b> run 24-hour cycles. <b>S-244 & S-500</b> run 48-hour cycles. That's the only difference! 🚀`
+  chips:["Which miner should I buy?","How do I recharge?","How do I withdraw?"],
+  answer:()=>`Mining on CryptoJet is <b>100% automatic</b> — no hardware, no technical knowledge!\n\n<div class="step-box"><div class="step-title">⛏️ How It Works (Auto-Run System)</div><div class="step-item"><span class="step-num">1</span><span>Buy any miner from ${pg("Miner → Levels tab")}</span></div><div class="step-item"><span class="step-num">2</span><span>Your miner <b>starts running immediately</b> on purchase — no tap needed!</span></div><div class="step-item"><span class="step-num">3</span><span>Every <b>24 hours</b>, your daily earnings are automatically credited to your balance</span></div><div class="step-item"><span class="step-num">4</span><span>The miner <b>automatically restarts</b> its next cycle — no manual action ever needed</span></div><div class="step-item"><span class="step-num">5</span><span>This continues until the plan duration expires (30–160 days depending on miner)</span></div></div>\n<div class="tip-box">💡 All miners now use <b>24-hour cycles</b> — once a day your balance grows automatically. Just buy and leave it!</div>`
 },
 
-// ───────── CYCLE DETAILS ─────────────────────────────────────
+// ── CYCLE DETAILS ─────────────────────────────────────────────
 {
-  tags:["48 hour","48hr","24 hour","24hr","cycle","pending balance","when credited","when earn","earnings credited","how long cycle","cycle time","cycle end","earning paused","how long does it take to earn","how long mining"],
-  chips:["What miners are available?","Why isn't my balance updating?","How do I restart my miner?"],
-  answer:()=>`Great question! Here's exactly how cycles work:\n\n<b>S-900 & S-1200 → 24-hour cycles:</b>\n<ul><li>Mine for 24 hours straight</li><li>Earnings credited to your balance at the end of 24 hours</li></ul>\n<b>S-244 & S-500 → 48-hour cycles:</b>\n<ul><li>After 24 hrs: shows your daily amount as <span class="am">pending balance</span> — visible but not credited yet</li><li>After full 48 hrs: full amount credits to your balance</li></ul>\n\nWhen a cycle ends, the miner shows <span class="rd">Earning Paused</span> in red with a <b>Start New Cycle</b> button.\n\n<div class="tip-box">💡 Each miner plan has a total duration (30–45 days). You can run unlimited cycles within that period!</div>`
+  tags:["cycle","24 hour","24hr","when credited","when earn","earnings credited","how long cycle","cycle time","cycle end","how long does it take to earn","auto restart","restart miner","no restart","automatic cycle"],
+  chips:["What miners are available?","Why isn't my balance updating?","How long does the plan last?"],
+  answer:()=>`All miners now use <b>24-hour cycles</b> — here's exactly how it works:\n\n<ul><li>Every <b>24 hours</b>, your daily income is credited to your balance automatically</li><li>The miner <b>auto-restarts</b> immediately — you never need to tap anything</li><li>This repeats every day until your plan's total duration runs out</li></ul>\n\n<b>Example — S-900 ($50):</b>\n<ul><li>Day 1: +$2 credited automatically</li><li>Day 2: +$2 credited automatically</li><li>...continues for 35 days total</li><li>Total earned: <span class="gd">$70</span></li></ul>\n\n<div class="tip-box">💡 When a plan expires, the miner shows <b>Plan Expired</b> — you can buy a new miner to continue earning.</div>`
 },
 
-// ───────── MINERS LIST ───────────────────────────────────────
+// ── ALL MINERS ────────────────────────────────────────────────
 {
-  tags:["miners","miner plan","miner price","how much miner","cost","buy miner","which miner","available miner","miner package","plans","s-244","s-500","s-900","s-1200","s244","s500","s900","s1200","miner list","all miner","miner options","show miners"],
-  chips:["Which miner is best for me?","How do I recharge to buy?","How does the cycle work?"],
-  answer:()=>`Here are all <b>4 CryptoJet miners</b>:\n\n<div class="miner-grid"><div class="mc"><div><div class="mc-name">S-244</div><div class="mc-info">$0.50/day · 48hr cycle · 30-day plan · Can buy ×2</div></div><div class="mc-price">$10</div></div><div class="mc"><div><div class="mc-name">S-500</div><div class="mc-info">$1.50/day · 48hr cycle · 30-day plan</div></div><div class="mc-price">$30</div></div><div class="mc"><div><div class="mc-name">S-900</div><div class="mc-info">$2.00/day · 24hr cycle · 35-day plan</div></div><div class="mc-price">$50</div></div><div class="mc"><div><div class="mc-name">S-1200</div><div class="mc-info">$4.00/day · 24hr cycle · 45-day plan</div></div><div class="mc-price">$120</div></div></div>\nAll miners pay back within <b>25–30 days</b> of consistent use. 💰\n\nYou can buy miners from ${pg("Miner → Purchase tab")}.`
+  tags:["miners","miner plan","miner price","how much miner","cost","buy miner","which miner","available miner","miner package","plans","s-100","s-244","s-500","s-900","s-1200","s100","s244","s500","s900","s1200","miner list","all miner","miner options","show miners","what miners"],
+  chips:["Which miner is best for me?","How do I recharge to buy?","How does auto-run work?"],
+  answer:()=>`Here are all <b>CryptoJet miners</b> by tier:\n\n<div class="miner-grid"><div class="tier-head">⛏️ Novice Tier — Available to All</div><div class="mc"><div><div class="mc-name">S-100 🆕</div><div class="mc-info">$0.20/day · 24hr auto · 30 days · Max ×2</div></div><div class="mc-price">$3</div></div><div class="mc"><div><div class="mc-name">S-244</div><div class="mc-info">$0.50/day · 24hr auto · 30 days · Max ×2</div></div><div class="mc-price">$10</div></div><div class="mc"><div><div class="mc-name">S-500</div><div class="mc-info">$1.50/day · 24hr auto · 30 days</div></div><div class="mc-price">$30</div></div><div class="mc"><div><div class="mc-name">S-900</div><div class="mc-info">$2.00/day · 24hr auto · 35 days</div></div><div class="mc-price">$50</div></div><div class="mc"><div><div class="mc-name">S-1200</div><div class="mc-info">$4.00/day · 24hr auto · 45 days</div></div><div class="mc-price">$120</div></div><div class="tier-head">🥈 Junior+ Tiers — Unlock by Building Team</div><div class="mc"><div><div class="mc-name">JX-200 Turbo</div><div class="mc-info">$5/day · 60 days · Junior Miner required</div></div><div class="mc-price">$200</div></div><div class="mc"><div><div class="mc-name">PX-1000 Apex</div><div class="mc-info">$12/day · 120 days · Pro Miner required</div></div><div class="mc-price">$1,000</div></div><div class="mc"><div><div class="mc-name">EX-1500 Blaze</div><div class="mc-info">$20/day · 120 days · Elite Miner required</div></div><div class="mc-price">$1,500</div></div><div class="mc"><div><div class="mc-name">LX-2200 Titan</div><div class="mc-info">$25/day · 135 days · Legend required</div></div><div class="mc-price">$2,200</div></div><div class="mc"><div><div class="mc-name">EM-4000 Oracle</div><div class="mc-info">$10/day · Unlimited · Employee required</div></div><div class="mc-price">$4,000</div></div></div>\n<div class="tip-box">💡 All miners run <b>automatically</b> — buy and earnings credit daily with zero effort!</div>`
 },
 
-// ───────── BEST MINER ────────────────────────────────────────
+// ── LEVEL SYSTEM ──────────────────────────────────────────────
 {
-  tags:["which miner best","recommend","best miner","suggest miner","what should i buy","which should i get","good investment","worth it","miner recommend","cheapest miner","profitable miner","which one","most profitable"],
-  chips:["How do I recharge?","How does mining work?","What are the exact earnings?"],
-  answer:()=>`Here's my honest recommendation based on your budget:\n\n<ul><li>💡 <b>Just testing the waters?</b> → <b>S-244 ($10)</b> — lowest risk, see how everything works. You can even buy 2 of them!</li><li>🎯 <b>Mid-budget?</b> → <b>S-900 ($50)</b> is the community favourite — $2/day on a 24hr cycle. Clean and consistent.</li><li>💎 <b>Serious earner?</b> → <b>S-1200 ($120)</b> earns $4/day — pays itself back in 30 days, then it's pure profit for 15 more days.</li><li>🔁 <b>Smart combo:</b> Buy <b>2 × S-244</b> (only miner you can buy twice) for $20 total = $1/day combined.</li></ul>\n<div class="tip-box">💡 Start where you're comfortable. Once you see your first earnings hit your balance, scaling up feels natural!</div>\n\nGo to ${pg("Miner → Purchase tab")} to buy.`
+  tags:["level","levels","tier","unlock","junior miner","pro miner","elite miner","legend miner","employee","level up","how to level","miner level","level system","level badge","upgrade","how to unlock","tier system","novice miner","what is level","level requirement"],
+  chips:["How do I build my team?","What miners unlock at each level?","How do referrals work?"],
+  answer:()=>`CryptoJet has a <b>6-level system</b> that unlocks more powerful miners as your team grows!\n\n<div class="step-box"><div class="step-title">🏆 Level Requirements</div><div class="step-item"><span class="step-num">1</span><span><b>Novice Miner</b> — Default level. Access to S-100, S-244, S-500, S-900, S-1200</span></div><div class="step-item"><span class="step-num">2</span><span><b>Junior Miner</b> — 5 L1 active + 20 total active team → unlocks JX-200, JX-500</span></div><div class="step-item"><span class="step-num">3</span><span><b>Pro Miner</b> — 10 L1 active + 50 total active → unlocks PX-1000, PX-2000</span></div><div class="step-item"><span class="step-num">4</span><span><b>Elite Miner</b> — 25 L1 active + 75 total active → unlocks EX-1500, EX-2000</span></div><div class="step-item"><span class="step-num">5</span><span><b>Legend Miner</b> — 50 L1 active + 150 total active → unlocks LX-2200, LX-3000</span></div><div class="step-item"><span class="step-num">6</span><span><b>Employee</b> — 100 L1 active + 500 total active → unlocks EM-4000, EM-5000 (unlimited!)</span></div></div>\n<div class="tip-box">💡 <b>"Active"</b> means team members who currently have a running miner. Grow your team and your mining power grows with it!</div>`
 },
 
-// ───────── RECHARGE (BANK) ───────────────────────────────────
+// ── BEST MINER ────────────────────────────────────────────────
 {
-  tags:["recharge","top up","fund","deposit","add money","add balance","how to pay","how to fund","pay","add credit","load balance","pay in","how to deposit","bank transfer","opay","how to recharge"],
+  tags:["which miner best","recommend","best miner","suggest miner","what should i buy","which should i get","good investment","worth it","miner recommend","cheapest miner","profitable","which one","most profitable","best value"],
+  chips:["How do I recharge?","How does mining work?","What is the level system?"],
+  answer:()=>`Here's my honest recommendation based on budget:\n\n<ul><li>🌱 <b>First time, lowest risk?</b> → <b>S-100 ($3)</b> — the cheapest entry, earns $6 total over 30 days. Perfect to see how it works!</li><li>💡 <b>Testing the waters?</b> → <b>S-244 ($10)</b> — low risk, can buy 2x for $20 total</li><li>🎯 <b>Mid-budget?</b> → <b>S-900 ($50)</b> — community favourite. $2/day automatic, 35 days = $70 total.</li><li>💎 <b>Serious earner?</b> → <b>S-1200 ($120)</b> — $4/day automatic, 45 days = $180 total. Pure passive income.</li><li>🔁 <b>Smart combo:</b> Buy 2×S-244 + 1×S-900 for $70 total = $2.50/day automatic</li></ul>\n<div class="tip-box">💡 All miners auto-run — no effort after purchase. Your balance grows every 24 hours automatically!</div>`
+},
+
+// ── RECHARGE (BANK) ───────────────────────────────────────────
+{
+  tags:["recharge","top up","fund","deposit","add money","add balance","how to pay","how to fund","add credit","load balance","pay in","how to deposit","bank transfer","opay","how to recharge"],
   chips:["How long does approval take?","Can I deposit with USDT?","What's the exchange rate?"],
-  answer:()=>`There are <b>2 ways to recharge</b>. Here's the full guide for bank transfer:\n\n<div class="step-box"><div class="step-title">🏦 Bank Transfer (Opay) — Step by Step</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me → Recharge")} and tap the <b>Bank Transfer tab</b></span></div><div class="step-item"><span class="step-num">2</span><span>Enter your USD amount — the naira equivalent shows automatically (<b>₦1,500 per dollar</b>)</span></div><div class="step-item"><span class="step-num">3</span><span>Transfer the exact naira amount to the <b>Opay account shown</b></span></div><div class="step-item"><span class="step-num">4</span><span>Include the <span class="am">reference code</span> in your transfer narration — this is required!</span></div><div class="step-item"><span class="step-num">5</span><span>Take a clear screenshot of your receipt and upload it on the page</span></div><div class="step-item"><span class="step-num">6</span><span>Tap <b>Submit</b> — admin reviews and approves within <b>3–20 minutes</b> ✅</span></div></div>\n<div class="warn-box">⚠️ <b>Important:</b> Only ONE pending deposit allowed at a time. Wait for your current one to be settled before placing another.</div>`
+  answer:()=>`There are <b>2 ways to recharge</b>. Here's the bank transfer guide:\n\n<div class="step-box"><div class="step-title">🏦 Bank Transfer (Opay) — Step by Step</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me → Recharge")} and tap the <b>Bank Transfer tab</b></span></div><div class="step-item"><span class="step-num">2</span><span>Enter your USD amount — naira equivalent shows automatically (<b>₦1,500 per dollar</b>)</span></div><div class="step-item"><span class="step-num">3</span><span>Transfer the exact naira amount to the <b>Opay account shown</b></span></div><div class="step-item"><span class="step-num">4</span><span>Include the <span class="am">reference code</span> in your transfer narration — this is required!</span></div><div class="step-item"><span class="step-num">5</span><span>Upload a clear screenshot of your receipt</span></div><div class="step-item"><span class="step-num">6</span><span>Tap <b>Submit</b> — admin reviews and approves within <b>3–20 minutes</b> ✅</span></div></div>\n<div class="warn-box">⚠️ Only ONE pending deposit allowed at a time. Wait for approval before submitting another.</div>`
 },
 
-// ───────── RECHARGE (USDT) ───────────────────────────────────
+// ── RECHARGE (USDT) ───────────────────────────────────────────
 {
-  tags:["usdt deposit","crypto deposit","bep20 deposit","trc20 deposit","usdt recharge","deposit usdt","pay usdt","usdt top up","send usdt","usdt transfer"],
+  tags:["usdt deposit","crypto deposit","bep20 deposit","trc20 deposit","usdt recharge","deposit usdt","pay usdt","usdt top up","send usdt"],
   chips:["What's the minimum USDT deposit?","How long does USDT take?","What networks are supported?"],
-  answer:()=>`Here's how to deposit USDT:\n\n<div class="step-box"><div class="step-title">💎 USDT Deposit — Step by Step</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me → Recharge")} and tap the <b>USDT tab</b></span></div><div class="step-item"><span class="step-num">2</span><span>Choose your network: <b>BEP20 (BSC)</b> or <b>TRC20 (TRON)</b></span></div><div class="step-item"><span class="step-num">3</span><span>Copy the wallet address shown — double-check before sending!</span></div><div class="step-item"><span class="step-num">4</span><span>Send USDT from your wallet (MetaMask, Trust Wallet, Binance, etc.)</span></div><div class="step-item"><span class="step-num">5</span><span>Come back and paste your <b>Transaction Hash (TX ID)</b> in the field</span></div><div class="step-item"><span class="step-num">6</span><span>Tap <b>Verify & Submit</b> — blockchain confirms automatically in 1–5 minutes ✅</span></div></div>\n<b>Minimum:</b> <span class="gd">$5 USDT</span>\n<div class="warn-box">⚠️ Always send on the correct network. BEP20 to a BEP20 address, TRC20 to TRC20. Wrong network = funds lost permanently.</div>`
+  answer:()=>`Here's how to deposit USDT:\n\n<div class="step-box"><div class="step-title">💎 USDT Deposit — Step by Step</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me → Recharge")} and tap the <b>USDT tab</b></span></div><div class="step-item"><span class="step-num">2</span><span>Choose your network: <b>BEP20 (BSC)</b> or <b>TRC20 (TRON)</b></span></div><div class="step-item"><span class="step-num">3</span><span>Copy the wallet address shown — double check before sending!</span></div><div class="step-item"><span class="step-num">4</span><span>Send USDT from your wallet</span></div><div class="step-item"><span class="step-num">5</span><span>Come back and paste your <b>Transaction Hash (TX ID)</b></span></div><div class="step-item"><span class="step-num">6</span><span>Tap <b>Verify & Submit</b> — auto-confirmed in 1–5 minutes ✅</span></div></div>\n<b>Minimum:</b> <span class="gd">$3 USDT</span>\n<div class="warn-box">⚠️ Always send on the correct network. Wrong network = funds lost permanently.</div>`
 },
 
-// ───────── RECHARGE APPROVAL TIME ────────────────────────────
+// ── RECHARGE TIME ─────────────────────────────────────────────
 {
-  tags:["how long recharge","recharge time","approval time","how long approve","pending recharge","recharge pending","not approved","waiting recharge","recharge status","3 20 minutes","recharge not credited"],
+  tags:["how long recharge","recharge time","approval time","how long approve","pending recharge","recharge pending","not approved","waiting recharge","recharge not credited"],
   chips:["What if it's taking too long?","How do I check my transactions?","How do I contact support?"],
-  answer:()=>`Recharge approvals usually take <b>3–20 minutes</b> after you submit your receipt.\n\n<b>If it's taking longer, check these:</b>\n<ul><li>✅ Did you upload a <b>clear, readable screenshot</b> of your receipt?</li><li>✅ Did you include the <span class="am">reference code</span> in the bank transfer narration?</li><li>✅ Did you transfer the <b>exact naira amount</b> shown — no rounding?</li><li>✅ Check ${pg("Me → Transaction History")} — is it still showing "Pending"?</li></ul>\n<b>If it's been over 30 minutes</b> and still pending, please tap the <b>Contact Support</b> button below and share your receipt with the team. 🙋`
+  answer:()=>`Recharge approvals usually take <b>3–20 minutes</b> after submitting your receipt.\n\n<b>If it's taking longer, check:</b>\n<ul><li>✅ Did you upload a <b>clear, readable screenshot</b>?</li><li>✅ Did you include the <span class="am">reference code</span> in narration?</li><li>✅ Did you transfer the <b>exact naira amount</b>?</li><li>✅ Check ${pg("Me → Transaction History")} — is it still "Pending"?</li></ul>\n<b>Over 30 minutes?</b> Contact support below with your receipt. 🙋`
 },
 
-// ───────── WITHDRAWAL (BANK) ──────────────────────────────────
+// ── WITHDRAWAL (BANK) ─────────────────────────────────────────
 {
-  tags:["withdraw","withdrawal","cash out","get money","take out","payout","how do i get paid","how to withdraw","request withdrawal","withdraw money","how do i withdraw","bank withdrawal"],
-  chips:["What's the fee?","What days can I withdraw?","How do I save my bank details?"],
-  answer:()=>`Here's the complete guide to withdrawing via bank:\n\n<div class="step-box"><div class="step-title">🏦 Bank Withdrawal — Step by Step</div><div class="step-item"><span class="step-num">1</span><span>First, save your bank details: go to ${pg("Me → Bank Information")}, add your bank name, account number, and set a withdrawal password</span></div><div class="step-item"><span class="step-num">2</span><span>Go to ${pg("Me → Withdraw")} and tap the <b>Bank Transfer tab</b></span></div><div class="step-item"><span class="step-num">3</span><span>Enter the amount you want to withdraw (minimum <b>$10</b>)</span></div><div class="step-item"><span class="step-num">4</span><span>The fee breakdown shows automatically — <span class="am">10% fee</span> is deducted</span></div><div class="step-item"><span class="step-num">5</span><span>Enter your <b>withdrawal password</b> and confirm</span></div><div class="step-item"><span class="step-num">6</span><span>Admin processes within 48 hours ✅</span></div></div>\n<b>Available:</b> <span class="gd">Monday to Friday only</span>\n<div class="tip-box">💡 Sharing your withdrawal proof in ${pg("Feeds")} boosts your <b>Miner Trust Score</b> and gets you priority processing next time!</div>`
+  tags:["withdraw","withdrawal","cash out","get money","take out","payout","how do i get paid","how to withdraw","request withdrawal","withdraw money","bank withdrawal"],
+  chips:["What's the fee?","What days can I withdraw?","Can I withdraw once a day?"],
+  answer:()=>`Here's the complete bank withdrawal guide:\n\n<div class="step-box"><div class="step-title">🏦 Bank Withdrawal — Step by Step</div><div class="step-item"><span class="step-num">1</span><span>First, save your bank details: go to ${pg("Me → Bank Information")}</span></div><div class="step-item"><span class="step-num">2</span><span>Go to ${pg("Me → Withdraw")} and tap <b>Bank Transfer tab</b></span></div><div class="step-item"><span class="step-num">3</span><span>Enter the amount (minimum <b>$3</b>)</span></div><div class="step-item"><span class="step-num">4</span><span>Fee breakdown shows automatically — <span class="am">10% fee</span> deducted</span></div><div class="step-item"><span class="step-num">5</span><span>Enter your <b>withdrawal password</b> and confirm</span></div><div class="step-item"><span class="step-num">6</span><span>Admin processes within 48 hours ✅</span></div></div>\n<b>Available:</b> <span class="gd">Monday to Friday only</span>\n<b>Limit:</b> <span class="am">Once per day maximum</span>\n<div class="tip-box">💡 Share your withdrawal proof in ${pg("Feeds")} to boost your <b>Miner Trust Score</b> and get priority processing!</div>`
 },
 
-// ───────── WITHDRAWAL (USDT) ──────────────────────────────────
+// ── WITHDRAWAL (USDT) ─────────────────────────────────────────
 {
   tags:["usdt withdraw","withdraw usdt","crypto withdraw","bep20 withdraw","withdraw crypto","usdt payout","usdt cashout"],
-  chips:["What's the minimum for USDT withdrawal?","How long does USDT take?","What's the fee?"],
-  answer:()=>`Here's how to withdraw USDT:\n\n<div class="step-box"><div class="step-title">💎 USDT Withdrawal — Step by Step</div><div class="step-item"><span class="step-num">1</span><span>Make sure you have a withdrawal password set at ${pg("Me → Bank Information")}</span></div><div class="step-item"><span class="step-num">2</span><span>Go to ${pg("Me → Withdraw")} and tap the <b>USDT tab</b></span></div><div class="step-item"><span class="step-num">3</span><span>Paste your <b>BEP20 wallet address</b> (must start with <span class="bl">0x</span>) — MetaMask, Trust Wallet, Binance supported</span></div><div class="step-item"><span class="step-num">4</span><span>Enter the amount (minimum <b>$10</b>), check the fee breakdown</span></div><div class="step-item"><span class="step-num">5</span><span>Enter your withdrawal password and submit</span></div><div class="step-item"><span class="step-num">6</span><span>USDT is <b>sent automatically</b> from our wallet on admin approval — usually within minutes ✅</span></div></div>\n<div class="warn-box">⚠️ BEP20 only for withdrawals. Always double-check your wallet address — wrong addresses cannot be recovered.</div>`
+  chips:["What's the minimum for USDT?","How long does it take?","What's the fee?"],
+  answer:()=>`Here's how to withdraw USDT:\n\n<div class="step-box"><div class="step-title">💎 USDT Withdrawal — Step by Step</div><div class="step-item"><span class="step-num">1</span><span>Set a withdrawal password at ${pg("Me → Bank Information")}</span></div><div class="step-item"><span class="step-num">2</span><span>Go to ${pg("Me → Withdraw")} and tap the <b>USDT tab</b></span></div><div class="step-item"><span class="step-num">3</span><span>Paste your <b>BEP20 wallet address</b> (starts with <span class="bl">0x</span>)</span></div><div class="step-item"><span class="step-num">4</span><span>Enter amount (minimum <b>$3</b>), check fee breakdown</span></div><div class="step-item"><span class="step-num">5</span><span>Enter password and confirm</span></div><div class="step-item"><span class="step-num">6</span><span>USDT sent automatically on approval ✅</span></div></div>\n<b>Available:</b> <span class="gd">Any day — including weekends!</span>\n<b>Limit:</b> <span class="am">Once per day maximum</span>\n<div class="warn-box">⚠️ BEP20 only. Double-check your address — wrong addresses cannot be recovered.</div>`
 },
 
-// ───────── WITHDRAWAL DAYS ────────────────────────────────────
+// ── WITHDRAWAL DAILY LIMIT ────────────────────────────────────
+{
+  tags:["once a day","daily limit","how many times","can i withdraw twice","withdraw again","daily withdraw","withdrawal limit","can i withdraw multiple","second withdrawal","another withdrawal today"],
+  chips:["How do I withdraw?","What's the minimum?","What days can I withdraw?"],
+  answer:()=>`<b>You can only withdraw once per day</b> — this applies to both bank and USDT withdrawals.\n\nIf you've already withdrawn today, you'll need to wait until tomorrow to submit another request.\n\n<div class="tip-box">💡 Plan your withdrawals! If you have a large balance, you can request bigger single withdrawals instead of multiple small ones.</div>`
+},
+
+// ── WITHDRAWAL DAYS ───────────────────────────────────────────
 {
   tags:["what day","which day","monday","saturday","sunday","weekend","withdraw day","available days","when can i withdraw","withdrawal days","what days withdraw"],
   chips:["How do I withdraw?","What's the fee?","Can I withdraw USDT any day?"],
-  answer:()=>`<b>Bank withdrawals</b> are processed <span class="gd">Monday to Friday only</span>.\n\nIf you submit on Saturday or Sunday, your request will queue and be processed first thing on Monday.\n\n<b>USDT withdrawals</b> are available <span class="gd">any day</span> — they're sent automatically from our wallet once approved, so no weekend restrictions.\n\n<div class="tip-box">💡 Share your withdrawal proof in ${pg("Feeds")} to build your Miner Trust Score and get priority processing!</div>`
+  answer:()=>`<b>Bank withdrawals:</b> <span class="gd">Monday to Friday only</span>\n\nOn weekends, the withdrawal form is disabled. Requests queue and are processed first on Monday.\n\n<b>USDT withdrawals:</b> <span class="gd">Any day, including weekends!</span> — sent automatically from our wallet on approval.\n\n<b>Both methods:</b> <span class="am">Maximum once per day</span>\n\n<div class="tip-box">💡 Share your withdrawal proof in ${pg("Feeds")} to build your Miner Trust Score and get priority processing!</div>`
 },
 
-// ───────── WITHDRAWAL FEE ─────────────────────────────────────
+// ── WITHDRAWAL FEE ────────────────────────────────────────────
 {
-  tags:["fee","charge","deduction","percent","withdrawal fee","10 percent","10%","deducted","how much fee","how much deducted","fee on withdrawal"],
-  chips:["How do I withdraw?","Minimum withdrawal amount?","Which days can I withdraw?"],
-  answer:()=>`The withdrawal fee is <b>10% on all withdrawals</b> — both bank and USDT.\n\nIt's automatically deducted when you submit.\n\n<b>Examples:</b>\n<ul><li>Withdraw $10 → receive <span class="gd">$9.00</span></li><li>Withdraw $50 → receive <span class="gd">$45.00</span></li><li>Withdraw $100 → receive <span class="gd">$90.00</span></li><li>Withdraw $200 → receive <span class="gd">$180.00</span></li></ul>\nThe exact breakdown (requested, fee, you receive) is shown on the ${pg("Withdraw page")} before you confirm. No surprises! 💸`
+  tags:["fee","charge","deduction","percent","withdrawal fee","10 percent","10%","deducted","how much fee","fee on withdrawal"],
+  chips:["How do I withdraw?","Minimum withdrawal?","Which days can I withdraw?"],
+  answer:()=>`The withdrawal fee is <b>10% on all withdrawals</b> — both bank and USDT.\n\n<b>Examples:</b>\n<ul><li>Withdraw $3 → receive <span class="gd">$2.70</span></li><li>Withdraw $10 → receive <span class="gd">$9.00</span></li><li>Withdraw $50 → receive <span class="gd">$45.00</span></li><li>Withdraw $100 → receive <span class="gd">$90.00</span></li></ul>\nThe exact breakdown is shown on the ${pg("Withdraw page")} before you confirm. No surprises! 💸`
 },
 
-// ───────── TEAM INCOME ───────────────────────────────────────
-{
-  tags:["team income","team balance","team money","what is team","team page","team earning","passive income from team","team funds","my team balance","team withdrawal","can i withdraw team","team income withdraw","use team income"],
-  chips:["How do I invite people?","What are the referral percentages?","Can I use team income to buy a miner?"],
-  answer:()=>`<b>Team income</b> is passive money you earn when people you referred complete their mining cycles.\n\n<div class="warn-box">🚫 <b>Important:</b> Team income <b>CANNOT be withdrawn</b> as cash. It can <b>only be used to buy miners</b>.</div>\n\n<b>How team income works:</b>\n<ul><li>🥇 <b>Level 1</b> (people you directly invited) → <span class="gd">10%</span> of their cycle earnings</li><li>🥈 <b>Level 2</b> (their referrals) → <span class="gd">4%</span> of their cycle earnings</li><li>🥉 <b>Level 3</b> (next level down) → <span class="gd">2%</span> of their cycle earnings</li></ul>\n<b>What you CAN do with team income:</b>\n<ul><li>✅ Use it to purchase any miner (deducted automatically at checkout)</li></ul>\n\nView your full team earnings history on ${pg("Me → Team Records")}. 📊`
-},
-
-// ───────── REFERRAL / INVITE ──────────────────────────────────
-{
-  tags:["referral","refer","invite","link","how to refer","referral link","share link","invite friend","bonus","referral code","invite people","how to invite","where is referral","get referral link"],
-  chips:["What are the referral percentages?","Where do I find my referral link?","What can I do with team income?"],
-  answer:()=>`<b>Refer friends and earn team income passively!</b>\n\n<div class="step-box"><div class="step-title">👥 How to Refer Friends</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me → Invite")}</span></div><div class="step-item"><span class="step-num">2</span><span>Copy your unique referral link</span></div><div class="step-item"><span class="step-num">3</span><span>Share it with friends on WhatsApp, Telegram, anywhere</span></div><div class="step-item"><span class="step-num">4</span><span>When they sign up and mine, you automatically earn a % of their cycle earnings</span></div><div class="step-item"><span class="step-num">5</span><span>Your team income builds up over time and can be used to <b>buy new miners</b></span></div></div>\n<b>Percentages:</b> <span class="gd">10%</span> Level 1 → <span class="gd">4%</span> Level 2 → <span class="gd">2%</span> Level 3\n\n<div class="warn-box">🚫 Team income cannot be withdrawn — use it to buy miners and grow your mining power!</div>`
-},
-
-// ───────── BANK SETTINGS ─────────────────────────────────────
-{
-  tags:["bank detail","add bank","bank information","bank setting","bank page","account number","bank name","save bank","bank account","my bank","set bank","change bank","add account","where bank","find bank page"],
-  chips:["How do I set withdrawal password?","How do I withdraw?","What banks are supported?"],
-  answer:()=>`Here's how to save your bank details:\n\n<div class="step-box"><div class="step-title">🏦 Adding Bank Details</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me tab")} at the bottom navigation</span></div><div class="step-item"><span class="step-num">2</span><span>Tap <b>Bank Information</b></span></div><div class="step-item"><span class="step-num">3</span><span>Enter your bank name and account number</span></div><div class="step-item"><span class="step-num">4</span><span>Set a secure <b>withdrawal password</b> — you'll need this every time you withdraw</span></div><div class="step-item"><span class="step-num">5</span><span>Tap <b>Save</b></span></div></div>\n<div class="warn-box">⚠️ Double-check your account number before saving — wrong account numbers cannot be reversed. This is your real bank account where money will be sent.</div>`
-},
-
-// ───────── WITHDRAWAL PASSWORD ───────────────────────────────
-{
-  tags:["withdrawal password","withdraw password","set password","forgot password","no password","create password","change password","reset password","password for withdrawal","where to set password"],
-  chips:["Where do I set my password?","What if I forget my password?","How do I withdraw?"],
-  answer:()=>`The <b>withdrawal password</b> is a security PIN set on the ${pg("Me → Bank Information")} page.\n\nYou enter it every time you request a withdrawal — it stops unauthorised cashouts.\n\n<b>If you forget it:</b>\n<div class="step-box"><div class="step-title">🔐 Reset Forgotten Password</div><div class="step-item"><span class="step-num">1</span><span>Go to the ${pg("Sign In page")}</span></div><div class="step-item"><span class="step-num">2</span><span>Tap <b>Forgot Password?</b> (only visible on Sign In mode)</span></div><div class="step-item"><span class="step-num">3</span><span><b>Email users:</b> Enter your email → get a 6-digit reset code → enter code → set new password</span></div><div class="step-item"><span class="step-num">4</span><span><b>Phone users:</b> Enter your number → add a recovery email → get reset code sent there</span></div></div>`
-},
-
-// ───────── BALANCE NOT UPDATING ───────────────────────────────
-{
-  tags:["balance not update","balance wrong","not showing","balance not adding","why balance","balance issue","not adding","earnings not showing","where money","balance not change","why not adding","balance stuck","not credited","my balance"],
-  chips:["How do cycles work?","Is my miner still running?","How do I restart my miner?"],
-  answer:()=>`This is completely normal! Here's why:\n\n<b>Balance only updates at the END of a complete cycle:</b>\n<ul><li>The <b>live counter</b> on your miner shows real-time decimals — that's just a display, not your real balance yet</li><li><b>S-900 / S-1200 (24hr):</b> balance updates after the full 24 hours</li><li><b>S-244 / S-500 (48hr):</b> you'll see "pending balance" after 24hrs but it only credits after the full 48 hours</li></ul>\n<b>Quick checklist:</b>\n<ul><li>✅ Is your miner still running? Check ${pg("Miner → Running tab")}</li><li>✅ Did the cycle complete? Look for the red <span class="rd">Earning Paused</span> message</li><li>✅ If paused — tap <b>Start New Cycle</b> and it credits immediately when that cycle ends</li></ul>\n<div class="tip-box">💡 Balance updates happen automatically when a cycle ends — you don't need to do anything special!</div>`
-},
-
-// ───────── MINER PAUSED ──────────────────────────────────────
-{
-  tags:["earning paused","miner paused","miner stopped","how to restart","start new cycle","restart miner","miner not running","miner inactive","cycle ended","paused","miner expired","miner done","how do i restart"],
-  chips:["How long is one cycle?","Why didn't my balance update?","How does mining work?"],
-  answer:()=>`When you see <span class="rd">Earning Paused</span> in red, it means a cycle just ended — and your earnings have been credited to your balance. 🎉\n\n<div class="step-box"><div class="step-title">🔄 How to Start a New Cycle</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Miner → Running tab")}</span></div><div class="step-item"><span class="step-num">2</span><span>Find the paused miner (it shows the red "Earning Paused" badge)</span></div><div class="step-item"><span class="step-num">3</span><span>Tap <b>Start New Cycle</b></span></div><div class="step-item"><span class="step-num">4</span><span>A fresh cycle begins immediately — earnings start accumulating again!</span></div></div>\n<div class="tip-box">💡 You can run unlimited cycles within your plan duration (30–45 days depending on the miner). Make sure to restart promptly so you don't waste time!</div>`
-},
-
-// ───────── TASKS & POINTS ────────────────────────────────────
-{
-  tags:["task","point","daily check","check in","social task","earn point","how points","telegram task","trust score","redeem","points system","ui points","tasks page","daily bonus","streak"],
-  chips:["How does trust score help?","Where is the Tasks page?","How do referrals work?"],
-  answer:()=>`<b>Tasks & Points</b> build your <b>Miner Trust Score</b> — which unlocks priority withdrawals!\n\n<b>Where to find it:</b> ${pg("Tasks tab")} in the bottom navigation or ${pg("Dashboard → Tasks")}\n\n<b>How to earn points:</b>\n<ul><li>📅 <b>Daily check-in</b> — tap once every 24 hours for +1 point. Build a streak!</li><li>📱 <b>Social tasks</b> — Follow on Telegram, WhatsApp, Facebook, Twitter, Instagram = <b>+2 points each</b></li></ul>\n<b>Why trust score matters:</b>\n<ul><li>🏅 Higher score = <b>priority withdrawal processing</b></li><li>Sharing withdrawal proof in ${pg("Feeds")} also boosts your score</li></ul>`
-},
-
-// ───────── FEEDS / COMMUNITY ──────────────────────────────────
-{
-  tags:["feed","community","post","share","withdrawal proof","proof","community feed","boost trust","feeds page","react","emoji","community post"],
-  chips:["How does trust score work?","How do I share proof?","What is Miner Trust Score?"],
-  answer:()=>`The ${pg("Feeds page")} is CryptoJet's community hub!\n\n<b>What you can do there:</b>\n<ul><li>📢 See platform announcements and updates</li><li>😊 React to posts with emojis</li><li>🏆 Share your withdrawal screenshots as proof</li></ul>\n<b>Why sharing proof matters:</b>\n<ul><li>Every withdrawal proof you post <b>boosts your Miner Trust Score</b></li><li>Higher trust score = <span class="gd">priority withdrawal processing</span></li><li>It also helps new users see that CryptoJet pays! 🤝</li></ul>\n\nAccess it from ${pg("Feeds tab")} in bottom navigation or ${pg("Dashboard → Feeds")}.`
-},
-
-// ───────── SIGN IN / SIGN UP ──────────────────────────────────
-{
-  tags:["sign in","sign up","login","create account","register","how to sign","new account","email sign","phone sign","google sign","how to create account","cant sign in","cant login","sign in problem"],
-  chips:["I forgot my password","Why do I need to verify email?","Can I sign in with Google?"],
-  answer:()=>`CryptoJet supports <b>3 ways to sign up or sign in</b>:\n\n<ul><li>✉️ <b>Email</b> — new accounts must verify email before first login. Check inbox + spam!</li><li>📱 <b>Phone</b> — 20 country codes supported. No OTP or verification needed — just number + password.</li><li>🔵 <b>Google</b> — one tap, automatic account creation if you're new.</li></ul>\n\nAll sign in options are on the ${pg("Sign In page")}.\n\n<b>Existing users</b> created before the verification system was added can sign in without re-verifying. ✅`
-},
-
-// ───────── EMAIL VERIFICATION ─────────────────────────────────
-{
-  tags:["verify email","verification","not verified","email verify","check email","verify my email","didnt receive","resend verification","spam","email not arriving","verification link","confirm email"],
-  chips:["Resend verification email","I'd rather sign up with phone","How do I sign in?"],
-  answer:()=>`After signing up with email, a <b>verification link</b> is sent to your inbox.\n\n<div class="step-box"><div class="step-title">📧 Email Verification Steps</div><div class="step-item"><span class="step-num">1</span><span>Check your email inbox for a message from CryptoJet</span></div><div class="step-item"><span class="step-num">2</span><span>Check your <b>Spam / Junk folder</b> too — it often goes there</span></div><div class="step-item"><span class="step-num">3</span><span>Click the verification link in the email</span></div><div class="step-item"><span class="step-num">4</span><span>Come back to ${pg("Sign In page")} and log in normally</span></div></div>\n\n<b>Didn't receive it?</b> On the sign in page, enter your email + password, tap Sign In — a <span class="hl">Resend email</span> link appears automatically.\n\n<b>Easier option:</b> Sign up with <b>phone number or Google</b> — no verification needed at all! 📱`
-},
-
-// ───────── EXCHANGE RATE ─────────────────────────────────────
-{
-  tags:["exchange rate","naira","ngn","how much naira","rate","dollar to naira","1500","conversion","usd to ngn","naira rate","how much is dollar","current rate"],
-  chips:["How do I recharge?","How much does the S-900 cost in naira?","Can I deposit USDT instead?"],
-  answer:()=>`The bank transfer exchange rate on CryptoJet is:\n\n<b>$1 USD = ₦1,500</b>\n\n<b>Quick reference:</b>\n<ul><li>S-244 ($10) → transfer <span class="gd">₦15,000</span></li><li>S-500 ($30) → transfer <span class="gd">₦45,000</span></li><li>S-900 ($50) → transfer <span class="gd">₦75,000</span></li><li>S-1200 ($120) → transfer <span class="gd">₦180,000</span></li></ul>\nThe exact naira amount for your chosen USD is shown automatically on ${pg("Recharge → Bank Transfer")} when you enter your amount. 💵`
-},
-
-// ───────── MINIMUMS ──────────────────────────────────────────
+// ── MINIMUMS ──────────────────────────────────────────────────
 {
   tags:["minimum","min deposit","min withdraw","minimum deposit","minimum withdrawal","lowest amount","smallest","how much minimum","least i can","minimum amount"],
   chips:["How do I recharge?","How do I withdraw?","What are the fees?"],
-  answer:()=>`Here are all the minimums on CryptoJet:\n\n<ul><li>💰 <b>Minimum USDT deposit:</b> <span class="gd">$5</span></li><li>🏦 <b>Bank deposit:</b> No stated minimum — deposit what you need</li><li>💸 <b>Minimum withdrawal (bank or USDT):</b> <span class="gd">$10</span></li><li>⛏️ <b>Cheapest miner:</b> <span class="gd">$10</span> (S-244)</li></ul>\n<div class="tip-box">💡 Remember: 10% fee on withdrawals. So $10 withdrawal → you receive $9. Plan accordingly!</div>`
+  answer:()=>`Here are all the minimums on CryptoJet:\n\n<ul><li>⛏️ <b>Cheapest miner:</b> <span class="gd">$3</span> (S-100)</li><li>💰 <b>Minimum bank deposit:</b> No hard minimum — deposit what you need</li><li>💎 <b>Minimum USDT deposit:</b> <span class="gd">$3</span></li><li>💸 <b>Minimum withdrawal (bank or USDT):</b> <span class="gd">$3</span></li><li>🔁 <b>Withdrawal limit:</b> Once per day maximum</li></ul>\n<div class="tip-box">💡 10% fee on withdrawals. So a $3 withdrawal → you receive $2.70. The exact amount is shown before you confirm.</div>`
 },
 
-// ───────── TRANSACTION HISTORY ───────────────────────────────
+// ── TEAM INCOME ───────────────────────────────────────────────
 {
-  tags:["transaction","history","transaction history","past transaction","my transactions","see transaction","all transaction","view transaction","check my deposit","check my withdrawal","where do i see"],
-  chips:["Why is my deposit still pending?","How do I recharge?","How do I withdraw?"],
-  answer:()=>`You can view all your transactions on the ${pg("Transaction History page")}.\n\n<b>How to get there:</b>\n<ul><li>Go to ${pg("Me tab")} → tap <b>Transaction History</b></li></ul>\n\n<b>What you'll see:</b>\n<ul><li>All deposits and withdrawals with their dates and amounts</li><li>Status: <span class="gd">Approved</span>, <span class="am">Pending</span>, or <span class="rd">Rejected</span></li><li>Payment method (Bank or USDT)</li></ul>\n\nUpdates happen in real time — the moment admin acts on a transaction, the status changes instantly. 📋`
+  tags:["team income","team balance","team money","what is team","team page","team earning","passive income from team","team funds","my team balance","team withdrawal","can i withdraw team","team income withdraw","use team income"],
+  chips:["How do I invite people?","What are the referral percentages?","Can I use team income to buy a miner?"],
+  answer:()=>`<b>Team income</b> is passive money you earn when your referrals complete mining cycles.\n\n<div class="warn-box">🚫 <b>Important:</b> Team income <b>CANNOT be withdrawn</b> as cash. It can <b>only be used to buy miners</b>.</div>\n\n<b>How team income works:</b>\n<ul><li>🥇 <b>Level 1</b> (direct referrals) → <span class="gd">10%</span> of their cycle earnings</li><li>🥈 <b>Level 2</b> (their referrals) → <span class="gd">4%</span> of their cycle earnings</li><li>🥉 <b>Level 3</b> (next level down) → <span class="gd">2%</span> of their cycle earnings</li></ul>\n<b>What you CAN do with team income:</b>\n<ul><li>✅ Use it at checkout to buy any miner (deducted automatically)</li></ul>\n\nView earnings history on ${pg("Me → Team Records")}. 📊`
 },
 
-// ───────── MINER ID ──────────────────────────────────────────
+// ── REFERRAL / INVITE ─────────────────────────────────────────
+{
+  tags:["referral","refer","invite","link","how to refer","referral link","share link","invite friend","bonus","referral code","invite people","how to invite","where is referral","get referral link"],
+  chips:["What are the referral percentages?","Where do I find my referral link?","What about reward points?"],
+  answer:()=>`<b>Refer friends and earn team income + reward points!</b>\n\n<div class="step-box"><div class="step-title">👥 How to Refer Friends</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me → Invite")}</span></div><div class="step-item"><span class="step-num">2</span><span>Copy your unique referral link or share your Miner ID code</span></div><div class="step-item"><span class="step-num">3</span><span>When they sign up with your link → you earn <span class="gd">3 points</span> instantly</span></div><div class="step-item"><span class="step-num">4</span><span>When they buy a miner → you earn <span class="am">reward points</span> (50–8000 depending on miner)</span></div><div class="step-item"><span class="step-num">5</span><span>When they mine → you earn <span class="gd">team income</span> (10% L1, 4% L2, 2% L3)</span></div></div>\n<div class="warn-box">🚫 Team income cannot be withdrawn — use it to buy miners and compound your earnings!</div>`
+},
+
+// ── REWARD POINTS ─────────────────────────────────────────────
+{
+  tags:["reward","points","pending reward","claim points","referral points","miner reward","signup reward","reward page","claim reward","how points","reward system","point claim"],
+  chips:["How do I claim my points?","Where is the rewards page?","How do referrals give points?"],
+  answer:()=>`<b>Reward points</b> are earned through referrals and can be claimed on the ${pg("Rewards page")}!\n\n<b>How to earn points:</b>\n<ul><li>👤 Someone signs up with your link → <span class="gd">+3 points</span></li><li>⛏️ They buy S-100 → <span class="gd">+30 points</span></li><li>⛏️ They buy S-244 → <span class="gd">+50 points</span></li><li>⛏️ They buy S-900 → <span class="gd">+100 points</span></li><li>⛏️ They buy S-1200 → <span class="gd">+200 points</span></li><li>⛏️ Higher tier miners → up to <span class="gd">8,000 points!</span></li></ul>\n<b>How to claim:</b>\n<ul><li>Go to ${pg("Rewards page")}</li><li>Tap <b>Claim</b> next to any miner with pending points</li><li>Points are added to your total immediately</li><li>Each referral purchase can be claimed again next time!</li></ul>\n<div class="tip-box">💡 Signup points are shown in the <b>Signup Referral tab</b>. Miner purchase points are in the <b>Miner Referral tab</b>.</div>`
+},
+
+// ── BANK SETTINGS ─────────────────────────────────────────────
+{
+  tags:["bank detail","add bank","bank information","bank setting","bank page","account number","bank name","save bank","bank account","my bank","set bank","change bank","add account","where bank"],
+  chips:["How do I set withdrawal password?","How do I withdraw?","What banks are supported?"],
+  answer:()=>`Here's how to save your bank details:\n\n<div class="step-box"><div class="step-title">🏦 Adding Bank Details</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me tab")} → tap <b>Bank Information</b></span></div><div class="step-item"><span class="step-num">2</span><span>Enter your bank name and account number</span></div><div class="step-item"><span class="step-num">3</span><span>Set a secure <b>withdrawal password</b> — needed every time you withdraw</span></div><div class="step-item"><span class="step-num">4</span><span>Tap <b>Save</b></span></div></div>\n<div class="warn-box">⚠️ Double-check your account number before saving — wrong account numbers cannot be reversed.</div>`
+},
+
+// ── WITHDRAWAL PASSWORD ───────────────────────────────────────
+{
+  tags:["withdrawal password","withdraw password","set password","forgot password","no password","create password","change password","reset password","password for withdrawal"],
+  chips:["Where do I set my password?","How do I withdraw?"],
+  answer:()=>`The <b>withdrawal password</b> is set on ${pg("Me → Bank Information")}.\n\nYou enter it every time you request a withdrawal — it prevents unauthorised cashouts.\n\n<b>If you forget it:</b>\n<div class="step-box"><div class="step-title">🔐 Reset Forgotten Password</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Sign In page")}</span></div><div class="step-item"><span class="step-num">2</span><span>Tap <b>Forgot Password?</b></span></div><div class="step-item"><span class="step-num">3</span><span>Email users: enter email → get 6-digit code → set new password</span></div><div class="step-item"><span class="step-num">4</span><span>Phone users: enter number → add recovery email → get reset code</span></div></div>`
+},
+
+// ── BALANCE NOT UPDATING ──────────────────────────────────────
+{
+  tags:["balance not update","balance wrong","not showing","balance not adding","why balance","balance issue","not adding","earnings not showing","where money","balance not change","balance stuck","not credited","my balance","balance decimal","balance shows","balance display"],
+  chips:["How do cycles work?","Is my miner still running?","How long does a plan last?"],
+  answer:()=>`Balance updates automatically every 24 hours when a cycle completes. Here's what to know:\n\n<ul><li>The live counter on your miner shows real-time progress — that's a preview, not your real balance yet</li><li>At the end of each <b>24-hour cycle</b>, your daily income is credited automatically</li><li>Your balance now shows <b>decimal values</b> (e.g. $4.70) for accuracy</li><li>No action needed — it all happens automatically!</li></ul>\n\n<b>Quick checklist if balance seems wrong:</b>\n<ul><li>✅ Check ${pg("Miner → Running tab")} — is the miner still active?</li><li>✅ Check ${pg("Me → Transaction History")} — are earnings showing?</li><li>✅ If the miner shows <b>Plan Expired</b> — buy a new miner to continue earning</li></ul>`
+},
+
+// ── MINER EXPIRED ─────────────────────────────────────────────
+{
+  tags:["plan expired","miner expired","duration ended","miner done","plan ended","expired","30 days","35 days","45 days","plan duration","how long plan","miner end","when does miner expire","miner duration"],
+  chips:["How do I buy a new miner?","How does auto-run work?","Which miner should I buy next?"],
+  answer:()=>`When a miner's plan expires (e.g. after 30 days for S-244), it shows <b>Plan Expired</b> and stops earning.\n\n<b>What to do:</b>\n<ul><li>Go to ${pg("Miner → Levels tab")}</li><li>Buy the same or a higher tier miner</li><li>It starts running automatically immediately on purchase</li></ul>\n\n<b>Plan durations by miner:</b>\n<ul><li>S-100, S-244, S-500 → <span class="gd">30 days</span></li><li>S-900 → <span class="gd">35 days</span></li><li>S-1200 → <span class="gd">45 days</span></li><li>JX-200 → 60 days, PX miners → 120–150 days</li><li>EM miners → <span class="gd">Unlimited — never expires!</span></li></ul>\n<div class="tip-box">💡 Employee tier miners (EM-4000, EM-5000) run forever with no expiry — worth it for serious long-term earners!</div>`
+},
+
+// ── TASKS & POINTS ────────────────────────────────────────────
+{
+  tags:["task","daily check","check in","social task","earn point","how points","telegram task","trust score","tasks page","daily bonus","streak"],
+  chips:["How does trust score help?","Where is the Tasks page?","How do referrals work?"],
+  answer:()=>`<b>Tasks & Points</b> build your <b>Miner Trust Score</b> — which unlocks priority withdrawals!\n\n<b>Find it at:</b> ${pg("Tasks tab")}\n\n<b>How to earn points:</b>\n<ul><li>📅 <b>Daily check-in</b> — +1 point every 24 hours. Build a streak!</li><li>📱 <b>Social tasks</b> — Follow on Telegram, WhatsApp, etc. = <b>+2 points each</b></li><li>👥 <b>Referral signup</b> — someone signs up with your link = <b>+3 points</b></li><li>⛏️ <b>Referral miner purchase</b> — they buy a miner = <b>50 to 8,000 points</b></li></ul>\n<div class="tip-box">💡 Higher trust score = priority withdrawal processing. Share withdrawal proof in ${pg("Feeds")} too!</div>`
+},
+
+// ── FEEDS / COMMUNITY ─────────────────────────────────────────
+{
+  tags:["feed","community","post","share","withdrawal proof","proof","community feed","boost trust","feeds page","react"],
+  chips:["How does trust score work?","How do I share proof?"],
+  answer:()=>`The ${pg("Feeds page")} is CryptoJet's community hub!\n\n<b>What you can do:</b>\n<ul><li>📢 See platform announcements</li><li>😊 React to posts with emojis</li><li>🏆 Share your withdrawal screenshots</li></ul>\n<b>Why sharing proof matters:</b>\n<ul><li>Every withdrawal proof posted <b>boosts your Miner Trust Score</b></li><li>Higher score = <span class="gd">priority withdrawal processing</span></li><li>It also helps new users trust the platform! 🤝</li></ul>`
+},
+
+// ── SIGN IN / SIGN UP ─────────────────────────────────────────
+{
+  tags:["sign in","sign up","login","create account","register","how to sign","new account","email sign","phone sign","google sign","cant sign in","sign in problem"],
+  chips:["I forgot my password","Can I sign in with Google?"],
+  answer:()=>`CryptoJet supports <b>3 ways to sign up or sign in</b>:\n\n<ul><li>✉️ <b>Email</b> — verify email before first login. Check inbox + spam!</li><li>📱 <b>Phone</b> — 20+ country codes supported. No OTP needed.</li><li>🔵 <b>Google</b> — one tap, automatic account creation.</li></ul>\nAll options are on the ${pg("Sign In page")}.`
+},
+
+// ── EXCHANGE RATE ─────────────────────────────────────────────
+{
+  tags:["exchange rate","naira","ngn","how much naira","rate","dollar to naira","1500","conversion","usd to ngn","naira rate","how much is dollar"],
+  chips:["How do I recharge?","Can I deposit USDT instead?"],
+  answer:()=>`The bank transfer exchange rate is:\n\n<b>$1 USD = ₦1,500</b>\n\n<b>Quick reference:</b>\n<ul><li>S-100 ($3) → transfer <span class="gd">₦4,500</span></li><li>S-244 ($10) → transfer <span class="gd">₦15,000</span></li><li>S-500 ($30) → transfer <span class="gd">₦45,000</span></li><li>S-900 ($50) → transfer <span class="gd">₦75,000</span></li><li>S-1200 ($120) → transfer <span class="gd">₦180,000</span></li></ul>\nThe exact naira amount shows automatically on ${pg("Recharge → Bank Transfer")} when you type your USD amount. 💵`
+},
+
+// ── TRANSACTION HISTORY ───────────────────────────────────────
+{
+  tags:["transaction","history","transaction history","past transaction","my transactions","see transaction","all transaction","view transaction","check my deposit","check my withdrawal"],
+  chips:["Why is my deposit pending?","How do I recharge?","How do I withdraw?"],
+  answer:()=>`View all your transactions on ${pg("Me → Transaction History")}.\n\n<b>What you'll see:</b>\n<ul><li>All deposits and withdrawals with dates and amounts</li><li>Status: <span class="gd">Approved</span>, <span class="am">Pending</span>, or <span class="rd">Rejected</span></li><li>Payment method (Bank or USDT)</li></ul>\nUpdates are real-time — the moment admin acts, your status changes instantly. 📋`
+},
+
+// ── MINER ID ──────────────────────────────────────────────────
 {
   tags:["miner id","what is cj","my id","user id","account id","find my id","cj number","what is my id","where is my id","my cryptojet id"],
-  chips:["Where can I see my Miner ID?","How do I contact support?","How do I sign in?"],
-  answer:()=>`Your <b>Miner ID</b> is your unique CryptoJet account code — it looks like <span class="gd">CJ1234</span> and is assigned at account creation.\n\n<b>Where to find it:</b>\n<ul><li>${pg("dashboard")} — shown on your user card at the top</li><li>${pg("Me tab")} — shown in your profile section</li></ul>\n\nAlways have it ready when contacting support — it helps the team find your account instantly! 🆔`
+  chips:["Where can I see my Miner ID?","How do I contact support?"],
+  answer:()=>`Your <b>Miner ID</b> is your unique account code — looks like <span class="gd">CJ1234</span>.\n\n<b>Find it at:</b>\n<ul><li>${pg("Dashboard")} — shown on your user card</li><li>${pg("Me tab")} — shown in your profile</li></ul>\nAlways have it ready when contacting support! 🆔`
 },
 
-// ───────── ABOUT CRYPTOJET ───────────────────────────────────
+// ── USDT NETWORKS ─────────────────────────────────────────────
 {
-  tags:["about cryptojet","what is cryptojet","about this app","platform info","is it legit","is it real","is it safe","scam","fraud","trustworthy","real platform","how does cryptojet work","legitimate"],
+  tags:["bep20","trc20","binance smart chain","tron network","network","which network","usdt network","bnb chain"],
+  chips:["How do I deposit USDT?","How do I withdraw USDT?"],
+  answer:()=>`CryptoJet supports two USDT networks:\n\n<b>For deposits:</b>\n<ul><li>✅ <b>BEP20 (BSC)</b> — ultra-low fees, auto-verified</li><li>✅ <b>TRC20 (TRON)</b> — near-zero fees, also auto-verified</li></ul>\n<b>For withdrawals:</b>\n<ul><li>✅ <b>BEP20 only</b> — wallet must start with <span class="bl">0x</span></li></ul>\n<div class="warn-box">⚠️ Always match network to network. Wrong network = permanent loss of funds.</div>`
+},
+
+// ── ABOUT CRYPTOJET ───────────────────────────────────────────
+{
+  tags:["about cryptojet","what is cryptojet","about this app","platform info","is it legit","is it real","is it safe","scam","fraud","trustworthy","real platform","legitimate"],
   chips:["How does mining work?","How do I get started?","How do I withdraw?"],
-  answer:()=>`<b>CryptoJet</b> is a Nigerian cloud mining investment platform launched in 2026. No hardware needed — everything runs online through your phone or browser.\n\n<b>What makes it trustworthy:</b>\n<ul><li>✅ All deposits manually reviewed before crediting</li><li>✅ USDT withdrawals sent automatically from a verified on-chain wallet</li><li>✅ Every user has full transaction history visibility</li><li>✅ Withdrawal password protection on every cashout</li><li>✅ Real-time balance updates the moment a transaction is approved</li><li>✅ 3-level referral team income system rewards active community members</li></ul>\n\nThousands of Nigerians are already earning daily. The process is simple: recharge → buy a miner → start → earn → repeat. 🇳🇬🚀`
+  answer:()=>`<b>CryptoJet</b> is a Nigerian cloud mining investment platform launched in 2026. No hardware needed — everything runs automatically through your phone or browser.\n\n<b>What makes it trustworthy:</b>\n<ul><li>✅ All deposits manually reviewed before crediting</li><li>✅ USDT withdrawals sent automatically from a verified on-chain wallet</li><li>✅ Full transaction history visibility for every user</li><li>✅ Withdrawal password protection on every cashout</li><li>✅ Daily withdrawal limit (once per day) protects your account</li><li>✅ 6-level system rewards active community builders</li><li>✅ All miners auto-run — no tricks, no manual steps</li></ul>\nThousands of Nigerians are earning daily. Recharge → buy a miner → earn automatically. 🇳🇬🚀`
 },
 
-// ───────── USDT NETWORKS ─────────────────────────────────────
+// ── SUPPORT ───────────────────────────────────────────────────
 {
-  tags:["bep20","trc20","binance smart chain","tron network","network","which network","what network","usdt network","crypto network","bnb chain"],
-  chips:["How do I deposit USDT?","How do I withdraw USDT?","What's the minimum?"],
-  answer:()=>`CryptoJet supports two USDT networks:\n\n<b>For deposits (Recharge):</b>\n<ul><li>✅ <b>BEP20 (Binance Smart Chain)</b> — ultra-low fees (~$0.05–0.20), auto-verified</li><li>✅ <b>TRC20 (TRON)</b> — near-zero fees, also auto-verified</li></ul>\n<b>For withdrawals:</b>\n<ul><li>✅ <b>BEP20 only</b> — wallet must start with <span class="bl">0x</span></li><li>Compatible with MetaMask, Trust Wallet, Binance</li></ul>\n<div class="warn-box">⚠️ Always match network to network. Sending BEP20 USDT to a TRC20 address = permanent loss of funds.</div>`
-},
-
-// ───────── PENDING DEPOSIT LIMIT ─────────────────────────────
-{
-  tags:["pending deposit","one pending","two deposit","multiple deposit","cant deposit again","cant recharge again","already pending","another recharge","pending order","blocked recharge","deposit limit"],
-  chips:["How do I check my deposit status?","How long does approval take?","Contact support"],
-  answer:()=>`CryptoJet only allows <b>one pending deposit at a time</b>.\n\nIf you already have a deposit being reviewed, you can't submit another until it's settled.\n\n<div class="step-box"><div class="step-title">✅ What To Do</div><div class="step-item"><span class="step-num">1</span><span>Go to ${pg("Me → Transaction History")}</span></div><div class="step-item"><span class="step-num">2</span><span>Check if your current deposit shows as <span class="am">Pending</span></span></div><div class="step-item"><span class="step-num">3</span><span>Wait for it to be Approved or Rejected (usually 3–20 minutes)</span></div><div class="step-item"><span class="step-num">4</span><span>Once settled, you can submit a new recharge</span></div></div>\n\nIf it's been over 30 minutes, contact support below with your receipt. 🙋`
-},
-
-// ───────── SUPPORT ────────────────────────────────────────────
-{
-  tags:["support","contact","telegram","live chat","real person","human","agent","customer service","speak to","not resolved","still confused","talk to someone","need help more","cant figure","cant solve","problem not solved"],
+  tags:["support","contact","telegram","live chat","real person","human","agent","customer service","speak to","not resolved","still confused","talk to someone","need help more","cant figure","problem not solved"],
   chips:[],
   isSupport:true,
-  answer:()=>`I'll connect you with the <b>CryptoJet support team</b> right now!\n\nOur team is on Telegram and responds quickly — tap below to open a direct chat. They handle everything I can't. 💬`
+  answer:()=>`I'll connect you with the <b>CryptoJet support team</b> right now!\n\nOur team is on Telegram and responds quickly — tap below to open a direct chat. 💬`
 },
 
 ];
@@ -373,41 +376,38 @@ const KB = [
 //  MATCHING ENGINE
 // ═══════════════════════════════════════════════════════════════
 
-const FRUSTRATION = ["not working","scam","fraud","cheat","fake","lied","issue","wrong","broken","annoyed","upset","cheating","stolen","useless","terrible","worst","angry","mad","rip off","wasted","robbed","rubbish","rubbish","this is trash","disgusting","where is my money","took my money"];
+const FRUSTRATION = ["not working","scam","fraud","cheat","fake","lied","issue","wrong","broken","annoyed","upset","cheating","stolen","useless","terrible","worst","angry","mad","rip off","wasted","robbed","rubbish","trash","disgusting","where is my money","took my money"];
 
 const SMALL_TALK_PATTERNS = [
   { match:["lol","lmao","haha","😂","😅","funny"], resp:`Haha! 😄 Glad you're in a good mood! Is there anything CryptoJet-related I can help you with?` },
-  { match:["nice","dope","fire","🔥","lit","mad","wow","whoa","amazing","incredible"], resp:`Right?! CryptoJet is pretty awesome! 🔥 What would you like to know more about?` },
-  { match:["bored","nothing to do","just chatting","just browsing"], resp:`Well then, let's make it productive! 😄 Want to learn how to make passive income while you're chilling? Ask me how mining works! ⚡` },
-  { match:["morning","good morning"], resp:`Good morning! ☀️ Hope you're starting the day well! Ready to check on your mining earnings? I'm here to help with anything CryptoJet!` },
-  { match:["afternoon","good afternoon"], resp:`Good afternoon! 🌤️ Hope the day is going great! What can I help you with on CryptoJet today?` },
-  { match:["night","good night","evening"], resp:`Good evening! 🌙 Your miners are working around the clock even while you sleep! 😄 Anything I can help with?` },
-  { match:["who is your creator","who created you","anthropic","claude"], resp:`I'm CryptoJet AI — a smart assistant built specifically for this platform. I'm not able to share details about my underlying tech, but I'm here to help you get the most out of CryptoJet! What do you need? ⚡` },
-  { match:["i love you","love you","😍","❤️","🥰"], resp:`Aww, love the energy! 😄💚 I'm just here to make sure your CryptoJet experience is amazing. What can I help you with?` },
-  { match:["hungry","food","eat","lunch","dinner","breakfast"], resp:`Haha, food on my mind too! 🍽️ But first — make sure your miners are running so you can afford a good meal! 😄 Need help with anything CryptoJet?` },
+  { match:["nice","dope","fire","🔥","lit","wow","whoa","amazing","incredible"], resp:`Right?! CryptoJet is pretty awesome! 🔥 What would you like to know more about?` },
+  { match:["bored","nothing to do","just chatting","just browsing"], resp:`Well then, let's make it productive! 😄 Want to learn how to make passive income automatically? Ask me how mining works! ⚡` },
+  { match:["good morning","morning"], resp:`Good morning! ☀️ Your miners worked all night for you — check your balance! What can I help with?` },
+  { match:["good afternoon","afternoon"], resp:`Good afternoon! 🌤️ Hope the day is going great! What can I help you with on CryptoJet today?` },
+  { match:["good night","good evening","evening"], resp:`Good evening! 🌙 Your miners keep earning even while you sleep! 😄 Anything I can help with?` },
+  { match:["who is your creator","who created you","anthropic","claude"], resp:`I'm CryptoJet AI — built specifically for this platform. I can't share details about my underlying tech, but I'm here to help you get the most out of CryptoJet! ⚡` },
+  { match:["i love you","love you","😍","❤️","🥰"], resp:`Aww, love the energy! 😄💚 What can I help you with on CryptoJet today?` },
+  { match:["hungry","food","eat","lunch","dinner","breakfast"], resp:`Haha, food on my mind too! 🍽️ Make sure your miners are running so you can afford a good meal! 😄 Need help with anything?` },
 ];
 
 function matchKB(input) {
   const q = input.toLowerCase().trim();
 
-  // Small talk pattern matching
   for (const { match, resp } of SMALL_TALK_PATTERNS) {
     if (match.some(m => q.includes(m))) {
       return { answer:resp, chips:["How does mining work?","How do I recharge?","How do I withdraw?"], isSupport:false };
     }
   }
 
-  // Frustration detection
   for (const word of FRUSTRATION) {
     if (q.includes(word)) {
       return {
-        answer:`I completely understand your frustration, and I'm sorry you're going through this. 💙\n\nLet me connect you with our <b>live support team</b> right away — they can look into your specific situation personally and resolve it.`,
+        answer:`I completely understand your frustration, and I'm sorry you're going through this. 💙\n\nLet me connect you with our <b>live support team</b> right away — they can look into your specific situation personally.`,
         chips:[], isSupport:true
       };
     }
   }
 
-  // Score-based KB matching
   let best=null, bestScore=0;
   for (const entry of KB) {
     let score=0;
@@ -421,12 +421,13 @@ function matchKB(input) {
     return { answer:best.answer(), chips:best.chips||[], isSupport:best.isSupport||false };
   }
 
-  // Smart fallback with best guess attempt
   const GUESSES = [
-    { words:["balance","money","dollar","earn"], answer:`Sounds like you're asking about your balance or earnings! Your balance updates at the end of each mining cycle. Check ${pg("Miner → Running")} to see your active miners. Want a full explanation?`, chips:["How do cycles work?","Why isn't my balance updating?","How do I withdraw?"] },
-    { words:["miner","mine","s-244","s-900","s-500","s-1200","purchase","buy"], answer:`Looks like you're asking about miners! You can buy and manage all miners from ${pg("Miner tab")}. Want to see all available plans and prices?`, chips:["Show me all miners","Which miner is best?","How do I start mining?"] },
-    { words:["pay","send","transfer","naira","ngn","usdt","money in"], answer:`Sounds like a deposit question! Head to ${pg("Me → Recharge")} for all deposit options — bank transfer or USDT. Want a step-by-step guide?`, chips:["How do I recharge with bank?","How do I deposit USDT?","How long does approval take?"] },
-    { words:["withdraw","cash","out","receive","bank","payout"], answer:`Sounds like a withdrawal question! Go to ${pg("Me → Withdraw")} to cash out. Want the full step-by-step guide?`, chips:["How do I withdraw?","What's the fee?","Which days can I withdraw?"] },
+    { words:["balance","money","dollar","earn","credit"], answer:`Sounds like a balance or earnings question! Your balance updates every 24 hours automatically when a mining cycle completes. Check ${pg("Miner → Running")} to see active miners. Want a full explanation?`, chips:["How do cycles work?","Why isn't my balance updating?","How do I withdraw?"] },
+    { words:["miner","mine","s-100","s-244","s-900","s-500","s-1200","purchase","buy","level","tier"], answer:`Looks like a miner question! You can view and buy all miners at ${pg("Miner → Levels tab")}. Want to see all available plans?`, chips:["Show me all miners","Which miner is best?","How does auto-run work?"] },
+    { words:["pay","send","transfer","naira","ngn","usdt","money in","fund","top","load"], answer:`Sounds like a deposit question! Head to ${pg("Me → Recharge")} — bank transfer or USDT both supported. Minimum $3. Want a step-by-step guide?`, chips:["How do I recharge with bank?","How do I deposit USDT?","How long does approval take?"] },
+    { words:["withdraw","cash","out","receive","bank","payout","cashout"], answer:`Sounds like a withdrawal question! Go to ${pg("Me → Withdraw")} to cash out. Minimum $3, once per day, 10% fee. Want the full guide?`, chips:["How do I withdraw?","What's the fee?","Which days can I withdraw?"] },
+    { words:["team","refer","invite","friend","link","referral"], answer:`Sounds like a referral or team income question! Go to ${pg("Me → Invite")} for your referral link. Want to know how team income and reward points work?`, chips:["How do referrals work?","What are reward points?","What is team income?"] },
+    { words:["level","unlock","tier","junior","pro","elite","legend","employee"], answer:`Sounds like a level system question! CryptoJet has 6 levels that unlock better miners as your team grows. Want to know the full requirements?`, chips:["How does the level system work?","How do I build my team?","What miners are at each level?"] },
   ];
 
   for (const guess of GUESSES) {
@@ -436,8 +437,8 @@ function matchKB(input) {
   }
 
   return {
-    answer:`Hmm, I'm not quite sure what you mean, but I'd love to help! 😊\n\nHere are some things I can assist you with:\n<ul><li>⛏️ How mining and cycles work</li><li>💰 Recharging your balance (bank or USDT)</li><li>💸 Withdrawing your earnings</li><li>👥 Referrals and team income</li><li>📊 Miners and plans</li><li>🔐 Account and login issues</li></ul>\nTry rephrasing your question, or tap a suggestion below! 👇`,
-    chips:["How does mining work?","How do I recharge?","How do I withdraw?","Contact Support"],
+    answer:`Hmm, I'm not quite sure what you mean, but I'd love to help! 😊\n\nHere are some things I can assist with:\n<ul><li>⛏️ Mining and auto-run cycles</li><li>💰 Recharging (bank or USDT, min $3)</li><li>💸 Withdrawals (min $3, once daily, 10% fee)</li><li>👥 Referrals, team income and reward points</li><li>🏆 Level system and unlocking higher tier miners</li><li>🔐 Account and login issues</li></ul>\nTry rephrasing your question, or tap a suggestion below! 👇`,
+    chips:["How does mining work?","How do I recharge?","How do I withdraw?","Level system explained","Contact Support"],
     isSupport:false
   };
 }
@@ -477,31 +478,25 @@ async function addBotMsg(html, chips, isSupport) {
   chatEl.appendChild(row);
   const bubble = document.getElementById(id);
 
-  // For complex HTML (step boxes, miner grids) — render instantly
   const isComplex = html.includes("step-box") || html.includes("miner-grid") || html.includes("warn-box");
   if (isComplex || html.length > 600) {
-    bubble.innerHTML = html;
-    scroll();
+    bubble.innerHTML = html; scroll();
   } else {
-    // Stream word-by-word for short simple responses
     const parts = html.split(/(<[^>]+>)/);
     let built = "";
     for (const part of parts) {
-      if (part.startsWith("<")) {
-        built += part;
-      } else {
+      if (part.startsWith("<")) { built += part; }
+      else {
         const words = part.split(" ");
         for (let i = 0; i < words.length; i++) {
           built += (i > 0 ? " " : "") + words[i];
-          bubble.innerHTML = built;
-          scroll(); await sleep(16);
+          bubble.innerHTML = built; scroll(); await sleep(16);
         }
       }
     }
   }
   bubble.removeAttribute("id");
 
-  // Chips
   if (chips && chips.length) {
     const chipRow = document.createElement("div");
     chipRow.className = "chips";
@@ -517,7 +512,6 @@ async function addBotMsg(html, chips, isSupport) {
     chatEl.appendChild(chipRow); scroll();
   }
 
-  // Support button
   if (isSupport) {
     const wrap = document.createElement("div");
     wrap.className = "support-wrap";
@@ -535,30 +529,23 @@ async function send() {
   if (!text || busy) return;
   busy = true;
   document.querySelectorAll(".chips").forEach(el => el.remove());
-
   addUserMsg(text);
   inputEl.value = "";
-
   const delay = 400 + Math.random() * 500;
-  showTyping();
-  await sleep(delay);
-  removeTyping();
-
+  showTyping(); await sleep(delay); removeTyping();
   const { answer, chips, isSupport } = matchKB(text);
   await addBotMsg(answer, chips, isSupport);
-
   busy = false;
   inputEl.focus();
 }
 
 inputEl.addEventListener("keypress", e => { if (e.key === "Enter" && !busy) send(); });
 
-// Boot greeting
 window.onload = async () => {
   await sleep(400);
   await addBotMsg(
-    `Hey! 👋 I'm <b>CryptoJet AI</b> — your smart 24/7 assistant.\n\nI know <b>everything</b> about this platform and I can give you <b>step-by-step guides</b> and point you to <b>exact pages</b>. What would you like help with?`,
-    ["How does mining work?","How do I recharge?","What miners can I buy?","How do I withdraw?","How do referrals work?"],
+    `Hey! 👋 I'm <b>CryptoJet AI</b> — your smart 24/7 assistant.\n\nI know <b>everything</b> about this platform including all the latest updates — auto-run miners, the new $3 S-100 miner, level system, reward points, and more. What would you like help with?`,
+    ["How does mining work?","What miners can I buy?","How do I recharge?","How do I withdraw?","Level system explained"],
     false
   );
 };
