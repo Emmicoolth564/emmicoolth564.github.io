@@ -445,7 +445,7 @@ auth.onAuthStateChanged(user => {
     const d = snap.val() || {};
     document.getElementById("userId").innerText    = d.minerId || "-";
     document.getElementById("points").innerText    = d.points  || 0;
-    document.getElementById("liveBalance").textContent = "$" + (userData.balance || 0).toFixed(2);
+    document.getElementById("balance").innerText = (d.balance || 0).toFixed(2);
     document.getElementById("team").innerText = (d.team || 0).toFixed(2);
     document.getElementById("minerLevel").innerText = d.level  || "Novice Miner";
   });

@@ -345,7 +345,7 @@ auth.onAuthStateChanged(user => {
   // Balance, team, points — live
   db.ref("users/" + uid).on("value", snap => {
     const d = snap.val() || {};
-    document.getElementById("balance").innerText    = Math.floor(d.balance || 0);
+    document.getElementById("balance").innerText = (d.balance || 0).toFixed(2);
     document.getElementById("uiPoints").innerText   = d.points || 0;
     document.getElementById("teamIncome").innerText = (d.team || 0).toFixed(2);
 
