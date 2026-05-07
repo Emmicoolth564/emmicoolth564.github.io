@@ -556,25 +556,18 @@ async function checkAndCredit(id, key, mData) {
   await db.ref(`users/${uid}/miningRecords`).push({
     amount: totalEarn, miner: cfg.name, timestamp: now
   });
-
-  // Re-read balance for display
-  const balSnap = await db.ref(`users/${uid}/balance`).once("value");
-  userData.balance = balSnap.val() || 0;
+// Update balance display immediately without waiting for a read
+  userData.balance = (userData.balance || 0) + totalEarn;
   document.getElementById("liveBalance").textContent = "$" + userData.balance.toFixed(2);
 
-  // Trigger referral chain
-  creditReferralChain(uid, totalEarn, cfg.name).catch(console.error);
-  checkAndUpdateLevel().catch(console.error);
-
-  // ── AUTO-RESTART next cycle ───────────────────────────────
+  // ── AUTO-RESTART immediately — don't wait for referral chain ──
   const planExpiry = (!cfg.unlimited && purchaseDate && cfg.duration)
     ? purchaseDate + cfg.duration * 86400000 : null;
 
   if (!planExpiry || Date.now() < planExpiry) {
-    // Plan still active — restart cycle automatically
     const newData = {
       start:        now,
-      purchaseDate: purchaseDate,  // keep original purchase date
+      purchaseDate: purchaseDate,
       lastUpdate:   now,
       credited:     false
     };
@@ -583,9 +576,12 @@ async function checkAndCredit(id, key, mData) {
     delete _credited[key];
     renderRunning();
   } else {
-    // Plan expired — don't restart
     renderRunning();
   }
+
+  // Fire referral chain + level check in background — never blocks restart
+  creditReferralChain(uid, totalEarn, cfg.name).catch(console.error);
+  checkAndUpdateLevel().catch(console.error);
 }
 
 async function creditReferralChain(earnerUid, earnedAmount, minerName) {
