@@ -587,7 +587,25 @@ async function checkAndCredit(id, key, mData) {
   creditReferralChain(uid, totalEarn, cfg.name).catch(console.error);
   checkAndUpdateLevel().catch(console.error);
 }
+async function forceRestart(id, key, mData) {
+    if (_credited[key]) return;
+    _credited[key] = true;
+    const cfg          = MINERS[id];
+    const now          = Date.now();
+    const purchaseDate = mData.purchaseDate || mData.start;
+    const planExpiry   = (!cfg.unlimited && purchaseDate && cfg.duration)
+        ? purchaseDate + cfg.duration * 86400000 : null;
 
+    if (!planExpiry || now < planExpiry) {
+        const newData = { start: now, purchaseDate, lastUpdate: now, credited: false };
+        await db.ref(`users/${uid}/miners/${key}`).set(newData);
+        userData.miners[key] = newData;
+        delete _credited[key];
+        renderRunning();
+    } else {
+        renderRunning();
+    }
+}
 async function creditReferralChain(earnerUid, earnedAmount, minerName) {
   let currentUid    = earnerUid;
   const earnerSnap  = await db.ref(`users/${earnerUid}/minerId`).once("value");
