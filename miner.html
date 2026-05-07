@@ -502,9 +502,13 @@ function refreshCard(id, key, mData) {
     ring.classList.remove("paused", "expired");
   }
 
-  if (isComplete) {
-    // Auto-credit and auto-restart — no button needed
-    checkAndCredit(id, key, mData);
+if (isComplete) {
+    // If already credited but restart never happened — force restart now
+    if (mData.credited) {
+        forceRestart(id, key, mData);
+    } else {
+        checkAndCredit(id, key, mData);
+    }
     box.innerHTML = `
       <div class="status-box paused">
         <div class="status-left">
