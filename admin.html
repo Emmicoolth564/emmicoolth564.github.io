@@ -670,21 +670,35 @@ async function adjustBalance(uid, type) {
   if (successEl) successEl.style.display = "none";
 
   try {
-    // Read current value
-    const snap    = await db.ref(`users/${uid}/${field}`).once("value");
-    const current = parseFloat(snap.val()) || 0;
-    const newVal  = type === "add"
-      ? parseFloat((current + amount).toFixed(4))
-      : parseFloat(Math.max(0, current - amount).toFixed(4));
+    let current = 0;
+    let newVal  = 0;
 
-    // Write new value
-    await db.ref(`users/${uid}/${field}`).set(newVal);
+    if (type === "add") {
+      // Use increment — no read needed, works even if field is null
+      await db.ref(`users/${uid}/${field}`).set(
+        firebase.database.ServerValue.increment(amount)
+      );
+      // Read back to get actual new value for display
+      const snap = await db.ref(`users/${uid}/${field}`).once("value");
+      newVal  = parseFloat(snap.val()) || 0;
+      current = newVal - amount;
+    } else {
+      // Deduct — read first to prevent going negative
+      const snap = await db.ref(`users/${uid}/${field}`).once("value");
+      current = parseFloat(snap.val()) || 0;
+      if (amount > current) {
+        toast(`❌ Cannot deduct $${amount} — current ${field} is only $${current.toFixed(2)}`);
+        return;
+      }
+      newVal = parseFloat(Math.max(0, current - amount).toFixed(4));
+      await db.ref(`users/${uid}/${field}`).set(newVal);
+    }
 
     // Log the adjustment
     await db.ref(`balanceAdjustments/${uid}`).push({
       type, field, amount, reason,
-      before:    current,
-      after:     newVal,
+      before:    parseFloat(current.toFixed(4)),
+      after:     parseFloat(newVal.toFixed(4)),
       adminUid:  myUid,
       timestamp: Date.now()
     });
@@ -693,9 +707,9 @@ async function adjustBalance(uid, type) {
     if (!allUsers[uid]) allUsers[uid] = {};
     allUsers[uid][field] = newVal;
 
-    // Update live display in hero stats
+    // Update live display
     if (field === "balance" && document.getElementById("live-balance"))
-      document.getElementById("live-balance").textContent = Math.floor(newVal);
+      document.getElementById("live-balance").textContent = newVal.toFixed(2);
     if (field === "team" && document.getElementById("live-team"))
       document.getElementById("live-team").textContent = newVal.toFixed(2);
     if (field === "points" && document.getElementById("live-points"))
@@ -709,7 +723,7 @@ async function adjustBalance(uid, type) {
 
     const label = type === "add" ? "Added" : "Deducted";
     if (successEl) {
-      successEl.textContent  = `✅ ${label} $${amount} ${type==="add"?"to":"from"} ${field}. New value: $${newVal}`;
+      successEl.textContent   = `✅ ${label} $${amount} ${type==="add"?"to":"from"} ${field}. New value: $${newVal.toFixed(2)}`;
       successEl.style.display = "block";
       setTimeout(() => { successEl.style.display = "none"; }, 5000);
     }
@@ -717,7 +731,10 @@ async function adjustBalance(uid, type) {
 
   } catch (err) {
     console.error("Adjustment error:", err);
-    toast("❌ Failed: " + err.message);
+    const msg = err.code === "PERMISSION_DENIED"
+      ? "❌ Permission denied — check Firebase rules"
+      : "❌ Failed: " + (err.message || err.code || "Unknown error");
+    toast(msg);
   } finally {
     if (addBtn)    addBtn.disabled    = false;
     if (deductBtn) deductBtn.disabled = false;
