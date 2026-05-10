@@ -642,6 +642,7 @@ async function buyMiner(id, price) {
   const m = MINERS[id];
   if (!m) return;
 
+  // Level check
   const tierIdx = LEVEL_ORDER.indexOf(m.tier);
   const userIdx = LEVEL_ORDER.indexOf(currentLevelKey);
   if (userIdx < tierIdx) {
@@ -659,7 +660,20 @@ async function buyMiner(id, price) {
   const count    = unlocked[id] || 0;
   if (count >= m.maxOwn) return alert("You already own the maximum of this miner.");
 
-  // Key: S100 and S244 support multiple, others are single
+  // ── Second purchase confirmation for S-100 and S-244 ──────
+  if (count === 1 && m.maxOwn >= 2) {
+    const confirmed = confirm(
+      `⚠️ Second Purchase Confirmation\n\n` +
+      `You already own one ${m.name}.\n\n` +
+      `Are you sure you want to buy a second ${m.name} for $${price}?\n\n` +
+      `$${price} will be deducted from your balance.`
+    );
+    if (!confirmed) return;
+  }
+
+  // ── Prevent double-click while processing ─────────────────
+  document.querySelectorAll(".shop-btn").forEach(b => b.disabled = true);
+
   const instanceKey   = (id === "S244" || id === "S100") ? `${id}_${count + 1}` : id;
   const deductTeam    = Math.min(price, data.team || 0);
   const deductBalance = price - deductTeam;
@@ -676,20 +690,20 @@ async function buyMiner(id, price) {
     });
   }
 
-  // Update user — miner starts immediately on purchase, stores purchaseDate
+  // Update user — miner starts immediately on purchase
   await db.ref("users/" + uid).update({
     balance: Math.max(0, (data.balance || 0) - deductBalance),
     team:    Math.max(0, (data.team    || 0) - deductTeam),
     [`minerUnlocked/${id}`]:   count + 1,
     [`miners/${instanceKey}`]: {
       start:        now,
-      purchaseDate: now,   // ← tracks plan start for expiry
+      purchaseDate: now,
       lastUpdate:   now,
       credited:     false
     }
   });
 
-  // Update referrer teamMembers with hasMiner + minerId
+  // Update referrer teamMembers
   if (referrer) {
     const myIdSnap  = await db.ref("users/" + uid + "/minerId").once("value");
     const myMinerId = myIdSnap.val() || uid.slice(0, 8);
@@ -697,6 +711,15 @@ async function buyMiner(id, price) {
       hasMiner: true, minerId: myMinerId
     });
   }
+
+  // ── Success alert ─────────────────────────────────────────
+  alert(
+    `✅ Purchase Successful!\n\n` +
+    `${m.name} is now active.\n\n` +
+    `⚡ Your miner is running automatically and will credit ` +
+    `$${m.daily.toFixed(2)} to your balance every 24 hours.\n\n` +
+    `Go to the Running tab to track your earnings.`
+  );
 
   await loadPage();
   showTab("running");
