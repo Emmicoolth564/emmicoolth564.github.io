@@ -348,14 +348,45 @@ function showTab(tab) {
   document.getElementById("levBtn").classList.toggle("active", tab === "levels");
 }
 
+let _listenersAttached = false;
+
 async function loadPage() {
   const snap = await db.ref("users/" + uid).once("value");
   userData   = snap.val() || {};
-  // Show balance with 2 decimal places
   document.getElementById("liveBalance").textContent = "$" + (userData.balance || 0).toFixed(2);
   await checkAndUpdateLevel();
   renderRunning();
   renderLevels();
+
+  if (!_listenersAttached) {
+    _listenersAttached = true;
+    attachRealTimeListeners();
+  }
+}
+
+function attachRealTimeListeners() {
+  db.ref(`users/${uid}/balance`).on("value", snap => {
+    const balance = snap.val() || 0;
+    if (userData) userData.balance = balance;
+    document.getElementById("liveBalance").textContent = "$" + balance.toFixed(2);
+  });
+
+  db.ref(`users/${uid}/miners`).on("value", snap => {
+    if (!userData) return;
+    const freshMiners = snap.val() || {};
+    Object.keys(freshMiners).forEach(key => {
+      if (freshMiners[key] && !freshMiners[key].credited) delete _credited[key];
+    });
+    userData.miners = freshMiners;
+    renderRunning();
+  });
+
+  db.ref(`users/${uid}/minerUnlocked`).on("value", snap => {
+    if (!userData) return;
+    userData.minerUnlocked = snap.val() || {};
+    renderRunning();
+    renderLevels();
+  });
 }
 
 // ── RENDER RUNNING TAB ───────────────────────────────────────
