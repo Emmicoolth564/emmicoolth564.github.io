@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miner Monitor • CryptoJet Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:     #020812;
+  --s1:     #070f20;
+  --s2:     #0c1830;
+  --s3:     #112040;
+  --neon:   #00f0ff;
+  --green:  #00ff88;
+  --gold:   #f59e0b;
+  --red:    #ff4466;
+  --purple: #a855f7;
+  --muted:  #3a5070;
+  --text:   #c8daf0;
+  --border: rgba(0,240,255,0.1);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { min-height:100vh; overflow-x:hidden; }
+
+body {
+  font-family:'Outfit',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,240,255,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 90% 80%, rgba(168,85,247,0.05) 0%, transparent 50%);
+}
+
+/* ── HEADER ── */
+.header {
+  padding:18px 24px;
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(2,8,18,0.95);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  position:sticky; top:0; z-index:200;
+}
+.header-left { display:flex; align-items:center; gap:14px; }
+.back-btn {
+  width:38px; height:38px; border-radius:10px;
+  background:rgba(0,240,255,0.07); border:1px solid var(--border);
+  color:var(--neon); font-size:18px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s;
+}
+.back-btn:hover { background:rgba(0,240,255,0.15); }
+.header-title {
+  font-family:'JetBrains Mono',monospace;
+  font-size:16px; font-weight:700; color:var(--neon);
+  letter-spacing:0.05em;
+}
+.header-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+.refresh-btn {
+  padding:9px 18px; border-radius:10px; border:1px solid rgba(0,240,255,0.2);
+  background:rgba(0,240,255,0.07); color:var(--neon);
+  font-family:'Outfit',sans-serif; font-size:13px; font-weight:600;
+  cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:8px;
+}
+.refresh-btn:hover { background:rgba(0,240,255,0.15); }
+.refresh-btn.spinning .spin-icon { animation:spin 0.8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ── STATS BAR ── */
+.stats-bar {
+  display:grid; grid-template-columns:repeat(5,1fr);
+  gap:1px; background:var(--border);
+  border-bottom:1px solid var(--border);
+}
+.stat-cell {
+  background:var(--s1);
+  padding:16px 20px;
+  text-align:center;
+  position:relative; overflow:hidden;
+}
+.stat-cell::before {
+  content:''; position:absolute;
+  top:0; left:0; right:0; height:2px;
+}
+.stat-cell.all::before    { background:linear-gradient(90deg,var(--neon),var(--purple)); }
+.stat-cell.run::before    { background:var(--green); }
+.stat-cell.comp::before   { background:var(--gold); }
+.stat-cell.stuck::before  { background:var(--red); }
+.stat-cell.exp::before    { background:var(--muted); }
+.stat-num {
+  font-family:'JetBrains Mono',monospace;
+  font-size:26px; font-weight:700;
+}
+.stat-cell.all .stat-num  { color:var(--neon); }
+.stat-cell.run .stat-num  { color:var(--green); }
+.stat-cell.comp .stat-num { color:var(--gold); }
+.stat-cell.stuck .stat-num{ color:var(--red); }
+.stat-cell.exp .stat-num  { color:var(--muted); }
+.stat-lbl { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-top:4px; }
+
+/* ── FILTER BAR ── */
+.filter-bar {
+  display:flex; align-items:center; gap:8px;
+  padding:14px 24px; border-bottom:1px solid var(--border);
+  background:var(--s1); flex-wrap:wrap;
+}
+.filter-btn {
+  padding:7px 16px; border-radius:8px;
+  font-family:'Outfit',sans-serif; font-size:12px; font-weight:700;
+  cursor:pointer; border:1.5px solid transparent;
+  background:var(--s2); color:var(--muted);
+  transition:all 0.2s; text-transform:uppercase; letter-spacing:0.06em;
+}
+.filter-btn.active-all   { border-color:var(--neon);   color:var(--neon);   background:rgba(0,240,255,0.08); }
+.filter-btn.active-run   { border-color:var(--green);  color:var(--green);  background:rgba(0,255,136,0.08); }
+.filter-btn.active-comp  { border-color:var(--gold);   color:var(--gold);   background:rgba(245,158,11,0.08); }
+.filter-btn.active-stuck { border-color:var(--red);    color:var(--red);    background:rgba(255,68,102,0.08); }
+.filter-btn.active-exp   { border-color:var(--muted);  color:var(--muted);  background:rgba(58,80,112,0.08); }
+.search-box {
+  margin-left:auto;
+  padding:8px 14px; border-radius:8px;
+  background:var(--s2); border:1.5px solid var(--border);
+  color:var(--text); font-family:'Outfit',sans-serif; font-size:13px;
+  width:220px; transition:border-color 0.2s;
+}
+.search-box:focus { outline:none; border-color:var(--neon); }
+.search-box::placeholder { color:var(--muted); }
+
+/* ── TABLE ── */
+.table-wrap { padding:20px 24px 80px; }
+.table-container {
+  background:var(--s1);
+  border-radius:18px;
+  border:1px solid var(--border);
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,240,255,0.04);
+}
+.table-header {
+  display:grid;
+  grid-template-columns: 130px 100px 110px 100px 80px 1fr 90px 100px;
+  gap:0;
+  padding:12px 20px;
+  background:var(--s2);
+  border-bottom:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px; font-weight:700;
+  color:var(--muted); text-transform:uppercase; letter-spacing:0.1em;
+}
+.miner-row {
+  display:grid;
+  grid-template-columns: 130px 100px 110px 100px 80px 1fr 90px 100px;
+  gap:0;
+  padding:14px 20px;
+  border-bottom:1px solid rgba(255,255,255,0.03);
+  align-items:center;
+  transition:background 0.15s;
+  animation:rowIn 0.3s ease both;
+}
+@keyframes rowIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+.miner-row:hover { background:rgba(0,240,255,0.03); }
+.miner-row:last-child { border-bottom:none; }
+
+.cell { font-size:13px; padding-right:12px; }
+.cell-id {
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px; font-weight:700; color:var(--neon);
+}
+.cell-id .user-name { font-size:10px; color:var(--muted); font-weight:400; margin-top:2px; font-family:'Outfit',sans-serif; }
+.cell-miner {
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px; color:var(--text); font-weight:600;
+}
+.cell-miner .miner-key { font-size:10px; color:var(--muted); font-weight:400; margin-top:2px; }
+.cell-time { font-size:12px; font-family:'JetBrains Mono',monospace; }
+.cell-earn { font-size:13px; font-weight:700; color:var(--green); }
+.cell-days { font-size:12px; font-family:'JetBrains Mono',monospace; }
+
+/* Status badge */
+.status-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:4px 10px; border-radius:6px;
+  font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
+  font-family:'JetBrains Mono',monospace;
+}
+.status-badge .dot {
+  width:6px; height:6px; border-radius:50%; flex-shrink:0;
+}
+.s-running { background:rgba(0,255,136,0.1);  color:var(--green); border:1px solid rgba(0,255,136,0.25); }
+.s-running .dot { background:var(--green); animation:blink 1.5s infinite; }
+.s-complete{ background:rgba(245,158,11,0.1); color:var(--gold);  border:1px solid rgba(245,158,11,0.25); }
+.s-complete .dot{ background:var(--gold); animation:blink 0.8s infinite; }
+.s-stuck   { background:rgba(255,68,102,0.1); color:var(--red);   border:1px solid rgba(255,68,102,0.25); }
+.s-stuck .dot{ background:var(--red); animation:blink 0.5s infinite; }
+.s-expired { background:rgba(58,80,112,0.12); color:var(--muted); border:1px solid rgba(58,80,112,0.3); }
+.s-expired .dot{ background:var(--muted); }
+.s-nodata  { background:rgba(58,80,112,0.08); color:var(--muted); border:1px solid rgba(58,80,112,0.2); }
+.s-nodata .dot{ background:var(--muted); }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+/* Progress bar */
+.cycle-bar-wrap { display:flex; align-items:center; gap:8px; }
+.cycle-bar-bg { flex:1; height:4px; background:var(--s3); border-radius:999px; overflow:hidden; }
+.cycle-bar-fill { height:100%; border-radius:999px; transition:width 0.5s; }
+.cycle-pct { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); flex-shrink:0; width:32px; text-align:right; }
+
+/* Fix button */
+.fix-btn {
+  padding:7px 14px; border-radius:8px; border:none; cursor:pointer;
+  font-family:'Outfit',sans-serif; font-size:12px; font-weight:700;
+  transition:all 0.2s; display:flex; align-items:center; gap:5px;
+}
+.fix-btn.fix-complete {
+  background:rgba(245,158,11,0.15); color:var(--gold);
+  border:1px solid rgba(245,158,11,0.3);
+}
+.fix-btn.fix-complete:hover { background:var(--gold); color:#000; }
+.fix-btn.fix-stuck {
+  background:rgba(255,68,102,0.15); color:var(--red);
+  border:1px solid rgba(255,68,102,0.3);
+}
+.fix-btn.fix-stuck:hover { background:var(--red); color:#fff; }
+.fix-btn:disabled { opacity:0.4; cursor:not-allowed; }
+.no-fix { color:var(--muted); font-size:12px; }
+
+/* Empty / Loading */
+.empty-state {
+  text-align:center; padding:80px 20px;
+  color:var(--muted); font-size:14px;
+}
+.spinner-wrap { display:flex; justify-content:center; padding:60px; }
+.spinner {
+  width:40px; height:40px;
+  border:3px solid rgba(0,240,255,0.1);
+  border-top-color:var(--neon);
+  border-radius:50%;
+  animation:spin 0.8s linear infinite;
+}
+
+/* Toast */
+.toast {
+  position:fixed; bottom:28px; left:50%; transform:translateX(-50%);
+  padding:12px 24px; border-radius:10px;
+  font-weight:700; font-size:13px;
+  opacity:0; transition:opacity 0.3s; z-index:9999;
+  pointer-events:none; white-space:nowrap;
+  font-family:'Outfit',sans-serif;
+}
+.toast.show { opacity:1; }
+.toast.ok  { background:var(--green);  color:#002a1a; }
+.toast.err { background:var(--red);    color:#fff; }
+.toast.inf { background:var(--neon);   color:#001a20; }
+
+/* Last updated */
+.last-updated {
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px; color:var(--muted); padding:0 24px 12px;
+}
+
+@media (max-width:900px) {
+  .stats-bar { grid-template-columns:repeat(3,1fr); }
+  .table-header, .miner-row {
+    grid-template-columns: 110px 90px 1fr 90px 90px;
+  }
+  .table-header .col-time,
+  .table-header .col-earn,
+  .miner-row .cell-time-hide,
+  .miner-row .cell-earn-hide { display:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <button class="back-btn" onclick="history.back()">←</button>
+    <div>
+      <div class="header-title">⛏ MINER MONITOR</div>
+      <div class="header-sub">Live status of all user miners</div>
+    </div>
+  </div>
+  <button class="refresh-btn" id="refreshBtn" onclick="loadAll()">
+    <span class="spin-icon">↻</span> Refresh
+  </button>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-cell all">
+    <div class="stat-num" id="statAll">—</div>
+    <div class="stat-lbl">Total Miners</div>
+  </div>
+  <div class="stat-cell run">
+    <div class="stat-num" id="statRun">—</div>
+    <div class="stat-lbl">Running</div>
+  </div>
+  <div class="stat-cell comp">
+    <div class="stat-num" id="statComp">—</div>
+    <div class="stat-lbl">Needs Credit</div>
+  </div>
+  <div class="stat-cell stuck">
+    <div class="stat-num" id="statStuck">—</div>
+    <div class="stat-lbl">Stuck</div>
+  </div>
+  <div class="stat-cell exp">
+    <div class="stat-num" id="statExp">—</div>
+    <div class="stat-lbl">Expired</div>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active-all" id="f-all"    onclick="setFilter('all')">All</button>
+  <button class="filter-btn"            id="f-running" onclick="setFilter('running')">🟢 Running</button>
+  <button class="filter-btn"            id="f-complete" onclick="setFilter('complete')">🟡 Needs Credit</button>
+  <button class="filter-btn"            id="f-stuck"   onclick="setFilter('stuck')">🔴 Stuck</button>
+  <button class="filter-btn"            id="f-expired" onclick="setFilter('expired')">⚫ Expired</button>
+  <input class="search-box" id="searchBox" placeholder="🔍 Search Miner ID or name..." oninput="renderTable()">
+</div>
+
+<div class="table-wrap">
+  <div class="last-updated" id="lastUpdated"></div>
+  <div class="table-container" id="tableContainer">
+    <div class="spinner-wrap"><div class="spinner"></div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey:      "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
+  authDomain:  "cj-miner.firebaseapp.com",
+  databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:   "cj-miner"
+};
+firebase.initializeApp(firebaseConfig);
+const db   = firebase.database();
+const auth = firebase.auth();
+
+const ADMIN_UID = "1G40GHwudBcea5GGdEeIIKFT5rL2";
+
+const MINERS_CFG = {
+  S100:  { name:"S-100",           daily:0.20, cycleHours:24, duration:30,  unlimited:false },
+  S244:  { name:"S-244",           daily:0.50, cycleHours:24, duration:30,  unlimited:false },
+  S500:  { name:"S-500",           daily:1.50, cycleHours:24, duration:30,  unlimited:false },
+  S900:  { name:"S-900",           daily:2.00, cycleHours:24, duration:35,  unlimited:false },
+  S1200: { name:"S-1200",          daily:4.00, cycleHours:24, duration:45,  unlimited:false },
+  JX200: { name:"JX-200 Turbo",    daily:5,    cycleHours:24, duration:60,  unlimited:false },
+  JX500: { name:"JX-500 Boost",    daily:8,    cycleHours:24, duration:85,  unlimited:false },
+  PX1K:  { name:"PX-1000 Apex",    daily:12,   cycleHours:24, duration:120, unlimited:false },
+  PX2K:  { name:"PX-2000 Core",    daily:20,   cycleHours:24, duration:150, unlimited:false },
+  EX3K:  { name:"EX-1500 Blaze",   daily:20,   cycleHours:24, duration:120, unlimited:false },
+  EX5K:  { name:"EX-2000 Inferno", daily:25,   cycleHours:24, duration:120, unlimited:false },
+  LX3K:  { name:"LX-2200 Titan",   daily:25,   cycleHours:24, duration:135, unlimited:false },
+  LX5K:  { name:"LX-3000 Zeus",    daily:30,   cycleHours:24, duration:160, unlimited:false },
+  EM4K:  { name:"EM-4000 Oracle",  daily:10,   cycleHours:24, duration:null, unlimited:true  },
+  EM5K:  { name:"EM-5000 Nexus",   daily:15,   cycleHours:24, duration:null, unlimited:true  },
+};
+
+let allRows    = [];
+let activeFilter = "all";
+
+// ── STATUS HELPER ─────────────────────────────────────────────
+function getStatus(cfg, mData) {
+  if (!mData || !mData.start) return "nodata";
+  const now          = Date.now();
+  const elapsed      = now - mData.start;
+  const cycleMs      = cfg.cycleHours * 3600000;
+  const purchaseDate = mData.purchaseDate || mData.start;
+  const planExpiry   = (!cfg.unlimited && cfg.duration)
+    ? purchaseDate + cfg.duration * 86400000 : null;
+
+  if (planExpiry && now > planExpiry && !cfg.unlimited) return "expired";
+  if (elapsed >= cycleMs && mData.credited)  return "stuck";
+  if (elapsed >= cycleMs && !mData.credited) return "complete";
+  return "running";
+}
+
+function getCyclePct(cfg, mData) {
+  if (!mData || !mData.start) return 0;
+  const elapsed = Date.now() - mData.start;
+  const cycleMs = cfg.cycleHours * 3600000;
+  return Math.min(100, Math.floor((elapsed / cycleMs) * 100));
+}
+
+function getDaysLeft(cfg, mData) {
+  if (!mData || cfg.unlimited) return "∞";
+  const purchaseDate = mData.purchaseDate || mData.start;
+  const planExpiry   = purchaseDate + cfg.duration * 86400000;
+  const days = Math.max(0, Math.ceil((planExpiry - Date.now()) / 86400000));
+  return days + "d";
+}
+
+function fmtElapsed(mData) {
+  if (!mData || !mData.start) return "—";
+  const ms = Date.now() - mData.start;
+  const h  = Math.floor(ms / 3600000);
+  const m  = Math.floor((ms % 3600000) / 60000);
+  if (h >= 24) return Math.floor(h/24) + "d " + (h%24) + "h";
+  return h + "h " + m + "m";
+}
+
+// ── LOAD DATA ─────────────────────────────────────────────────
+async function loadAll() {
+  const btn = document.getElementById("refreshBtn");
+  btn.classList.add("spinning");
+
+  const snap  = await db.ref("users").once("value");
+  const users = snap.val() || {};
+  allRows     = [];
+
+  Object.entries(users).forEach(([uid, u]) => {
+    const miners = u.miners || {};
+    Object.entries(miners).forEach(([key, mData]) => {
+      const minerId = key.includes("_") ? key.split("_")[0] : key;
+      const cfg     = MINERS_CFG[minerId];
+      if (!cfg) return;
+      const status  = getStatus(cfg, mData);
+      allRows.push({ uid, u, key, minerId, cfg, mData, status });
+    });
+  });
+
+  updateStats();
+  renderTable();
+
+  btn.classList.remove("spinning");
+  document.getElementById("lastUpdated").textContent =
+    "Last updated: " + new Date().toLocaleTimeString("en-NG");
+}
+
+function updateStats() {
+  const counts = { running:0, complete:0, stuck:0, expired:0, nodata:0 };
+  allRows.forEach(r => { counts[r.status] = (counts[r.status] || 0) + 1; });
+  document.getElementById("statAll").textContent   = allRows.length;
+  document.getElementById("statRun").textContent   = counts.running  || 0;
+  document.getElementById("statComp").textContent  = counts.complete || 0;
+  document.getElementById("statStuck").textContent = counts.stuck    || 0;
+  document.getElementById("statExp").textContent   = (counts.expired || 0) + (counts.nodata || 0);
+}
+
+// ── FILTER + RENDER ───────────────────────────────────────────
+function setFilter(f) {
+  activeFilter = f;
+  document.querySelectorAll(".filter-btn").forEach(b => {
+    b.className = "filter-btn";
+  });
+  const map = { all:"active-all", running:"active-run", complete:"active-comp", stuck:"active-stuck", expired:"active-exp" };
+  document.getElementById("f-" + (f === "all" ? "all" : f)).classList.add(map[f]);
+  renderTable();
+}
+
+function renderTable() {
+  const query  = document.getElementById("searchBox").value.toLowerCase().trim();
+  let   rows   = allRows.filter(r => {
+    if (activeFilter !== "all" && r.status !== activeFilter) return false;
+    if (query) {
+      const minerId = (r.u.minerId || "").toLowerCase();
+      const name    = (r.u.name    || "").toLowerCase();
+      if (!minerId.includes(query) && !name.includes(query)) return false;
+    }
+    return true;
+  });
+
+  const container = document.getElementById("tableContainer");
+
+  if (!rows.length) {
+    container.innerHTML = `<div class="empty-state">No miners match this filter</div>`;
+    return;
+  }
+
+  // Sort: stuck first, complete, running, expired
+  const ORDER = { stuck:0, complete:1, running:2, nodata:3, expired:4 };
+  rows.sort((a,b) => (ORDER[a.status]||99) - (ORDER[b.status]||99));
+
+  const statusLabel = {
+    running:  `<span class="status-badge s-running"><span class="dot"></span>Running</span>`,
+    complete: `<span class="status-badge s-complete"><span class="dot"></span>Needs Credit</span>`,
+    stuck:    `<span class="status-badge s-stuck"><span class="dot"></span>Stuck</span>`,
+    expired:  `<span class="status-badge s-expired"><span class="dot"></span>Expired</span>`,
+    nodata:   `<span class="status-badge s-nodata"><span class="dot"></span>No Data</span>`,
+  };
+
+  const barColor = {
+    running:  "var(--green)",
+    complete: "var(--gold)",
+    stuck:    "var(--red)",
+    expired:  "var(--muted)",
+    nodata:   "var(--muted)",
+  };
+
+  let html = `
+    <div class="table-header">
+      <span>User</span>
+      <span>Miner</span>
+      <span>Status</span>
+      <span class="col-time">Elapsed</span>
+      <span class="col-earn">Daily</span>
+      <span>Cycle Progress</span>
+      <span>Days Left</span>
+      <span>Action</span>
+    </div>`;
+
+  rows.forEach((r, i) => {
+    const pct      = getCyclePct(r.cfg, r.mData);
+    const daysLeft = getDaysLeft(r.cfg, r.mData);
+    const elapsed  = fmtElapsed(r.mData);
+    const delay    = Math.min(i * 20, 400);
+
+    let actionHTML = `<span class="no-fix">—</span>`;
+    if (r.status === "complete") {
+      actionHTML = `<button class="fix-btn fix-complete" onclick="fixMiner('${r.uid}','${r.key}','${r.minerId}','complete',this)">⚡ Credit</button>`;
+    } else if (r.status === "stuck") {
+      actionHTML = `<button class="fix-btn fix-stuck" onclick="fixMiner('${r.uid}','${r.key}','${r.minerId}','stuck',this)">🔄 Restart</button>`;
+    }
+
+    html += `
+      <div class="miner-row" style="animation-delay:${delay}ms">
+        <div class="cell cell-id">
+          ${r.u.minerId || r.uid.slice(0,8)}
+          <div class="user-name">${r.u.name || "Unknown"}</div>
+        </div>
+        <div class="cell cell-miner">
+          ${r.cfg.name}
+          <div class="miner-key">${r.key}</div>
+        </div>
+        <div class="cell">${statusLabel[r.status] || statusLabel.nodata}</div>
+        <div class="cell cell-time cell-time-hide">${elapsed}</div>
+        <div class="cell cell-earn cell-earn-hide">$${r.cfg.daily.toFixed(2)}</div>
+        <div class="cell">
+          <div class="cycle-bar-wrap">
+            <div class="cycle-bar-bg">
+              <div class="cycle-bar-fill" style="width:${pct}%;background:${barColor[r.status]}"></div>
+            </div>
+            <span class="cycle-pct">${pct}%</span>
+          </div>
+        </div>
+        <div class="cell cell-days" style="color:${r.cfg.unlimited ? 'var(--purple)' : daysLeft === '0d' ? 'var(--red)' : 'var(--text)'}">
+          ${daysLeft}
+        </div>
+        <div class="cell">${actionHTML}</div>
+      </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+// ── FIX MINER ─────────────────────────────────────────────────
+async function fixMiner(uid, key, minerId, type, btn) {
+  if (!confirm(type === "complete"
+    ? `Credit $${MINERS_CFG[minerId]?.daily || "?"} to this user and restart their miner?`
+    : `Force-restart this stuck miner? (Balance already credited)`
+  )) return;
+
+  btn.disabled    = true;
+  btn.textContent = "⏳ Fixing...";
+
+  try {
+    const cfg          = MINERS_CFG[minerId];
+    const mSnap        = await db.ref(`users/${uid}/miners/${key}`).once("value");
+    const mData        = mSnap.val() || {};
+    const now          = Date.now();
+    const purchaseDate = mData.purchaseDate || mData.start;
+
+    if (type === "complete") {
+      // Mark credited first
+      await db.ref(`users/${uid}/miners/${key}`).update({ credited: true });
+      // Credit balance
+      await db.ref(`users/${uid}/balance`).set(
+        firebase.database.ServerValue.increment(cfg.daily)
+      );
+      // Log record
+      await db.ref(`users/${uid}/miningRecords`).push({
+        amount: cfg.daily, miner: cfg.name, timestamp: now, source: "admin-fix"
+      });
+      toast(`✅ Credited $${cfg.daily} — restarting...`, "ok");
+    }
+
+    // Restart cycle (both types)
+    const planExpiry = (!cfg.unlimited && cfg.duration)
+      ? purchaseDate + cfg.duration * 86400000 : null;
+
+    if (!planExpiry || now < planExpiry) {
+      await db.ref(`users/${uid}/miners/${key}`).set({
+        start:        now,
+        purchaseDate: purchaseDate,
+        lastUpdate:   now,
+        credited:     false
+      });
+      toast(`✅ Miner restarted successfully!`, "ok");
+    } else {
+      toast(`ℹ️ Plan expired — miner not restarted`, "inf");
+    }
+
+    // Refresh this row after a moment
+    setTimeout(() => loadAll(), 1200);
+
+  } catch (e) {
+    console.error(e);
+    toast("❌ Fix failed: " + e.message, "err");
+    btn.disabled    = false;
+    btn.textContent = type === "complete" ? "⚡ Credit" : "🔄 Restart";
+  }
+}
+
+// ── TOAST ─────────────────────────────────────────────────────
+function toast(msg, type = "ok") {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className   = `toast ${type} show`;
+  setTimeout(() => t.classList.remove("show"), 3200);
+}
+
+// ── BOOT ──────────────────────────────────────────────────────
+window.addEventListener("load", () => {
+  auth.onAuthStateChanged(async user => {
+    if (!user || user.uid !== ADMIN_UID) {
+      alert("Access denied");
+      window.location.href = "signin.html";
+      return;
+    }
+    await loadAll();
+
+    // Auto-refresh every 2 minutes
+    setInterval(loadAll, 120000);
+  });
+});
+</script>
+</body>
+</html>
