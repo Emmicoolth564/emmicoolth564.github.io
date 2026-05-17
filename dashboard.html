@@ -190,6 +190,13 @@ body {
   box-shadow:0 0 30px rgba(245,158,11,0.08);
   display:none;
 }
+.promo-banner {
+  margin:10px 14px 0;border-radius:16px;padding:12px 16px;
+  background:linear-gradient(135deg,rgba(0,255,136,0.08),rgba(0,240,255,0.05));
+  border:1px solid rgba(0,255,136,0.2);
+  display:none;            /* ← keep only this */
+  align-items:center;gap:12px;  /* ← remove the display:flex, keep these */
+}
 .lb-top {
   background:linear-gradient(90deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05));
   padding:10px 16px;display:flex;align-items:center;gap:8px;
@@ -242,37 +249,6 @@ body {
 </head>
 <body>
 
-<!-- LAUNCH COUNTDOWN BANNER -->
-<div class="launch-banner" id="launchBanner">
-  <div class="lb-top">
-    <span class="lb-top-badge">🚀 LAUNCHING SOON</span>
-    <span class="lb-top-text">New miners & updated earnings go live in:</span>
-  </div>
-  <div class="lb-body">
-    <div class="lb-title">CryptoJet 2.0 — Major Platform Upgrade</div>
-    <div class="lb-desc">New miner tiers, updated daily rates, salary system, level rewards and more. Lock in your miners now!</div>
-    <div class="lb-units">
-      <div class="lb-unit"><span class="lb-num" id="lb-d">00</span><span class="lb-lbl">Days</span></div>
-      <div class="lb-unit"><span class="lb-num" id="lb-h">00</span><span class="lb-lbl">Hours</span></div>
-      <div class="lb-unit"><span class="lb-num" id="lb-m">00</span><span class="lb-lbl">Mins</span></div>
-      <div class="lb-unit"><span class="lb-num" id="lb-s">00</span><span class="lb-lbl">Secs</span></div>
-    </div>
-  </div>
-</div>
-
-<!-- NEW USER PROMO BANNER -->
-<div class="promo-banner" id="promoBanner">
-  <div class="promo-icon">⚡</div>
-  <div class="promo-text">
-    <div class="pt">You're on Promotional Rates!</div>
-    <div class="ps">Enjoy higher mining earnings for your first 3 days</div>
-  </div>
-  <div class="promo-timer">
-    <div class="pn" id="promoTimer">00:00:00</div>
-    <div class="pl">remaining</div>
-  </div>
-</div>
-
 <div id="loader">
   <div class="loader-content">
     <div class="loader-logo">CryptoJet</div>
@@ -282,7 +258,36 @@ body {
 
 <div class="page-content">
 <div class="wrapper">
+  <!-- LAUNCH COUNTDOWN BANNER -->
+  <div class="launch-banner" id="launchBanner">
+    <div class="lb-top">
+      <span class="lb-top-badge">🚀 LAUNCHING SOON</span>
+      <span class="lb-top-text">New miners & updated earnings go live in:</span>
+    </div>
+    <div class="lb-body">
+      <div class="lb-title">CryptoJet 2.0 — Major Platform Upgrade</div>
+      <div class="lb-desc">New miner tiers, updated daily rates, salary system, level rewards and more. Lock in your miners now!</div>
+      <div class="lb-units">
+        <div class="lb-unit"><span class="lb-num" id="lb-d">00</span><span class="lb-lbl">Days</span></div>
+        <div class="lb-unit"><span class="lb-num" id="lb-h">00</span><span class="lb-lbl">Hours</span></div>
+        <div class="lb-unit"><span class="lb-num" id="lb-m">00</span><span class="lb-lbl">Mins</span></div>
+        <div class="lb-unit"><span class="lb-num" id="lb-s">00</span><span class="lb-lbl">Secs</span></div>
+      </div>
+    </div>
+  </div>
 
+  <!-- NEW USER PROMO BANNER — only shows if promoExpiry exists -->
+  <div class="promo-banner" id="promoBanner" style="display:none;">
+    <div class="promo-icon">⚡</div>
+    <div class="promo-text">
+      <div class="pt">You're on Promotional Rates!</div>
+      <div class="ps">Enjoy higher mining earnings for your first 3 days</div>
+    </div>
+    <div class="promo-timer">
+      <div class="pn" id="promoTimer">00:00:00</div>
+      <div class="pl">remaining</div>
+    </div>
+  </div>
   <!-- LOGO -->
   <div class="logo-container">
     <svg viewBox="0 0 500 120" class="logo-svg">
@@ -483,8 +488,9 @@ auth.onAuthStateChanged(user => {
 // ── USER INFO ────────────────────────────────────────────────
 async function loadUser() {
   const snap = await db.ref("users/" + uid).once("value");
+  let d = {};                          // ← declare here
   if (snap.exists()) {
-    const d = snap.val();
+    d = snap.val();                    // ← assign here (no const)
     if (d.minerId) {
       document.getElementById("userId").innerText = d.minerId;
     } else {
