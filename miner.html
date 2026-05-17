@@ -232,7 +232,7 @@ const LEVEL_ORDER = ["novice","junior","pro","elite","legend","employee"];
 const MINERS = {
   // NOVICE
   S100:  { name:"S-100",           tier:"novice",   price:3,    daily:0.20, cycleHours:24, img:"purchase0.png", duration:30,  maxOwn:2 },
-  S244:  { name:"S-244",        tier:"novice", price:10,   daily:0.30, cycleHours:24, img:"purchase1.png", duration:45,  maxOwn:2 },
+  S244:  { name:"S-244",        tier:"novice", price:10,   daily:0.30, cycleHours:24, img:"purchase1.png", duration:50,  maxOwn:2 },
   S500:  { name:"S-500",        tier:"novice", price:30,   daily:0.75, cycleHours:24, img:"purchase2.png", duration:60,  maxOwn:1 },
   S900:  { name:"S-900",        tier:"novice", price:50,   daily:1.00, cycleHours:24, img:"purchase3.png", duration:70,  maxOwn:1 },
   S1200: { name:"S-1200",       tier:"novice", price:120,  daily:2.00, cycleHours:24, img:"purchase4.png", duration:90,  maxOwn:1 },
@@ -437,13 +437,13 @@ function renderRunning() {
 
       // Plan expiry uses purchaseDate (when first bought)
       const purchaseDate = mData?.purchaseDate || mData?.start;
-      const totalEarn     = cfg.unlimited ? null : parseFloat((cfg.daily * cfg.duration).toFixed(4));
-      const totalCredited = parseFloat((mData?.totalCredited || 0).toFixed(4));
-      const remainingEarn = cfg.unlimited ? null : Math.max(0, totalEarn - totalCredited);
-      const daysRemaining = cfg.unlimited ? null : Math.ceil((remainingEarn || 0) / cfg.daily);
-      const isPlanDone    = !cfg.unlimited && totalCredited >= totalEarn;
-      const planPct       = cfg.unlimited ? 0 : Math.min(100, Math.floor((totalCredited / totalEarn) * 100));
-
+      const effectiveDaily = getDailyRate(id);
+      const totalEarn      = cfg.unlimited ? null : parseFloat((cfg.daily * cfg.duration).toFixed(4));
+      const totalCredited  = parseFloat((mData?.totalCredited || 0).toFixed(4));
+      const remainingEarn  = cfg.unlimited ? null : Math.max(0, totalEarn - totalCredited);
+      const daysRemaining  = cfg.unlimited ? null : Math.ceil((remainingEarn || 0) / effectiveDaily);
+      const isPlanDone     = !cfg.unlimited && totalCredited >= totalEarn;
+      const planPct        = cfg.unlimited ? 0 : Math.min(100, Math.floor((totalCredited / totalEarn) * 100));
       const totalEarnLabel = cfg.unlimited ? "∞ Unlimited" : "$" + (cfg.daily * cfg.duration).toLocaleString();
      const expiresLine = cfg.unlimited
   ? "Plan: Unlimited — runs forever"
@@ -476,7 +476,10 @@ function renderRunning() {
           </div>
         </div>
         <div class="stats-grid">
-          <div class="stat-item"><div class="stat-label">DAILY INCOME</div><div class="stat-value" style="color:#00ff88;">$${cfg.daily.toFixed(2)}</div></div>
+          <div class="stat-label">DAILY INCOME</div>
+          <div class="stat-value" style="color:#00ff88;">
+            $${effectiveDaily.toFixed(2)}${effectiveDaily !== cfg.daily ? ' <span style="font-size:9px;background:rgba(245,158,11,0.2);color:#f59e0b;padding:1px 5px;border-radius:4px;font-weight:700;">PROMO</span>' : ''}
+          </div>
           <div class="stat-item"><div class="stat-label">CYCLE</div><div class="stat-value">${cfg.cycleHours}h</div></div>
           <div class="stat-item"><div class="stat-label">TOTAL EARN</div><div class="stat-value" style="color:#f59e0b;">${totalEarnLabel}</div></div>
           <div class="stat-item"><div class="stat-label">DURATION</div><div class="stat-value">${cfg.unlimited ? "∞" : cfg.duration + "d"}</div></div>
@@ -577,7 +580,7 @@ if (isComplete) {
           <div class="status-badge" style="color:#00f0ff;">
             <span class="badge-dot blue"></span> Crediting & Restarting...
           </div>
-          <div class="earned-row">Cycle complete — crediting $${cfg.daily.toFixed(2)}</div>
+          <div class="earned-row">Cycle complete — crediting $${getDailyRate(id).toFixed(2)}</div>
         </div>
       </div>`;
   } else {
