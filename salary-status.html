@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salary • CryptoJet</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@500;600;700&family=Cabinet+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#03080f;
+  --s1:#07111e;
+  --s2:#0c1a2e;
+  --s3:#112238;
+  --neon:#00f0ff;
+  --green:#00ff88;
+  --gold:#f5a623;
+  --purple:#9b5de5;
+  --pink:#f72585;
+  --text:#ddeeff;
+  --muted:#4a6a8a;
+  --border:rgba(0,240,255,0.08);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{min-height:100vh;overflow-x:hidden;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  background-image:
+    radial-gradient(ellipse 100% 60% at 50% 0%, rgba(0,240,255,0.05) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(155,93,229,0.06) 0%, transparent 50%);
+}
+
+/* ── HEADER ── */
+.header{
+  padding:16px 20px;
+  display:flex;align-items:center;gap:12px;
+  background:rgba(3,8,15,0.95);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+}
+.back{font-size:24px;color:var(--neon);cursor:pointer;flex-shrink:0;}
+.header-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--text);}
+.header-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+
+/* ── HERO SALARY CARD ── */
+.hero-wrap{padding:20px 16px 0;}
+.hero-card{
+  border-radius:28px;padding:28px 24px 24px;
+  position:relative;overflow:hidden;
+  background:linear-gradient(145deg,#07111e,#0c1a2e);
+  border:1px solid rgba(0,240,255,0.12);
+  box-shadow:0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(0,240,255,0.06);
+}
+.hero-glow{
+  position:absolute;top:-60px;right:-60px;
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle, rgba(0,240,255,0.12) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-glow-2{
+  position:absolute;bottom:-40px;left:-40px;
+  width:160px;height:160px;border-radius:50%;
+  background:radial-gradient(circle, rgba(155,93,229,0.1) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;}
+.level-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 14px;border-radius:999px;
+  font-size:12px;font-weight:700;letter-spacing:0.04em;
+  border:1px solid;
+}
+.hero-qual-badge{
+  padding:5px 12px;border-radius:999px;
+  font-size:11px;font-weight:700;
+  background:rgba(0,255,136,0.12);color:var(--green);
+  border:1px solid rgba(0,255,136,0.2);
+}
+.hero-qual-badge.no{background:rgba(245,158,11,0.12);color:var(--gold);border-color:rgba(245,158,11,0.2);}
+
+.salary-display{margin-bottom:20px;}
+.salary-lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;font-weight:600;margin-bottom:6px;}
+.salary-amount{
+  font-family:'Syne',sans-serif;
+  font-size:52px;font-weight:800;line-height:1;
+  background:linear-gradient(135deg,#00ffcc,#00f0ff,#a78bfa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.salary-amount.zero{
+  background:linear-gradient(135deg,#4a6a8a,#2a4a6a);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.salary-per{font-size:14px;color:var(--muted);margin-top:4px;}
+
+/* COUNTDOWN */
+.countdown-wrap{
+  background:rgba(0,0,0,0.3);border-radius:16px;padding:14px 16px;
+  border:1px solid rgba(255,255,255,0.04);
+}
+.countdown-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;}
+.countdown-units{display:flex;gap:8px;}
+.c-unit{flex:1;text-align:center;}
+.c-num{
+  font-family:'Syne',sans-serif;font-size:22px;font-weight:800;
+  color:var(--neon);display:block;line-height:1;
+}
+.c-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:3px;display:block;}
+.c-sep{font-family:'Syne',sans-serif;font-size:20px;color:rgba(0,240,255,0.3);line-height:1;padding-top:4px;}
+
+/* ── NEXT LEVEL CARD ── */
+.section-wrap{padding:16px 16px 0;}
+.sec-title{
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;
+  margin-bottom:12px;
+}
+.next-card{
+  background:var(--s1);border-radius:20px;padding:20px;
+  border:1px solid var(--border);margin-bottom:16px;
+}
+.next-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.next-emoji{font-size:28px;}
+.next-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--text);}
+.next-salary{font-size:13px;font-weight:700;color:var(--green);margin-top:2px;}
+.unlock-label{font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:600;}
+
+.req-row{display:flex;gap:10px;margin-bottom:8px;}
+.req-item{
+  flex:1;background:var(--s2);border-radius:12px;padding:12px;
+  text-align:center;border:1px solid var(--border);
+}
+.req-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;}
+.req-val.done{color:var(--green);}
+.req-val.need{color:var(--gold);}
+.req-lbl{font-size:10px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:0.05em;}
+.req-needed{font-size:10px;font-weight:700;margin-top:4px;}
+.req-needed.done{color:var(--green);}
+.req-needed.need{color:var(--gold);}
+
+.prog-wrap{margin-top:12px;}
+.prog-label-row{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px;}
+.prog-bg{height:5px;background:var(--s3);border-radius:999px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:999px;transition:width 0.8s ease;background:linear-gradient(90deg,var(--gold),#f59e0b);}
+.prog-fill.done{background:linear-gradient(90deg,var(--green),#00ffcc);}
+
+/* ── SALARY LADDER ── */
+.ladder-wrap{padding:0 16px 16px;}
+.ladder-item{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;border-radius:16px;margin-bottom:8px;
+  border:1px solid var(--border);
+  background:var(--s1);
+  position:relative;overflow:hidden;
+  transition:border-color 0.2s;
+}
+.ladder-item.current{
+  border-color:rgba(0,240,255,0.3);
+  background:linear-gradient(135deg,rgba(0,240,255,0.05),rgba(0,240,255,0.02));
+}
+.ladder-item.current::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,var(--neon),var(--purple));
+  border-radius:0 2px 2px 0;
+}
+.ladder-item.unlocked{border-color:rgba(0,255,136,0.15);}
+.ladder-item.locked{opacity:0.5;}
+.ladder-emoji{font-size:24px;flex-shrink:0;}
+.ladder-info{flex:1;}
+.ladder-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
+.ladder-req{font-size:11px;color:var(--muted);margin-top:2px;}
+.ladder-right{text-align:right;flex-shrink:0;}
+.ladder-salary{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;}
+.ladder-badge{
+  display:inline-block;margin-top:4px;
+  padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;
+}
+.badge-current{background:rgba(0,240,255,0.12);color:var(--neon);}
+.badge-unlocked{background:rgba(0,255,136,0.12);color:var(--green);}
+.badge-locked{background:rgba(74,106,138,0.12);color:var(--muted);}
+
+/* ── SALARY HISTORY ── */
+.history-wrap{padding:0 16px 100px;}
+.hist-item{
+  background:var(--s1);border-radius:16px;padding:16px;
+  border:1px solid var(--border);margin-bottom:10px;
+  display:flex;align-items:center;gap:14px;
+}
+.hist-icon{
+  width:44px;height:44px;border-radius:12px;flex-shrink:0;
+  background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.2);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+}
+.hist-month{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);}
+.hist-date{font-size:11px;color:var(--muted);margin-top:2px;}
+.hist-amount{
+  margin-left:auto;font-family:'Syne',sans-serif;
+  font-size:18px;font-weight:800;color:var(--green);
+  flex-shrink:0;
+}
+.hist-level{font-size:11px;color:var(--muted);text-align:right;margin-top:2px;}
+
+.empty-hist{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;}
+.empty-hist .e-icon{font-size:40px;margin-bottom:10px;}
+
+/* ── NAV ── */
+.nav-glass{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  width:90%;height:70px;display:flex;justify-content:space-around;align-items:center;
+  background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);
+  border-radius:25px;box-shadow:0 8px 30px rgba(0,0,0,0.4);
+  border:1px solid rgba(255,255,255,0.07);z-index:999;
+}
+.nav-item{text-align:center;color:#4a6a8a;font-size:11px;cursor:pointer;}
+.nav-item.active{color:#00ffcc;}
+.n-icon{width:26px;height:26px;margin:0 auto 4px;position:relative;}
+.n-icon.home::before{content:"";position:absolute;width:18px;height:18px;background:#4a6a8a;transform:rotate(45deg);top:4px;left:4px;border-radius:3px;}
+.nav-item.active .home::before{background:#00ffcc;}
+.n-icon.me{background:#ffffff18;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.n-icon.me::before{content:"👤";font-size:14px;}
+.n-icon.sal::before{content:"💰";font-size:20px;position:absolute;left:3px;top:-2px;}
+
+/* ── LOADER ── */
+#loader{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;}
+.loader-logo{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--neon);margin-bottom:20px;animation:glow 1.5s infinite alternate;}
+.loader-bar{width:160px;height:3px;background:#111;border-radius:10px;overflow:hidden;}
+.loader-fill{width:0%;height:100%;background:linear-gradient(90deg,var(--neon),var(--purple));animation:loadBar 1.5s ease forwards;}
+@keyframes loadBar{to{width:100%;}}
+@keyframes glow{from{text-shadow:0 0 5px var(--neon);}to{text-shadow:0 0 30px var(--neon);}}
+
+/* Level pill colors */
+.pill-novice  {background:rgba(100,116,139,0.12);color:#94a3b8;border-color:rgba(100,116,139,0.25);}
+.pill-junior  {background:rgba(0,255,136,0.1);color:var(--green);border-color:rgba(0,255,136,0.25);}
+.pill-pro     {background:rgba(0,240,255,0.1);color:var(--neon);border-color:rgba(0,240,255,0.25);}
+.pill-elite   {background:rgba(245,166,35,0.1);color:var(--gold);border-color:rgba(245,166,35,0.25);}
+.pill-legend  {background:rgba(155,93,229,0.1);color:#c084fc;border-color:rgba(155,93,229,0.25);}
+.pill-employee{background:rgba(247,37,133,0.1);color:var(--pink);border-color:rgba(247,37,133,0.25);}
+
+/* Ladder salary colors */
+.sal-novice  {color:#4a6a8a;}
+.sal-junior  {color:var(--green);}
+.sal-pro     {color:var(--neon);}
+.sal-elite   {color:var(--gold);}
+.sal-legend  {color:#c084fc;}
+.sal-employee{color:var(--pink);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+.fade-up{animation:fadeUp 0.4s ease both;}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="loader-logo">CryptoJet</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+</div>
+
+<div class="header">
+  <div class="back" onclick="history.back()">←</div>
+  <div>
+    <div class="header-title">Monthly Salary</div>
+    <div class="header-sub">Level-based passive income</div>
+  </div>
+</div>
+
+<!-- HERO CARD -->
+<div class="hero-wrap">
+  <div class="hero-card fade-up">
+    <div class="hero-glow"></div>
+    <div class="hero-glow-2"></div>
+    <div class="hero-top">
+      <div class="level-pill" id="levelPill">⛏️ Loading...</div>
+      <div class="hero-qual-badge" id="qualBadge">—</div>
+    </div>
+    <div class="salary-display">
+      <div class="salary-lbl">Your Monthly Salary</div>
+      <div class="salary-amount" id="salaryAmount">$0</div>
+      <div class="salary-per">credited to your balance on the 1st of every month</div>
+    </div>
+    <div class="countdown-wrap">
+      <div class="countdown-lbl">⏳ Next salary in</div>
+      <div class="countdown-units">
+        <div class="c-unit"><span class="c-num" id="cd-d">00</span><span class="c-lbl">Days</span></div>
+        <div class="c-sep">:</div>
+        <div class="c-unit"><span class="c-num" id="cd-h">00</span><span class="c-lbl">Hours</span></div>
+        <div class="c-sep">:</div>
+        <div class="c-unit"><span class="c-num" id="cd-m">00</span><span class="c-lbl">Mins</span></div>
+        <div class="c-sep">:</div>
+        <div class="c-unit"><span class="c-num" id="cd-s">00</span><span class="c-lbl">Secs</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEXT LEVEL -->
+<div class="section-wrap" id="nextLevelSection" style="display:none;">
+  <div class="sec-title">Unlock Higher Salary</div>
+  <div class="next-card fade-up" id="nextCard"></div>
+</div>
+
+<!-- SALARY LADDER -->
+<div class="section-wrap">
+  <div class="sec-title">Salary Ladder</div>
+</div>
+<div class="ladder-wrap" id="ladderWrap"></div>
+
+<!-- HISTORY -->
+<div class="section-wrap">
+  <div class="sec-title">Your Salary History</div>
+</div>
+<div class="history-wrap" id="historyWrap">
+  <div class="empty-hist"><div class="e-icon">⏳</div>Loading...</div>
+</div>
+
+<div class="nav-glass">
+  <div class="nav-item" onclick="location.href='dashboard.html'"><div class="n-icon home"></div><span>Home</span></div>
+  <div class="nav-item active"><div class="n-icon sal"><div></div></div><span>Salary</span></div>
+  <div class="nav-item" onclick="location.href='me.html'"><div class="n-icon me"></div><span>Me</span></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey:      "AIzaSyC6FpkoVyWoDxnzSqC39X8_pqwoEyc7tvw",
+  authDomain:  "cj-miner.firebaseapp.com",
+  databaseURL: "https://cj-miner-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:   "cj-miner"
+};
+firebase.initializeApp(firebaseConfig);
+const db   = firebase.database();
+const auth = firebase.auth();
+
+const uid = localStorage.getItem("uid");
+if (!uid) { window.location.href = "signin.html"; }
+
+// ── CONFIG ────────────────────────────────────────────────────
+const SALARIES = {
+  "Novice Miner":  0,
+  "Junior Miner":  10,
+  "Pro Miner":     30,
+  "Elite Miner":   50,
+  "Legend Miner":  150,
+  "Employee":      300
+};
+
+const LEVEL_ORDER = ["Novice Miner","Junior Miner","Pro Miner","Elite Miner","Legend Miner","Employee"];
+
+const LEVEL_META = {
+  "Novice Miner":  { emoji:"⛏️",  cls:"novice",   pillCls:"pill-novice",   salCls:"sal-novice",   l1:0,   total:0,   req:"Default — no requirements" },
+  "Junior Miner":  { emoji:"🥈",  cls:"junior",   pillCls:"pill-junior",   salCls:"sal-junior",   l1:5,   total:20,  req:"5 direct active + 20 total active team" },
+  "Pro Miner":     { emoji:"💎",  cls:"pro",      pillCls:"pill-pro",      salCls:"sal-pro",      l1:10,  total:50,  req:"10 direct active + 50 total active team" },
+  "Elite Miner":   { emoji:"🔥",  cls:"elite",    pillCls:"pill-elite",    salCls:"sal-elite",    l1:25,  total:75,  req:"25 direct active + 75 total active team" },
+  "Legend Miner":  { emoji:"👑",  cls:"legend",   pillCls:"pill-legend",   salCls:"sal-legend",   l1:50,  total:150, req:"50 direct active + 150 total active team" },
+  "Employee":      { emoji:"🚀",  cls:"employee", pillCls:"pill-employee", salCls:"sal-employee", l1:100, total:500, req:"100 direct active + 500 total active team" }
+};
+
+// ── LOAD ──────────────────────────────────────────────────────
+window.addEventListener("load", () => {
+  auth.onAuthStateChanged(async user => {
+    if (!user) { window.location.href = "signin.html"; return; }
+
+    const snap     = await db.ref("users/" + uid).once("value");
+    const userData = snap.val() || {};
+    const level    = userData.level || "Novice Miner";
+    const meta     = LEVEL_META[level];
+    const salary   = SALARIES[level] || 0;
+
+    // Level stats
+    const membersSnap = await db.ref("users/" + uid + "/teamMembers").once("value");
+    const members     = membersSnap.val() || {};
+    const l1Active    = Object.values(members).filter(m => m.hasMiner).length;
+
+    const incomeSnap = await db.ref("teamIncome/" + uid).once("value");
+    const income     = incomeSnap.val() || {};
+    const uniqueSet  = new Set();
+    Object.keys(members).forEach(m => { if (members[m].hasMiner) uniqueSet.add(m); });
+    Object.values(income).forEach(r => { if (r.fromUid) uniqueSet.add(r.fromUid); });
+    const totalActive = uniqueSet.size;
+
+    renderHero(level, salary, meta);
+    renderNextLevel(level, l1Active, totalActive);
+    renderLadder(level);
+    renderHistory();
+    startCountdown();
+
+    setTimeout(() => document.getElementById("loader").style.display = "none", 1200);
+  });
+});
+
+// ── HERO ──────────────────────────────────────────────────────
+function renderHero(level, salary, meta) {
+  document.getElementById("levelPill").className  = `level-pill ${meta.pillCls}`;
+  document.getElementById("levelPill").textContent = `${meta.emoji} ${level}`;
+
+  const amtEl = document.getElementById("salaryAmount");
+  if (salary > 0) {
+    amtEl.textContent  = "$" + salary;
+    amtEl.className    = "salary-amount";
+    document.getElementById("qualBadge").textContent = "✅ Qualified";
+    document.getElementById("qualBadge").className   = "hero-qual-badge";
+  } else {
+    amtEl.textContent  = "$0";
+    amtEl.className    = "salary-amount zero";
+    document.getElementById("qualBadge").textContent = "Level up to earn";
+    document.getElementById("qualBadge").className   = "hero-qual-badge no";
+  }
+}
+
+// ── NEXT LEVEL ────────────────────────────────────────────────
+function renderNextLevel(currentLevel, l1Active, totalActive) {
+  const currentIdx = LEVEL_ORDER.indexOf(currentLevel);
+  if (currentIdx >= LEVEL_ORDER.length - 1) return; // already max
+
+  const nextLevel = LEVEL_ORDER[currentIdx + 1];
+  const nextMeta  = LEVEL_META[nextLevel];
+  const nextSal   = SALARIES[nextLevel];
+  const section   = document.getElementById("nextLevelSection");
+  const card      = document.getElementById("nextCard");
+
+  section.style.display = "block";
+
+  const l1Need    = nextMeta.l1;
+  const totalNeed = nextMeta.total;
+  const l1Done    = l1Active >= l1Need;
+  const totDone   = totalActive >= totalNeed;
+  const l1Pct     = Math.min(100, l1Need > 0 ? Math.floor((l1Active / l1Need) * 100) : 100);
+  const totPct    = Math.min(100, totalNeed > 0 ? Math.floor((totalActive / totalNeed) * 100) : 100);
+  const l1Left    = Math.max(0, l1Need - l1Active);
+  const totLeft   = Math.max(0, totalNeed - totalActive);
+
+  card.innerHTML = `
+    <div class="next-header">
+      <div class="next-emoji">${nextMeta.emoji}</div>
+      <div>
+        <div class="next-name">${nextLevel}</div>
+        <div class="next-salary">+$${nextSal}/month salary unlock</div>
+      </div>
+    </div>
+    <div class="unlock-label">📋 Requirements to unlock:</div>
+    <div class="req-row">
+      <div class="req-item">
+        <div class="req-val ${l1Done ? 'done' : 'need'}">${l1Active}/${l1Need}</div>
+        <div class="req-lbl">Direct Active</div>
+        <div class="req-needed ${l1Done ? 'done' : 'need'}">${l1Done ? '✅ Done' : l1Left + ' more needed'}</div>
+      </div>
+      <div class="req-item">
+        <div class="req-val ${totDone ? 'done' : 'need'}">${totalActive}/${totalNeed}</div>
+        <div class="req-lbl">Total Active Team</div>
+        <div class="req-needed ${totDone ? 'done' : 'need'}">${totDone ? '✅ Done' : totLeft + ' more needed'}</div>
+      </div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-label-row"><span>Level 1 progress</span><span>${l1Pct}%</span></div>
+      <div class="prog-bg"><div class="prog-fill ${l1Done ? 'done' : ''}" style="width:${l1Pct}%"></div></div>
+    </div>
+    <div class="prog-wrap" style="margin-top:10px;">
+      <div class="prog-label-row"><span>Total team progress</span><span>${totPct}%</span></div>
+      <div class="prog-bg"><div class="prog-fill ${totDone ? 'done' : ''}" style="width:${totPct}%"></div></div>
+    </div>`;
+}
+
+// ── LADDER ────────────────────────────────────────────────────
+function renderLadder(currentLevel) {
+  const wrap = document.getElementById("ladderWrap");
+  wrap.innerHTML = "";
+  const currentIdx = LEVEL_ORDER.indexOf(currentLevel);
+
+  LEVEL_ORDER.forEach((lvl, idx) => {
+    const meta   = LEVEL_META[lvl];
+    const salary = SALARIES[lvl];
+    const isCurr = lvl === currentLevel;
+    const isUnlocked = idx <= currentIdx;
+    const statusCls  = isCurr ? "current" : isUnlocked ? "unlocked" : "locked";
+    const badgeCls   = isCurr ? "badge-current" : isUnlocked ? "badge-unlocked" : "badge-locked";
+    const badgeTxt   = isCurr ? "● YOUR LEVEL" : isUnlocked ? "✓ Unlocked" : "🔒 Locked";
+
+    const item = document.createElement("div");
+    item.className = `ladder-item ${statusCls} fade-up`;
+    item.style.animationDelay = (idx * 60) + "ms";
+    item.innerHTML = `
+      <div class="ladder-emoji">${meta.emoji}</div>
+      <div class="ladder-info">
+        <div class="ladder-name">${lvl}</div>
+        <div class="ladder-req">${meta.req}</div>
+      </div>
+      <div class="ladder-right">
+        <div class="ladder-salary ${meta.salCls}">${salary > 0 ? "$" + salary + "/mo" : "—"}</div>
+        <div class="ladder-badge ${badgeCls}">${badgeTxt}</div>
+      </div>`;
+    wrap.appendChild(item);
+  });
+}
+
+// ── HISTORY ───────────────────────────────────────────────────
+async function renderHistory() {
+  const snap = await db.ref("userTransactions/" + uid).once("value");
+  const txs  = snap.val() || {};
+  const hist = Object.entries(txs)
+    .filter(([, t]) => t.type === "salary" && t.status === "approved")
+    .sort((a, b) => (b[1].date || 0) - (a[1].date || 0));
+
+  const wrap = document.getElementById("historyWrap");
+  if (!hist.length) {
+    wrap.innerHTML = `
+      <div class="empty-hist">
+        <div class="e-icon">💰</div>
+        No salary payments yet.<br>
+        <span style="font-size:12px;color:#2a4a6a;margin-top:6px;display:block;">Your first salary arrives on the 1st of next month</span>
+      </div>`;
+    return;
+  }
+
+  wrap.innerHTML = hist.map(([, t]) => {
+    const lvlMeta = LEVEL_META[t.level] || { emoji:"💰" };
+    const date    = t.date ? new Date(t.date).toLocaleDateString("en-NG", { day:"numeric", month:"long", year:"numeric" }) : "—";
+    const month   = t.monthKey ? getMonthName(t.monthKey) : "—";
+    return `
+      <div class="hist-item fade-up">
+        <div class="hist-icon">${lvlMeta.emoji}</div>
+        <div>
+          <div class="hist-month">${month}</div>
+          <div class="hist-date">${date}</div>
+        </div>
+        <div>
+          <div class="hist-amount">+$${t.amount}</div>
+          <div class="hist-level">${t.level || "—"}</div>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+function getMonthName(key) {
+  if (!key) return "—";
+  const [y, m] = key.split("-");
+  return new Date(y, m - 1, 1).toLocaleDateString("en-NG", { month:"long", year:"numeric" });
+}
+
+// ── COUNTDOWN to 1st of next month ────────────────────────────
+function startCountdown() {
+  function update() {
+    const now  = new Date();
+    const next = new Date(now.getFullYear(), now.getMonth() + 1, 1, 7, 0, 0); // 7am next 1st
+    const diff = Math.max(0, next - now);
+    const d    = Math.floor(diff / 86400000);
+    const h    = Math.floor((diff % 86400000) / 3600000);
+    const m    = Math.floor((diff % 3600000) / 60000);
+    const s    = Math.floor((diff % 60000) / 1000);
+    document.getElementById("cd-d").textContent = String(d).padStart(2,"0");
+    document.getElementById("cd-h").textContent = String(h).padStart(2,"0");
+    document.getElementById("cd-m").textContent = String(m).padStart(2,"0");
+    document.getElementById("cd-s").textContent = String(s).padStart(2,"0");
+  }
+  update();
+  setInterval(update, 1000);
+}
+</script>
+</body>
+</html>

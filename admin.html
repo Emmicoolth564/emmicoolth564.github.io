@@ -150,6 +150,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="tab"        id="tab-all-tx"  onclick="switchTab('all-tx',this)">📋 All Tx</div>
   <div class="tab"        id="tab-manage"  onclick="window.location.href='manage-transactions.html'">🔧 Manage Tx</div>
   <div class="tab" onclick="window.location.href='miner-monitor.html'">⛏ Miner Monitor</div>
+  <div class="tab" onclick="window.location.href='salary.html'">💰 Salary</div>
+
+</div>
+
+<div class="sec-card" style="margin:16px;">
+  <div class="sec-title">⏰ Set Platform Launch Date</div>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">
+    Set the date/time when new miner rates go live. Banner shows automatically to all users.
+  </p>
+  <input type="datetime-local" id="launchDateInput"
+    style="width:100%;padding:12px;background:#1e2937;border:1.5px solid rgba(0,240,255,0.15);border-radius:12px;color:#e2e8f0;font-size:14px;margin-bottom:10px;">
+  <button onclick="setLaunchDate()"
+    style="width:100%;padding:13px;background:linear-gradient(90deg,#00ffcc,#00f0ff);color:#000;font-weight:700;border:none;border-radius:12px;cursor:pointer;font-size:14px;">
+    💾 Save Launch Date
+  </button>
+  <div id="launchDateStatus" style="font-size:12px;color:#22c55e;margin-top:8px;text-align:center;"></div>
 </div>
 
 <div id="view-users">
@@ -243,6 +259,26 @@ function updateStripStats() {
   document.getElementById("statBalance").textContent = "$" + Math.floor(total);
   document.getElementById("statMiners").textContent  = miners;
 }
+
+async function setLaunchDate() {
+  const input = document.getElementById("launchDateInput").value;
+  if (!input) return;
+  const ts = new Date(input).getTime();
+  await db.ref("platformSettings/launchDate").set(ts);
+  document.getElementById("launchDateStatus").textContent =
+    "✅ Launch date set: " + new Date(ts).toLocaleString("en-NG");
+}
+
+// Load existing launch date into input on page load
+db.ref("platformSettings/launchDate").once("value", snap => {
+  if (snap.val()) {
+    const d = new Date(snap.val());
+    const local = new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,16);
+    document.getElementById("launchDateInput").value = local;
+    document.getElementById("launchDateStatus").textContent =
+      "Current: " + d.toLocaleString("en-NG");
+  }
+});
 
 function switchTab(name, el) {
   document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));

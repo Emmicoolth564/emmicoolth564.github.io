@@ -214,6 +214,7 @@ const uid = localStorage.getItem("uid");
 if (!uid) { alert("Session expired"); window.location.href = "signin.html"; }
 
 let userData        = null;
+let LAUNCH_DATE = null;
 let currentLevelKey = "novice";
 
 const LEVELS = {
@@ -231,16 +232,14 @@ const LEVEL_ORDER = ["novice","junior","pro","elite","legend","employee"];
 const MINERS = {
   // NOVICE
   S100:  { name:"S-100",           tier:"novice",   price:3,    daily:0.20, cycleHours:24, img:"purchase0.png", duration:30,  maxOwn:2 },
-  S244:  { name:"S-244",           tier:"novice",   price:10,   daily:0.50, cycleHours:24, img:"purchase1.png", duration:30,  maxOwn:2 },
-  S500:  { name:"S-500",           tier:"novice",   price:30,   daily:1.50, cycleHours:24, img:"purchase2.png", duration:30,  maxOwn:1 },
-  S900:  { name:"S-900",           tier:"novice",   price:50,   daily:2.00, cycleHours:24, img:"purchase3.png", duration:35,  maxOwn:1 },
-  S1200: { name:"S-1200",          tier:"novice",   price:120,  daily:4.00, cycleHours:24, img:"purchase4.png", duration:45,  maxOwn:1 },
-  // JUNIOR
-  JX200: { name:"JX-200 Turbo",    tier:"junior",   price:200,  daily:5,    cycleHours:24, img:"junior1.png",   duration:60,  maxOwn:1, unlimited:false },
-  JX500: { name:"JX-500 Boost",    tier:"junior",   price:500,  daily:8,    cycleHours:24, img:"junior2.png",   duration:85,  maxOwn:1, unlimited:false },
-  // PRO
-  PX1K:  { name:"PX-1000 Apex",    tier:"pro",      price:1000, daily:12,   cycleHours:24, img:"pro1.png",      duration:120, maxOwn:1, unlimited:false },
-  PX2K:  { name:"PX-2000 Core",    tier:"pro",      price:2000, daily:20,   cycleHours:24, img:"pro2.png",      duration:150, maxOwn:1, unlimited:false },
+  S244:  { name:"S-244",        tier:"novice", price:10,   daily:0.30, cycleHours:24, img:"purchase1.png", duration:45,  maxOwn:2 },
+  S500:  { name:"S-500",        tier:"novice", price:30,   daily:0.75, cycleHours:24, img:"purchase2.png", duration:60,  maxOwn:1 },
+  S900:  { name:"S-900",        tier:"novice", price:50,   daily:1.00, cycleHours:24, img:"purchase3.png", duration:70,  maxOwn:1 },
+  S1200: { name:"S-1200",       tier:"novice", price:120,  daily:2.00, cycleHours:24, img:"purchase4.png", duration:90,  maxOwn:1 },
+  JX200: { name:"JX-200 Turbo", tier:"junior", price:200,  daily:2.50, cycleHours:24, img:"junior1.png",   duration:120, maxOwn:1, unlimited:false },
+  JX500: { name:"JX-500 Boost", tier:"junior", price:500,  daily:5.00, cycleHours:24, img:"junior2.png",   duration:136, maxOwn:1, unlimited:false },
+  PX1K:  { name:"PX-1000 Apex", tier:"pro",    price:1000, daily:8.00, cycleHours:24, img:"pro1.png",      duration:180, maxOwn:1, unlimited:false },
+  PX2K:  { name:"PX-2000 Core", tier:"pro",    price:2000, daily:15.0, cycleHours:24, img:"pro2.png",      duration:180, maxOwn:1, unlimited:false },
   // ELITE
   EX3K:  { name:"EX-1500 Blaze",   tier:"elite",    price:1500, daily:20,   cycleHours:24, img:"elite1.png",    duration:120, maxOwn:1, unlimited:false },
   EX5K:  { name:"EX-2000 Inferno", tier:"elite",    price:2000, daily:25,   cycleHours:24, img:"elite2.png",    duration:120, maxOwn:1, unlimited:false },
@@ -267,6 +266,34 @@ const REF_PTS = {
   LX3K:4000, LX5K:5000,
   EM4K:6000, EM5K:8000
 };
+// ── PROMO RATES — old higher rates for new users (3 days) ─────
+const PROMO_RATES = {
+  S244:  0.50,  S500:  1.50, S900:  2.00, S1200: 4.00,
+  JX200: 5.00,  JX500: 8.00, PX1K: 12.00, PX2K: 20.00
+};
+
+// Returns correct daily rate based on user's promo status
+function getDailyRate(id) {
+  const now = Date.now();
+
+  // Before launch date — everyone gets old promo rates
+  if (LAUNCH_DATE && now < LAUNCH_DATE) {
+    return PROMO_RATES[id] || MINERS[id].daily;
+  }
+
+  // After launch — new users still get promo for 3 days
+  const inPromo = userData?.promoExpiry && now < userData.promoExpiry;
+  if (inPromo && PROMO_RATES[id]) return PROMO_RATES[id];
+
+  // Default — new adjusted rates
+  return MINERS[id].daily;
+}
+
+// Returns promo time remaining in ms (0 if not in promo)
+function getPromoTimeLeft() {
+  if (!userData?.promoExpiry) return 0;
+  return Math.max(0, userData.promoExpiry - Date.now());
+}
 
 function fmtTime(ms) {
   if (ms <= 0) return "00:00:00";
@@ -353,11 +380,13 @@ let _listenersAttached = false;
 async function loadPage() {
   const snap = await db.ref("users/" + uid).once("value");
   userData   = snap.val() || {};
+  const launchSnap = await db.ref("platformSettings/launchDate").once("value");
+  LAUNCH_DATE = launchSnap.val() || null;
   document.getElementById("liveBalance").textContent = "$" + (userData.balance || 0).toFixed(2);
   await checkAndUpdateLevel();
   renderRunning();
   renderLevels();
-
+  
   if (!_listenersAttached) {
     _listenersAttached = true;
     attachRealTimeListeners();
@@ -408,22 +437,21 @@ function renderRunning() {
 
       // Plan expiry uses purchaseDate (when first bought)
       const purchaseDate = mData?.purchaseDate || mData?.start;
-      const planExpiry   = (!cfg.unlimited && purchaseDate && cfg.duration)
-        ? purchaseDate + cfg.duration * 86400000
-        : null;
-      const daysRemaining = planExpiry
-        ? Math.max(0, Math.ceil((planExpiry - Date.now()) / 86400000))
-        : null;
-      const daysTotal   = cfg.duration || 1;
-      const planPct     = planExpiry ? Math.max(0, Math.min(100, ((Date.now() - purchaseDate) / (daysTotal * 86400000)) * 100)) : 0;
+      const totalEarn     = cfg.unlimited ? null : parseFloat((cfg.daily * cfg.duration).toFixed(4));
+      const totalCredited = parseFloat((mData?.totalCredited || 0).toFixed(4));
+      const remainingEarn = cfg.unlimited ? null : Math.max(0, totalEarn - totalCredited);
+      const daysRemaining = cfg.unlimited ? null : Math.ceil((remainingEarn || 0) / cfg.daily);
+      const isPlanDone    = !cfg.unlimited && totalCredited >= totalEarn;
+      const planPct       = cfg.unlimited ? 0 : Math.min(100, Math.floor((totalCredited / totalEarn) * 100));
 
       const totalEarnLabel = cfg.unlimited ? "∞ Unlimited" : "$" + (cfg.daily * cfg.duration).toLocaleString();
-      const expiresLine    = cfg.unlimited
-        ? "Plan: Unlimited — runs forever"
-        : planExpiry
-          ? `Expires: ${fmtDate(planExpiry)} · ${daysRemaining}d left`
-          : "Starting soon...";
-
+     const expiresLine = cfg.unlimited
+  ? "Plan: Unlimited — runs forever"
+  : isPlanDone
+    ? "Plan completed ✓"
+    : daysRemaining !== null
+      ? `~${daysRemaining}d remaining · $${remainingEarn?.toFixed(2)} left to earn`
+      : "Starting soon...";
       const tierColor = getTierColor(LEVELS[cfg.tier].cls);
       const ringColor = cfg.tier === "novice" ? "#00ffcc" : tierColor;
       const card      = document.createElement("div");
@@ -453,11 +481,14 @@ function renderRunning() {
           <div class="stat-item"><div class="stat-label">TOTAL EARN</div><div class="stat-value" style="color:#f59e0b;">${totalEarnLabel}</div></div>
           <div class="stat-item"><div class="stat-label">DURATION</div><div class="stat-value">${cfg.unlimited ? "∞" : cfg.duration + "d"}</div></div>
         </div>
-        ${!cfg.unlimited && planExpiry ? `
-        <div class="plan-progress">
-          <div class="plan-bar-bg"><div class="plan-bar-fill" style="width:${planPct}%"></div></div>
-          <div class="plan-label"><span>Plan started</span><span>${daysRemaining}d remaining</span></div>
-        </div>` : ""}
+        ${!cfg.unlimited ? `
+    <div class="plan-progress">
+      <div class="plan-bar-bg"><div class="plan-bar-fill" style="width:${planPct}%"></div></div>
+      <div class="plan-label">
+        <span>$${totalCredited.toFixed(2)} earned</span>
+        <span>${isPlanDone ? "Complete ✓" : "$" + remainingEarn?.toFixed(2) + " remaining"}</span>
+      </div>
+    </div>` : ""}
         <div id="statusbox-${key}"></div>`;
 
       container.appendChild(card);
@@ -479,11 +510,11 @@ function computeEarned(id, mData) {
   const dayMs   = 86400000;
 
   if (elapsed >= cycleMs) {
-    return { displayEarned: cfg.daily, pct: 100, isComplete: true, timeLeft: 0 };
+    return { displayEarned: getDailyRate(id), pct: 100, isComplete: true, timeLeft: 0 };
   }
 
   const pct      = (elapsed / cycleMs) * 100;
-  const earned   = (elapsed / dayMs) * cfg.daily;
+  const earned = (elapsed / dayMs) * getDailyRate(id);
   const timeLeft = cycleMs - elapsed;
   return { displayEarned: Math.min(earned, cfg.daily), pct, isComplete: false, timeLeft };
 }
@@ -496,9 +527,9 @@ function refreshCard(id, key, mData) {
 
   // Check plan expiry
   const purchaseDate = mData?.purchaseDate || mData?.start;
-  const planExpiry   = (!cfg.unlimited && purchaseDate && cfg.duration)
-    ? purchaseDate + cfg.duration * 86400000 : null;
-  const isPlanExpired = planExpiry && Date.now() > planExpiry && !cfg.unlimited;
+  const _totalEarn     = cfg.unlimited ? null : cfg.daily * cfg.duration;
+  const _totalCredited = mData?.totalCredited || 0;
+  const isPlanExpired  = !cfg.unlimited && _totalCredited >= _totalEarn;
 
   if (isPlanExpired) {
     // Plan expired — show final state
@@ -556,7 +587,7 @@ if (isComplete) {
           <div class="status-badge" style="color:#00ff88;">
             <span class="badge-dot green"></span> Actively Earning
           </div>
-          <div class="earned-row">Earned this cycle:</div>
+          <div class="earned-row">Earned this cycle:${getPromoTimeLeft() > 0 ? ' <span style="background:rgba(245,158,11,0.15);color:#f59e0b;font-size:10px;padding:2px 7px;border-radius:999px;font-weight:700;">⚡ PROMO RATE</span>' : ''}</div>
           <div class="earned-val">$${displayEarned.toFixed(4)}</div>
         </div>
         <div style="text-align:right;">
@@ -575,7 +606,7 @@ async function checkAndCredit(id, key, mData) {
   _credited[key] = true;
 
   const cfg          = MINERS[id];
-  const totalEarn    = cfg.daily;  // 24hr cycle = exactly daily income
+  const totalEarn = getDailyRate(id);  // 24hr cycle = exactly daily income
   const now          = Date.now();
   const purchaseDate = mData.purchaseDate || mData.start;
 
@@ -596,21 +627,26 @@ async function checkAndCredit(id, key, mData) {
   document.getElementById("liveBalance").textContent = "$" + userData.balance.toFixed(2);
 
   // ── AUTO-RESTART immediately — don't wait for referral chain ──
-  const planExpiry = (!cfg.unlimited && purchaseDate && cfg.duration)
-    ? purchaseDate + cfg.duration * 86400000 : null;
+  const newTotalCredited = parseFloat(((mData.totalCredited || 0) + totalEarn).toFixed(4));
+  const planTotalEarn    = cfg.unlimited ? Infinity : parseFloat((cfg.daily * cfg.duration).toFixed(4));
 
-  if (!planExpiry || Date.now() < planExpiry) {
+  if (cfg.unlimited || newTotalCredited < planTotalEarn) {
     const newData = {
-      start:        now,
-      purchaseDate: purchaseDate,
-      lastUpdate:   now,
-      credited:     false
+      start:         now,
+      purchaseDate:  purchaseDate,
+      lastUpdate:    now,
+      credited:      false,
+      totalCredited: newTotalCredited
     };
     await db.ref(`users/${uid}/miners/${key}`).set(newData);
     userData.miners[key] = newData;
     delete _credited[key];
     renderRunning();
   } else {
+    await db.ref(`users/${uid}/miners/${key}`).update({
+      totalCredited: newTotalCredited,
+      planComplete:  true
+    });
     renderRunning();
   }
 
@@ -624,11 +660,11 @@ async function forceRestart(id, key, mData) {
     const cfg          = MINERS[id];
     const now          = Date.now();
     const purchaseDate = mData.purchaseDate || mData.start;
-    const planExpiry   = (!cfg.unlimited && purchaseDate && cfg.duration)
-        ? purchaseDate + cfg.duration * 86400000 : null;
+    const planTotalEarn  = cfg.unlimited ? Infinity : cfg.daily * cfg.duration;
+    const alreadyCredited = mData.totalCredited || 0;
 
-    if (!planExpiry || now < planExpiry) {
-        const newData = { start: now, purchaseDate, lastUpdate: now, credited: false };
+    if (cfg.unlimited || alreadyCredited < planTotalEarn) {
+        const newData = { start: now, purchaseDate, lastUpdate: now, credited: false, totalCredited: mData.totalCredited || 0 };
         await db.ref(`users/${uid}/miners/${key}`).set(newData);
         userData.miners[key] = newData;
         delete _credited[key];

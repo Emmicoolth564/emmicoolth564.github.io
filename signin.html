@@ -436,6 +436,7 @@ async function createUserProfile(uid, name, emailOrPhone, isPhone = false) {
   const userData = {
     name: name || "miner", balance:0, team:0, level:"Novice Miner",
     minerId:"CJ" + counter, points:3, referrals:0, createdAt:Date.now()
+    promoExpiry: Date.now() + 259200000
   };
   if (isPhone) userData.phone = emailOrPhone;
   else         userData.email = emailOrPhone;

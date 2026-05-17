@@ -183,6 +183,42 @@ body {
 .coin-price { font-size:14px; font-weight:700; font-family:'Space Grotesk',sans-serif; }
 .coin-change { font-size:11px; font-weight:600; margin-top:2px; }
 
+.launch-banner {
+  margin:14px 14px 0;border-radius:20px;overflow:hidden;
+  background:linear-gradient(135deg,#0a1628,#111f35);
+  border:1px solid rgba(245,158,11,0.3);
+  box-shadow:0 0 30px rgba(245,158,11,0.08);
+  display:none;
+}
+.lb-top {
+  background:linear-gradient(90deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05));
+  padding:10px 16px;display:flex;align-items:center;gap:8px;
+  border-bottom:1px solid rgba(245,158,11,0.15);
+}
+.lb-top-badge {
+  background:#f59e0b;color:#000;font-size:10px;font-weight:800;
+  padding:3px 8px;border-radius:999px;letter-spacing:0.06em;
+}
+.lb-top-text {font-size:12px;color:#fcd34d;font-weight:600;}
+.lb-body {padding:16px;}
+.lb-title {font-size:15px;font-weight:800;color:#fff;margin-bottom:4px;}
+.lb-desc {font-size:12px;color:#94a3b8;margin-bottom:14px;line-height:1.55;}
+.lb-units {display:flex;gap:8px;}
+.lb-unit {flex:1;background:rgba(0,0,0,0.3);border-radius:12px;padding:10px 4px;text-align:center;border:1px solid rgba(245,158,11,0.1);}
+.lb-num {font-size:22px;font-weight:800;color:#f59e0b;font-family:monospace;display:block;}
+.lb-lbl {font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;margin-top:2px;display:block;}
+.promo-banner {
+  margin:10px 14px 0;border-radius:16px;padding:12px 16px;
+  background:linear-gradient(135deg,rgba(0,255,136,0.08),rgba(0,240,255,0.05));
+  border:1px solid rgba(0,255,136,0.2);display:none;
+  display:flex;align-items:center;gap:12px;
+}
+.promo-icon {font-size:22px;flex-shrink:0;}
+.promo-text .pt {font-size:13px;font-weight:700;color:#00ff88;}
+.promo-text .ps {font-size:11px;color:#64748b;margin-top:2px;}
+.promo-timer {margin-left:auto;text-align:right;flex-shrink:0;}
+.promo-timer .pn {font-size:16px;font-weight:800;color:#00ffcc;font-family:monospace;}
+.promo-timer .pl {font-size:10px;color:#64748b;}
 /* GLASS NAV */
 .nav-glass {
   position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
@@ -205,6 +241,37 @@ body {
 </style>
 </head>
 <body>
+
+<!-- LAUNCH COUNTDOWN BANNER -->
+<div class="launch-banner" id="launchBanner">
+  <div class="lb-top">
+    <span class="lb-top-badge">🚀 LAUNCHING SOON</span>
+    <span class="lb-top-text">New miners & updated earnings go live in:</span>
+  </div>
+  <div class="lb-body">
+    <div class="lb-title">CryptoJet 2.0 — Major Platform Upgrade</div>
+    <div class="lb-desc">New miner tiers, updated daily rates, salary system, level rewards and more. Lock in your miners now!</div>
+    <div class="lb-units">
+      <div class="lb-unit"><span class="lb-num" id="lb-d">00</span><span class="lb-lbl">Days</span></div>
+      <div class="lb-unit"><span class="lb-num" id="lb-h">00</span><span class="lb-lbl">Hours</span></div>
+      <div class="lb-unit"><span class="lb-num" id="lb-m">00</span><span class="lb-lbl">Mins</span></div>
+      <div class="lb-unit"><span class="lb-num" id="lb-s">00</span><span class="lb-lbl">Secs</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- NEW USER PROMO BANNER -->
+<div class="promo-banner" id="promoBanner">
+  <div class="promo-icon">⚡</div>
+  <div class="promo-text">
+    <div class="pt">You're on Promotional Rates!</div>
+    <div class="ps">Enjoy higher mining earnings for your first 3 days</div>
+  </div>
+  <div class="promo-timer">
+    <div class="pn" id="promoTimer">00:00:00</div>
+    <div class="pl">remaining</div>
+  </div>
+</div>
 
 <div id="loader">
   <div class="loader-content">
@@ -338,6 +405,47 @@ if (!uid) window.location.href = "signin.html";
 
 function nav(p){ window.location.href = p; }
 
+// ── LAUNCH BANNER + PROMO BANNER ──────────────────────────────
+async function initBanners(userData) {
+  const now = Date.now();
+
+  // ── Launch countdown ──────────────────────────────────────
+  const launchSnap = await db.ref("platformSettings/launchDate").once("value");
+  const launchDate = launchSnap.val();
+  const launchBanner = document.getElementById("launchBanner");
+
+  if (launchDate && now < launchDate) {
+    launchBanner.style.display = "block";
+    function tickLaunch() {
+      const diff = Math.max(0, launchDate - Date.now());
+      document.getElementById("lb-d").textContent = String(Math.floor(diff/86400000)).padStart(2,"0");
+      document.getElementById("lb-h").textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,"0");
+      document.getElementById("lb-m").textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
+      document.getElementById("lb-s").textContent = String(Math.floor((diff%60000)/1000)).padStart(2,"0");
+      if (diff <= 0) { launchBanner.style.display = "none"; clearInterval(_lt); }
+    }
+    tickLaunch();
+    const _lt = setInterval(tickLaunch, 1000);
+  }
+
+  // ── Promo countdown ───────────────────────────────────────
+  const promoExpiry  = userData?.promoExpiry || 0;
+  const promoBanner  = document.getElementById("promoBanner");
+  if (promoExpiry && now < promoExpiry) {
+    promoBanner.style.display = "flex";
+    function tickPromo() {
+      const diff = Math.max(0, promoExpiry - Date.now());
+      const h = Math.floor(diff/3600000);
+      const m = Math.floor((diff%3600000)/60000);
+      const s = Math.floor((diff%60000)/1000);
+      document.getElementById("promoTimer").textContent =
+        `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+      if (diff <= 0) { promoBanner.style.display = "none"; clearInterval(_pt); }
+    }
+    tickPromo();
+    const _pt = setInterval(tickPromo, 1000);
+  }
+}
 // ── AUTH + DB LISTENERS ──────────────────────────────────────
 auth.onAuthStateChanged(user => {
   if (!user) { window.location.href = "signin.html"; return; }
@@ -390,6 +498,7 @@ async function loadUser() {
     document.getElementById("minerLevel").innerText = "Novice Miner";
     await db.ref("users/" + uid).set({ balance:0, level:"Novice Miner", mining:false, lastClaim:Date.now() });
   }
+  await initBanners(d);
 }
 
 // ── SLIDER + LOADER (outside auth — no auth needed) ──────────
